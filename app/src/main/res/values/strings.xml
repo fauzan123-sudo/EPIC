@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">EPIC</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="incoming_goods">Sales</string>
+    <string name="outgoing_goods">Penjualan</string>
+    <string name="return_goods">Pengembalia Barang</string>
+    <string name="inventory">Persediaan</string>
+    <string name="my_name">CHRISNANDA</string>
+
+
 </resources>

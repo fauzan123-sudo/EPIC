@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#2D327A</color>
+    <color name="secondary">#8F00FF</color>
+    <color name="blue_light">#DBE7FF</color>
+    <color name="success">#198754</color>
+    <color name="danger">#DC3545</color>
+    <color name="info">#0660C7</color>
+    <color name="grey">#7F838B</color>
+    <color name="dark">#252832</color>
+
+    <color name="unreadColor">#FF0000</color> <!-- Warna untuk notifikasi belum dibaca -->
+    <color name="readColor">#00FF00</color> <!-- Warna untuk notifikasi yang sudah dibaca -->
+    <color name="greyColor">#999999</color> <!-- Warna abu-abu untuk waktu relatif -->
+
+
 </resources>
