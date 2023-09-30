@@ -1,14 +1,15 @@
 package com.example.epic.data.network
 
+import com.example.epic.data.model.user.login.LoginResponse
+import com.example.epic.data.model.user.login.RequestLogin
 import retrofit2.Response
-import retrofit2.http.Field
+import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
 
-    @POST("")
-    suspend fun login(
-        @Field("username") username:String,
-        @Field("password") password:String,
-    ) :Response<Any>
+    @POST("auth")
+    suspend fun loginUser(
+        @Body request: RequestLogin
+    ): Response<LoginResponse>
 }

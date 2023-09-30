@@ -7,17 +7,61 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.epic.ui.fragment.HomeFragment"
+        android:name="com.example.epic.ui.fragment.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allMenuFragment"
+            app:destination="@id/allMenuFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_listSalesFragment"
+            app:destination="@id/listSalesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.example.epic.ui.fragment.MenuFragment"
+        android:name="com.example.epic.ui.fragment.menu.MenuFragment"
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.epic.ui.fragment.ProfileFragment"
+        android:name="com.example.epic.ui.fragment.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/allMenuFragment"
+        android:name="com.example.epic.ui.fragment.menu.AllMenuFragment"
+        android:label="fragment_all_menu"
+        tools:layout="@layout/fragment_all_menu" >
+        <action
+            android:id="@+id/action_allMenuFragment_to_listSalesFragment"
+            app:destination="@id/listSalesFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_listCategoryFragment"
+            app:destination="@id/listCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listSalesFragment"
+        android:name="com.example.epic.ui.fragment.sales.ListSalesFragment"
+        android:label="fragment_list_sales"
+        tools:layout="@layout/fragment_list_sales" />
+    <fragment
+        android:id="@+id/listCategoryFragment"
+        android:name="com.example.epic.ui.fragment.category.ListCategoryFragment"
+        android:label="fragment_list_category"
+        tools:layout="@layout/fragment_list_category" >
+        <action
+            android:id="@+id/action_listCategoryFragment_to_addCategoryFragment"
+            app:destination="@id/addCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCategoryFragment"
+        android:name="com.example.epic.ui.fragment.category.AddCategoryFragment"
+        android:label="fragment_add_category"
+        tools:layout="@layout/fragment_add_category" />
 </navigation>

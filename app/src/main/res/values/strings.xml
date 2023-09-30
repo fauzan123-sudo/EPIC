@@ -6,7 +6,20 @@
     <string name="outgoing_goods">Penjualan</string>
     <string name="return_goods">Pengembalia Barang</string>
     <string name="inventory">Persediaan</string>
-    <string name="my_name">CHRISNANDA</string>
+    <string name="sales">Sales</string>
 
-
+    <string-array name="month">
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maret</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Agustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Desember</item>
+    </string-array>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.epic.ui.fragment
+package com.example.epic.ui.fragment.menu
 
 import android.os.Bundle
 import android.view.View
@@ -8,17 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epic.data.adapter.ContactsAdapter
 import com.example.epic.data.model.NotificationData
 import com.example.epic.databinding.FragmentMenuBinding
+import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.DatabaseViewModel
 import com.example.epic.util.Constans
 import com.example.epic.util.DataStatus
 import com.example.epic.util.getNotification
 import com.example.epic.util.isVisible
+import dagger.hilt.android.AndroidEntryPoint
 import io.paperdb.Paper
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MenuFragment : BaseFragment<FragmentMenuBinding>(FragmentMenuBinding::inflate) {
 //    private lateinit var adapter: NotificationAdapter
     private val viewModel: DatabaseViewModel by viewModels()
+
     @Inject
     lateinit var contactsAdapter: ContactsAdapter
 

@@ -1,6 +1,7 @@
 package com.example.epic.data.module
 
 import com.example.epic.data.network.AuthApi
+import com.example.epic.data.network.CategoryApi
 import com.example.epic.util.AuthInterceptor
 import com.example.epic.util.Constans
 import com.google.gson.GsonBuilder
@@ -11,7 +12,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -27,7 +27,7 @@ object NetworkModule {
 
         return Retrofit.Builder()
             .baseUrl(Constans.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+//            .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
     }
 
@@ -47,14 +47,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesUserAPI(retrofitBuilder: Retrofit.Builder): AuthApi {
-        return retrofitBuilder.build()
+    fun providesUserAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): AuthApi {
+        return retrofitBuilder.client(okHttpClient).build()
             .create(AuthApi::class.java)
     }
 
-//    @Singleton
-//    @Provides
-//    fun providesHomeAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): HomeApi {
-//        return retrofitBuilder.client(okHttpClient).build().create(HomeApi::class.java)
-//    }
+    @Singleton
+    @Provides
+    fun providesCategoryAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): CategoryApi {
+        return retrofitBuilder.client(okHttpClient).build()
+            .create(CategoryApi::class.java)
+    }
+
 }

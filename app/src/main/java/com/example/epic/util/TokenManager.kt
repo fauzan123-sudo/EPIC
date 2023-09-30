@@ -21,19 +21,9 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
         return prefs.getString(USER_TOKEN, null)
     }
 
-//    fun getNip(): String? {
-//        return prefs.getString(USER_TOKEN, null)
-//    }
-
     fun deleteToken() {
         val editor = prefs.edit()
         editor.clear()
         editor.apply()
     }
-
-//    fun saveNip(nip: String) {
-//        val editor = prefs.edit()
-//        editor.putString(USER_TOKEN, nip)
-//        editor.apply()
-//    }
 }

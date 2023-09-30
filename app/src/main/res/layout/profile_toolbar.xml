@@ -1,0 +1,21 @@
+<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/my_toolbar"
+    style="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/blue_light"
+    android:elevation="0dp"
+    android:titleTextAppearance="@style/ToolbarTitle"
+    app:logo="@drawable/logo"
+    app:title="EPIC INVENTORY CONTROL SYSTEM">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:src="@drawable/ari" />
+
+</com.google.android.material.appbar.MaterialToolbar>

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_20sdp"
     android:background="@color/white"
-    tools:context=".ui.fragment.MenuFragment">
+    tools:context=".ui.fragment.menu.MenuFragment">
 
     <ru.nikartm.support.ImageBadgeView
         android:id="@+id/notification_count"

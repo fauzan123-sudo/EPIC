@@ -1,0 +1,44 @@
+<!-- res/layout/item_notification.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bodyTextView"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleTextView"
+        android:text="Body"
+        android:textSize="14sp" />
+
+    <!-- Tanda untuk status baca -->
+    <View
+        android:id="@+id/readIndicator"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/circle_indicator" />
+
+    <!-- Waktu relatif -->
+    <TextView
+        android:id="@+id/timeAgoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bodyTextView"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/greyColor"
+        android:textSize="12sp" />
+</RelativeLayout>
