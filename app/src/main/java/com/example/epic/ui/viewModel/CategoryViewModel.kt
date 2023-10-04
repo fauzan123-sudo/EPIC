@@ -6,7 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.category.add.AddCategoryResponse
 import com.example.epic.data.model.category.add.RequestAddCategory
+import com.example.epic.data.model.category.based.SpinnerCategoryResponse
+import com.example.epic.data.model.category.delete.DeleteCategoryResponse
 import com.example.epic.data.model.category.read.CategoryListResponse
+import com.example.epic.data.model.category.update.RequestEditCategory
+import com.example.epic.data.model.category.update.UpdateCategoryResponse
 import com.example.epic.data.repository.CategoryRepository
 import com.example.epic.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,13 +30,28 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
     val addCategoryResponse: LiveData<NetworkResult<AddCategoryResponse>>
         get() = _addCategoryResponse
 
-    private val _updateCategoryResponse = MutableLiveData<NetworkResult<AddCategoryResponse>>()
-    val updateCategoryResponse: LiveData<NetworkResult<AddCategoryResponse>>
+    private val _updateCategoryResponse = MutableLiveData<NetworkResult<UpdateCategoryResponse>>()
+    val updateCategoryResponse: LiveData<NetworkResult<UpdateCategoryResponse>>
         get() = _updateCategoryResponse
 
-    private val _deleteCategoryResponse = MutableLiveData<NetworkResult<AddCategoryResponse>>()
-    val deleteCategoryResponse: LiveData<NetworkResult<AddCategoryResponse>>
+    private val _deleteCategoryResponse = MutableLiveData<NetworkResult<DeleteCategoryResponse>>()
+    val deleteCategoryResponse: LiveData<NetworkResult<DeleteCategoryResponse>>
         get() = _deleteCategoryResponse
+
+    private val _basedCategoryResponse = MutableLiveData<NetworkResult<SpinnerCategoryResponse>>()
+    val basedCategoryResponse: LiveData<NetworkResult<SpinnerCategoryResponse>>
+        get() = _basedCategoryResponse
+
+    fun requestAddCategory(request: RequestAddCategory) {
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _addCategoryResponse.postValue(NetworkResult.Loading())
+                _addCategoryResponse.postValue(repository.addCategory(request))
+            } else
+                _addCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+        }
+    }
 
     fun requestListCategory() {
         viewModelScope.launch {
@@ -45,14 +64,40 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
         }
     }
 
-    fun requestAddCategory(request: RequestAddCategory) {
+    fun updateCategory(request: RequestEditCategory) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
-                _addCategoryResponse.postValue(NetworkResult.Loading())
-                _addCategoryResponse.postValue(repository.addCategory(request))
-            } else
-                _addCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+                _updateCategoryResponse.postValue(NetworkResult.Loading())
+                _updateCategoryResponse.postValue(repository.updateCategory(request))
+            } else {
+                _updateCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+            }
         }
     }
+
+    fun deleteCategory(idCategory: String) {
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _deleteCategoryResponse.postValue(NetworkResult.Loading())
+                _deleteCategoryResponse.postValue(repository.deleteCategory(idCategory))
+            } else {
+                _deleteCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+            }
+        }
+    }
+
+    fun RequestProductByCategory(idCategory: Int) {
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _basedCategoryResponse.postValue(NetworkResult.Loading())
+                _basedCategoryResponse.postValue(repository.baseCategory(idCategory))
+            } else {
+                _basedCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+            }
+        }
+    }
+
 }

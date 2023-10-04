@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.MenuRes
 import androidx.core.view.MenuHost
@@ -14,17 +15,37 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.epic.R
 import com.example.epic.ui.activity.MainActivity
 import com.google.android.material.appbar.MaterialToolbar
 
-fun hideKeyboard(view: View){
+fun Activity.hideKeyboard() {
+    val view = this.currentFocus
+    if (view != null) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
+
+fun hideKeyboard(view: View) {
     try {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }catch (e: Exception){
+    } catch (e: Exception) {
 
     }
+}
+
+fun ImageView.loadImagesWithGlideExt(url: String) {
+    Glide.with(this)
+        .load(url)
+        .centerCrop()
+        .error(R.drawable.ic_no_image)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+//        .placeholder(R.drawable.movie_loading_animation)
+        .into(this)
 }
 
 fun View.isVisible(isShowLoading: Boolean, container: View) {
@@ -37,7 +58,11 @@ fun View.isVisible(isShowLoading: Boolean, container: View) {
     }
 }
 
-fun Fragment.setupMenu(@MenuRes menuId: Int, onMenuSelected: (MenuItem) -> Boolean, showAsAction: Int) =
+fun Fragment.setupMenu(
+    @MenuRes menuId: Int,
+    onMenuSelected: (MenuItem) -> Boolean,
+    showAsAction: Int
+) =
     (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) =
             menuInflater.inflate(menuId, menu)

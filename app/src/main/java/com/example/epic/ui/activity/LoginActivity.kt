@@ -47,7 +47,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                             if (response.status) {
                                 tokenManager.saveToken(response.access_token)
                                 startActivity(Intent(this, MainActivity::class.java))
-                            }else{
+                            } else {
                                 showErrorMessage(response.message)
                             }
                         }
@@ -86,6 +86,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             .setTitleText("Error")
             .setContentText(message)
             .show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkLogin()
     }
 
 }

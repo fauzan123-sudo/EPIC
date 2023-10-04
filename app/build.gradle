@@ -45,7 +45,7 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+//    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
@@ -58,8 +58,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.3'
 
 //    Retrofit
     implementation platform("com.squareup.okhttp3:okhttp-bom:4.10.0")
@@ -112,13 +112,18 @@ dependencies {
 
     implementation("io.github.nikartm:image-support:2.0.0")
 
-//    implementation 'cn.pedant.sweetalert:library:1.6.4'
     //SweetAlert
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
 
 
 //    Check Internet
     implementation("com.github.raheemadamboev:check-internet-android:1.1.1")
+
+//    Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+//    SearchView
+    implementation 'com.github.mancj:MaterialSearchBar:0.7.1'
 
 }
 

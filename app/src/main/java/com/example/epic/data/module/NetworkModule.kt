@@ -2,6 +2,11 @@ package com.example.epic.data.module
 
 import com.example.epic.data.network.AuthApi
 import com.example.epic.data.network.CategoryApi
+import com.example.epic.data.network.ProductApi
+import com.example.epic.data.network.ProductReturnApi
+import com.example.epic.data.network.SalesApi
+import com.example.epic.data.network.StockApi
+import com.example.epic.data.network.UserManagementApi
 import com.example.epic.util.AuthInterceptor
 import com.example.epic.util.Constans
 import com.google.gson.GsonBuilder
@@ -12,6 +17,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.Retrofit.Builder
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -54,9 +60,53 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesCategoryAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): CategoryApi {
+    fun providesCategoryAPI(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClient: OkHttpClient
+    ): CategoryApi {
         return retrofitBuilder.client(okHttpClient).build()
             .create(CategoryApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesProductAPI(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClient: OkHttpClient
+    ): ProductApi {
+        return retrofitBuilder.client(okHttpClient).build()
+            .create(ProductApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun stockApi(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): StockApi {
+        return retrofitBuilder.client(okHttpClient).build()
+            .create(StockApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun productReturnApi(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClient: OkHttpClient
+    ): ProductReturnApi {
+        return retrofitBuilder.client(okHttpClient).build().create(ProductReturnApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun userManagementApi(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClient: OkHttpClient
+    ): UserManagementApi {
+        return retrofitBuilder.client(okHttpClient).build().create(UserManagementApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun salesApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): SalesApi {
+        return retrofitBuilder.client(okHttpClient).build().create(SalesApi::class.java)
     }
 
 }

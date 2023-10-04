@@ -29,13 +29,17 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
             mcSales.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_listSalesFragment)
             }
-
+            mcProduct.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_listProductFragment)
+            }
+            mcStock.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_listStockFragment)
+            }
         }
     }
 
     private fun setUpToolbar() {
         binding.apply {
-//            toolbar.myToolbar.setLogo(R.drawable.logo)
             view?.let {
                 configureToolbarBackPress(
                     toolbar.myToolbar,

@@ -20,6 +20,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding.apply {
 
             hIncomingMenu.setOnClickListener {
@@ -33,6 +35,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
             imgLookAll.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_allMenuFragment)
+            }
+
+            hStockMenu.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_listStockFragment)
             }
 
             val monthArray = resources.getStringArray(R.array.month).toList()

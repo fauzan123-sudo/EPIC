@@ -101,7 +101,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_shift"
+            android:id="@+id/mc_stock"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"
@@ -196,7 +196,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_reimbursement"
+            android:id="@+id/mc_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"

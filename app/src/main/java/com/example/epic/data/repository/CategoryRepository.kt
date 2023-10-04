@@ -25,4 +25,9 @@ class CategoryRepository @Inject constructor(private val api: CategoryApi) : Bas
             api.deleteCategory(idCategory)
         }
 
+    suspend fun baseCategory(basedIdCategory:Int) =
+        safeApiCall {
+            api.basedIdCategory(basedIdCategory)
+        }
+
 }

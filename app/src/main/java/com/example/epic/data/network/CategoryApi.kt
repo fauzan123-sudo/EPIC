@@ -2,6 +2,7 @@ package com.example.epic.data.network
 
 import com.example.epic.data.model.category.add.AddCategoryResponse
 import com.example.epic.data.model.category.add.RequestAddCategory
+import com.example.epic.data.model.category.based.SpinnerCategoryResponse
 import com.example.epic.data.model.category.delete.DeleteCategoryResponse
 import com.example.epic.data.model.category.read.CategoryListResponse
 import com.example.epic.data.model.category.update.RequestEditCategory
@@ -12,6 +13,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface CategoryApi {
 
@@ -29,5 +31,10 @@ interface CategoryApi {
     @FormUrlEncoded
     @POST("kategori/delete")
     suspend fun deleteCategory(@Field("id_kategori") id_kategori: String): Response<DeleteCategoryResponse>
+
+    @GET("barang/based-on-kategori/{id_kategori}")
+    suspend fun basedIdCategory(
+        @Path("id_kategori") idCategory:Int
+    ) : Response<SpinnerCategoryResponse>
 
 }
