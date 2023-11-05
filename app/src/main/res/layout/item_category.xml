@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_12sdp"
-    app:cardCornerRadius="@dimen/_10sdp">
+    app:cardElevation="@dimen/_6sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,11 +12,12 @@
 
         <TextView
             android:id="@+id/tv_category"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/_9sdp"
             android:text="Pilox Axe"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

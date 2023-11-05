@@ -88,7 +88,7 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
         }
     }
 
-    fun RequestProductByCategory(idCategory: Int) {
+    fun requestProductByCategory(idCategory: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {

@@ -15,26 +15,22 @@ class StockAdapter @Inject constructor() : RecyclerView.Adapter<StockAdapter.Vie
 
     inner class ViewHolder(val binding: ItemStockBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(stock: Data) {
-            binding.tvProduct.text = stock.id_barang
-            binding.tvCodeAndUnit.text = stock.id_barang
+            binding.tvProduct.text = stock.nama_barang
+            binding.tvCodeAndUnit.text = "${stock.id_barang}"
             binding.tvTotalProduct.text = stock.jumlah_barang
         }
     }
 
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Data>() {
-        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
-            return oldItem == newItem
-        }
+        override fun areItemsTheSame(oldItem: Data, newItem: Data) =
+            oldItem.id_persediaan == newItem.id_persediaan
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Data, newItem: Data) = oldItem == newItem
 
     }
 
     val differ = AsyncListDiffer(this, diffCallBack)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemStockBinding.inflate(LayoutInflater.from(parent.context), parent, false)

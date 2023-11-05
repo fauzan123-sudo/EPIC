@@ -89,7 +89,7 @@ class AddProductFragment :
     }
 
     private fun showProduct(categoryId: Int) {
-        categoryViewModel.RequestProductByCategory(categoryId)
+        categoryViewModel.requestProductByCategory(categoryId)
         categoryViewModel.basedCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {

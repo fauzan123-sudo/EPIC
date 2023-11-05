@@ -6,9 +6,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.epic.R
 import com.example.epic.data.adapter.CategoryAdapter
+import com.example.epic.data.model.category.read.Data
 import com.example.epic.databinding.FragmentListCategoryBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.CategoryViewModel
@@ -19,9 +22,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListCategoryFragment :
-    BaseFragment<FragmentListCategoryBinding>(FragmentListCategoryBinding::inflate) {
+    BaseFragment<FragmentListCategoryBinding>(FragmentListCategoryBinding::inflate),
+    CategoryAdapter.ItemListener {
 
     private val viewModel: CategoryViewModel by viewModels()
+
     @Inject
     lateinit var categoryAdapter: CategoryAdapter
 
@@ -32,6 +37,47 @@ class ListCategoryFragment :
         loadDataCategory()
         movePage()
         setUpToolbar()
+        deleteCategory()
+    }
+
+    private fun deleteCategory() {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+
+                val data = categoryAdapter.differ.currentList[position]
+                val deletedCategory =
+                    categoryAdapter.differ.currentList[position].id_kategori.toString()
+
+                viewModel.deleteCategory(deletedCategory)
+                viewModel.deleteCategoryResponse.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            hideLoading()
+                            categoryAdapter.deleteItem(position)
+//                            categoryAdapter.notifyItemRemoved(position)
+                        }
+
+                        is NetworkResult.Loading -> {
+                            showLoading()
+                        }
+
+                        is NetworkResult.Error -> {
+                            hideLoading()
+                            showErrorMessage(it.message!!)
+                            categoryAdapter.addItem(data)
+                        }
+                    }
+                }
+
+            }
+        }).attachToRecyclerView(binding.rvCategory)
     }
 
     private fun setUpToolbar() {
@@ -77,6 +123,9 @@ class ListCategoryFragment :
                                         requireContext()
                                     )
                                 adapter = categoryAdapter
+                                categoryAdapter.listener = this@ListCategoryFragment
+
+
                             }
                             tvNoCategory.visibility = View.GONE
 
@@ -98,6 +147,22 @@ class ListCategoryFragment :
                 }
             }
         }
+    }
+
+    override fun updateCategory(data: Data) {
+        Log.d("clicked", "bind: on fire too $data")
+        try {
+            val action =
+                ListCategoryFragmentDirections.actionListCategoryFragmentToUpdateCategoryFragment(
+                    data
+                )
+            findNavController().navigate(action)
+
+        } catch (e: Exception) {
+            Log.e("error", "updateCategory: ", e)
+            showErrorMessage(e.toString())
+        }
+
     }
 
 }

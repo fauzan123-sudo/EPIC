@@ -4,7 +4,10 @@ import com.example.epic.data.network.AuthApi
 import com.example.epic.data.network.CategoryApi
 import com.example.epic.data.network.ProductApi
 import com.example.epic.data.network.ProductReturnApi
+import com.example.epic.data.network.ProfileApi
+import com.example.epic.data.network.ReportApi
 import com.example.epic.data.network.SalesApi
+import com.example.epic.data.network.SellerApi
 import com.example.epic.data.network.StockApi
 import com.example.epic.data.network.UserManagementApi
 import com.example.epic.util.AuthInterceptor
@@ -16,7 +19,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
 import retrofit2.Retrofit.Builder
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -28,10 +30,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit.Builder {
+    fun providesRetrofit(): Builder {
         val gson = GsonBuilder().setLenient().create()
 
-        return Retrofit.Builder()
+        return Builder()
             .baseUrl(Constans.BASE_URL)
 //            .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
@@ -53,7 +55,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesUserAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): AuthApi {
+    fun providesUserAPI(retrofitBuilder: Builder, okHttpClient: OkHttpClient): AuthApi {
         return retrofitBuilder.client(okHttpClient).build()
             .create(AuthApi::class.java)
     }
@@ -61,7 +63,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesCategoryAPI(
-        retrofitBuilder: Retrofit.Builder,
+        retrofitBuilder: Builder,
         okHttpClient: OkHttpClient
     ): CategoryApi {
         return retrofitBuilder.client(okHttpClient).build()
@@ -71,7 +73,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesProductAPI(
-        retrofitBuilder: Retrofit.Builder,
+        retrofitBuilder: Builder,
         okHttpClient: OkHttpClient
     ): ProductApi {
         return retrofitBuilder.client(okHttpClient).build()
@@ -80,7 +82,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun stockApi(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): StockApi {
+    fun stockApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): StockApi {
         return retrofitBuilder.client(okHttpClient).build()
             .create(StockApi::class.java)
     }
@@ -88,7 +90,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun productReturnApi(
-        retrofitBuilder: Retrofit.Builder,
+        retrofitBuilder: Builder,
         okHttpClient: OkHttpClient
     ): ProductReturnApi {
         return retrofitBuilder.client(okHttpClient).build().create(ProductReturnApi::class.java)
@@ -97,7 +99,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun userManagementApi(
-        retrofitBuilder: Retrofit.Builder,
+        retrofitBuilder: Builder,
         okHttpClient: OkHttpClient
     ): UserManagementApi {
         return retrofitBuilder.client(okHttpClient).build().create(UserManagementApi::class.java)
@@ -109,4 +111,21 @@ object NetworkModule {
         return retrofitBuilder.client(okHttpClient).build().create(SalesApi::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun sellerApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): SellerApi {
+        return retrofitBuilder.client(okHttpClient).build().create(SellerApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun profileApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): ProfileApi {
+        return retrofitBuilder.client(okHttpClient).build().create(ProfileApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun reportApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): ReportApi {
+        return retrofitBuilder.client(okHttpClient).build().create(ReportApi::class.java)
+    }
 }

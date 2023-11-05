@@ -34,12 +34,25 @@
                 android:text="Kategori"
                 android:textColor="@color/black" />
 
-            <Spinner
-                android:id="@+id/sp_pick_category"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="pilih kategori"
-                android:textColorHint="@color/grey" />
+                android:hint="@string/select_product"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.15"
+                app:layout_constraintWidth_percent="0.9">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sp_pick_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -64,14 +77,33 @@
                 android:text="Nama Barang"
                 android:textColor="@color/black" />
 
-            <Spinner
-                android:id="@+id/sp_name_product"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_product"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nama Barang"
-                android:textColorHint="@color/grey" />
+                android:hint="@string/select_product"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.15"
+                app:layout_constraintWidth_percent="0.9">
+
+                <AutoCompleteTextView
+                    android:id="@+id/designSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    >
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -94,14 +126,22 @@
                 android:text="Satuan Barang"
                 android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/tv_goods"
-                android:text="kg"
+            <EditText
+                android:id="@+id/et_unit_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Satuan barang"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:singleLine="true"
                 android:textColorHint="@color/grey" />
+
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,11 +164,13 @@
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/et_amount"
-                android:inputType="number"
+                android:id="@+id/et_sales_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Jumlah Barang"
+                android:hint="Masukan jumlah barang"
+                android:imeOptions="actionGo"
+                android:inputType="number"
+                android:singleLine="true"
                 android:textColorHint="@color/grey" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

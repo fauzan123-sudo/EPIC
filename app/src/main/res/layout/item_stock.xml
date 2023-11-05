@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="@dimen/_5sdp"
     android:layout_marginBottom="@dimen/_15sdp"
     android:background="@color/white">
 
@@ -11,38 +13,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/_15sdp">
+        android:padding="@dimen/_8sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/ic_circle_24"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"/>
 
         <TextView
             android:id="@+id/tv_product"
-            style="@style/titleText"
+            android:textAlignment="center"
+            android:textSize="@dimen/_16ssp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
+            android:fontFamily="@font/poppins_bold"
             android:text="Nippon Paint nippe 2000"
             android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="#DBBA6B"
-            app:layout_constraintTop_toBottomOf="@+id/tv_product"
-            tools:layout_editor_absoluteX="19dp" />
-
-
-        <TextView
-            android:id="@+id/tv_update_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:textColor="@color/success"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="19dp" />
 
         <TextView
             android:id="@+id/textView12"
@@ -51,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Jumlah Total : "
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_product" />
 
         <TextView
             android:id="@+id/textView18"
@@ -65,21 +57,21 @@
 
         <TextView
             android:id="@+id/tv_total_product"
-            style="@style/contentText"
+            android:textColor="@color/grey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kode/Satuan : "
+            android:text="25"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
 
         <TextView
             android:id="@+id/tv_code_and_unit"
-            style="@style/unitText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kode/Satuan : "
+            android:text="100"
+            android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_total_product" />
+            app:layout_constraintTop_toTopOf="@+id/textView18" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -63,7 +63,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_lembur"
+            android:id="@+id/mc_seller"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg">
@@ -156,7 +156,7 @@
         app:showDivider="middle">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_salary"
+            android:id="@+id/mc_product_return"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"
@@ -289,7 +289,7 @@
         app:showDivider="middle">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_aktivitas"
+            android:id="@+id/mc_grafic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"
@@ -329,7 +329,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_report"
+            android:id="@+id/mc_report"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"

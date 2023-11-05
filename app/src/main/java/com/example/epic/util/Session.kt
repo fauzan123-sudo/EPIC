@@ -1,6 +1,8 @@
 package com.example.epic.util
 
 import com.example.epic.data.model.NotificationData
+import com.example.epic.data.model.user.login.LoginResponse
+import com.example.epic.util.Constans.USER_SAVED
 import com.example.epic.util.Constans.notifyCount
 import io.paperdb.Paper
 
@@ -31,3 +33,12 @@ import io.paperdb.Paper
     fun deleteNotificationCount() {
         Paper.book().delete(notifyCount)
     }
+
+    fun saveUser(data:LoginResponse){
+        Paper.book().write(USER_SAVED, data)
+    }
+
+    fun readLoginResponse(): LoginResponse? {
+        return Paper.book().read<LoginResponse>(USER_SAVED, null)
+    }
+

@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_homeFragment_to_listStockFragment"
             app:destination="@id/listStockFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_listSellerFragment"
+            app:destination="@id/listSellerFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"
@@ -35,7 +38,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.epic.ui.fragment.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_imagePickerFragment"
+            app:destination="@id/imagePickerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/allMenuFragment"
         android:name="com.example.epic.ui.fragment.menu.AllMenuFragment"
@@ -53,12 +60,28 @@
         <action
             android:id="@+id/action_allMenuFragment_to_listStockFragment"
             app:destination="@id/listStockFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_listSellerFragment"
+            app:destination="@id/listSellerFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_productReturnFragment"
+            app:destination="@id/productReturnFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_statisticSellerFragment"
+            app:destination="@id/statisticSellerFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
     </fragment>
     <fragment
         android:id="@+id/listSalesFragment"
         android:name="com.example.epic.ui.fragment.sales.ListSalesFragment"
         android:label="fragment_list_sales"
-        tools:layout="@layout/fragment_list_sales" />
+        tools:layout="@layout/fragment_list_sales" >
+        <action
+            android:id="@+id/action_listSalesFragment_to_addSalesFragment"
+            app:destination="@id/addSalesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listCategoryFragment"
         android:name="com.example.epic.ui.fragment.category.ListCategoryFragment"
@@ -67,6 +90,9 @@
         <action
             android:id="@+id/action_listCategoryFragment_to_addCategoryFragment"
             app:destination="@id/addCategoryFragment" />
+        <action
+            android:id="@+id/action_listCategoryFragment_to_updateCategoryFragment"
+            app:destination="@id/updateCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCategoryFragment"
@@ -92,4 +118,61 @@
         android:name="com.example.epic.ui.fragment.stock.ListStockFragment"
         android:label="fragment_list_stock"
         tools:layout="@layout/fragment_list_stock" />
+    <fragment
+        android:id="@+id/addSalesFragment"
+        android:name="com.example.epic.ui.fragment.sales.AddSalesFragment"
+        android:label="fragment_add_sales"
+        tools:layout="@layout/fragment_add_sales" />
+    <fragment
+        android:id="@+id/listSellerFragment"
+        android:name="com.example.epic.ui.fragment.seller.ListSellerFragment"
+        android:label="fragment_list_seller"
+        tools:layout="@layout/fragment_list_seller" >
+        <action
+            android:id="@+id/action_listSellerFragment_to_addSellerFragment"
+            app:destination="@id/addSellerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addSellerFragment"
+        android:name="com.example.epic.ui.fragment.seller.AddSellerFragment"
+        android:label="fragment_add_seller"
+        tools:layout="@layout/fragment_add_seller" />
+    <fragment
+        android:id="@+id/updateCategoryFragment"
+        android:name="com.example.epic.ui.fragment.category.UpdateCategoryFragment"
+        android:label="fragment_update_category"
+        tools:layout="@layout/fragment_update_category" >
+        <argument
+            android:name="dataCategory"
+            app:argType="com.example.epic.data.model.category.read.Data" />
+    </fragment>
+    <fragment
+        android:id="@+id/productReturnFragment"
+        android:name="com.example.epic.ui.fragment.product_return.ProductReturnFragment"
+        android:label="fragment_product_return"
+        tools:layout="@layout/fragment_product_return" >
+        <action
+            android:id="@+id/action_productReturnFragment_to_addProductReturnFragment"
+            app:destination="@id/addProductReturnFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addProductReturnFragment"
+        android:name="com.example.epic.ui.fragment.product_return.AddProductReturnFragment"
+        android:label="fragment_add_product_return"
+        tools:layout="@layout/fragment_add_product_return" />
+    <dialog
+        android:id="@+id/imagePickerFragment"
+        android:name="com.example.epic.ui.fragment.profile.ImagePickerFragment"
+        android:label="fragment_image_picker"
+        tools:layout="@layout/fragment_image_picker" />
+    <fragment
+        android:id="@+id/statisticSellerFragment"
+        android:name="com.example.epic.ui.fragment.statistic.StatisticSellerFragment"
+        android:label="fragment_statistic_seller"
+        tools:layout="@layout/fragment_statistic_seller" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.example.epic.ui.fragment.report.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
 </navigation>

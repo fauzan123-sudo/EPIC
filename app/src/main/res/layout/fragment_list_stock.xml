@@ -9,13 +9,13 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/main_toolbar" />
+        layout="@layout/notification_toolbar" />
 
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         android:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_stock"
-        android:layout_marginHorizontal="@dimen/_20sdp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         tools:listitem="@layout/item_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

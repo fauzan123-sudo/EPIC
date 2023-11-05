@@ -18,6 +18,11 @@ class ProductRepository @Inject constructor(private val api: ProductApi) :
             api.getProduct()
         }
 
+    suspend fun searchProduct(q:String) =
+        safeApiCall {
+            api.searchProduct(q)
+        }
+
     suspend fun updateProduct(request: RequestEditProduct) =
         safeApiCall {
             api.updateProduct(request)
@@ -27,4 +32,8 @@ class ProductRepository @Inject constructor(private val api: ProductApi) :
         safeApiCall {
             api.deleteProduct(codeProduct)
         }
+
+    suspend fun statisticSeller(month: Int, year: Int) = safeApiCall {
+        api.statisticSeller(month, year)
+    }
 }

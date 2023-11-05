@@ -35,6 +35,18 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
             mcStock.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_listStockFragment)
             }
+            mcSeller.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_listSellerFragment)
+            }
+            mcProductReturn.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_productReturnFragment)
+            }
+            mcGrafic.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_statisticSellerFragment)
+            }
+            mcReport.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_reportFragment)
+            }
         }
     }
 

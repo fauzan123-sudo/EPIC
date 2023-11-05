@@ -32,7 +32,7 @@ interface CategoryApi {
     @POST("kategori/delete")
     suspend fun deleteCategory(@Field("id_kategori") id_kategori: String): Response<DeleteCategoryResponse>
 
-    @GET("barang/based-on-kategori/{id_kategori}")
+    @GET("barang/list-by-kategori/{id_kategori}")
     suspend fun basedIdCategory(
         @Path("id_kategori") idCategory:Int
     ) : Response<SpinnerCategoryResponse>

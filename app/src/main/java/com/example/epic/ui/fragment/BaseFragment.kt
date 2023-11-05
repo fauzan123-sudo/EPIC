@@ -13,7 +13,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     private val bindingInflater: (inflater: LayoutInflater) -> VB
 ) : Fragment() {
 
-    var _binding: VB? = null
+    private var _binding: VB? = null
 
     val binding: VB
         get() = _binding as VB
@@ -52,6 +52,22 @@ abstract class BaseFragment<VB : ViewBinding>(
         sweetAlertDialog.dismiss()
     }
 
+    fun showWarningMessage(message: String, confirmAction: () -> Unit) {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Apakah Anda yakin?")
+            .setContentText("menghapus data $message")
+            .setConfirmText("Ya, Hapus")
+            .setCancelText("Batal")
+            .setConfirmClickListener {
+                it.dismissWithAnimation()
+                confirmAction.invoke()
+            }
+            .setCancelClickListener {
+                it.dismissWithAnimation()
+            }
+            .show()
+    }
+
     fun showSuccessMessage(message: String) {
         SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE)
             .setTitleText("Sukses")
@@ -59,6 +75,17 @@ abstract class BaseFragment<VB : ViewBinding>(
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 findNavController().popBackStack()
+            }
+            .show()
+    }
+
+    fun showSuccessDelete(message: String) {
+        SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE)
+            .setTitleText("Sukses")
+            .setContentText(message)
+            .setConfirmClickListener {
+                it.dismissWithAnimation()
+//                findNavController().popBackStack()
             }
             .show()
     }

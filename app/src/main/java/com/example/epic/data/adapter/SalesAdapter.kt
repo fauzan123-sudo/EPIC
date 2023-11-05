@@ -12,10 +12,18 @@ import javax.inject.Singleton
 
 @Singleton
 class SalesAdapter @Inject constructor() : RecyclerView.Adapter<SalesAdapter.ViewHolder>() {
+    var listener: ItemListener? = null
+
+    interface ItemListener {
+        fun deleteSales(data: Data)
+    }
+
 
     inner class ViewHolder(val binding: ItemSalesBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(sales: Data) {
-
+            binding.tvDeleteSaller.setOnClickListener {
+                listener?.deleteSales(sales)
+            }
         }
     }
 
@@ -38,7 +46,7 @@ class SalesAdapter @Inject constructor() : RecyclerView.Adapter<SalesAdapter.Vie
     override fun getItemCount() = differ.currentList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val sales = differ.currentList[position]
+        val sales = differ.currentList[position]
         holder.bind(sales)
     }
 }

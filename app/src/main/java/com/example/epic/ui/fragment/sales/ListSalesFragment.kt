@@ -1,14 +1,16 @@
 package com.example.epic.ui.fragment.sales
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epic.R
 import com.example.epic.data.adapter.SalesAdapter
+import com.example.epic.data.model.sales.read.Data
 import com.example.epic.databinding.FragmentListSalesBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.SalesViewModel
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListSalesFragment :
-    BaseFragment<FragmentListSalesBinding>(FragmentListSalesBinding::inflate) {
+    BaseFragment<FragmentListSalesBinding>(FragmentListSalesBinding::inflate),
+    SalesAdapter.ItemListener {
 
     private val viewModel: SalesViewModel by viewModels()
 
@@ -36,12 +39,15 @@ class ListSalesFragment :
     }
 
     private fun setUpData() {
+        Log.d("mulai", "mulai onViewCreated: ")
         viewModel.listSalesRequest()
         viewModel.listSalesResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+//                    viewModel.listSalesResponse.removeObservers(viewLifecycleOwner)
                     hideLoading()
                     val response = it.data!!
+                    salesAdapter.listener = this
                     salesAdapter.differ.submitList(response.data)
                     with(binding.rvSales) {
                         layoutManager =
@@ -54,9 +60,11 @@ class ListSalesFragment :
 
                 is NetworkResult.Loading -> {
                     showLoading()
+
                 }
 
                 is NetworkResult.Error -> {
+//                    viewModel.listSalesResponse.removeObservers(viewLifecycleOwner)
                     hideLoading()
                     showErrorMessage(it.message!!)
                 }
@@ -70,9 +78,7 @@ class ListSalesFragment :
             setupMenu(R.menu.menu_action, { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_add -> {
-
-                        Toast.makeText(requireContext(), "add has been clicked", Toast.LENGTH_SHORT)
-                            .show()
+                        findNavController().navigate(R.id.action_listSalesFragment_to_addSalesFragment)
                         true
                     }
 
@@ -90,6 +96,36 @@ class ListSalesFragment :
                 )
             }
         }
+    }
+
+    override fun deleteSales(data: Data) {
+        showWarningMessage("Sales") {
+            viewModel.deleteSalesRequest(data.id_sales.toString())
+            viewModel.deleteSalesResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        hideLoading()
+                        val response = it.data!!
+                        if (response.status) {
+                            showSuccessDelete(response.message)
+                            setUpData()
+                        } else {
+                            showErrorMessage(response.message)
+                        }
+                    }
+
+                    is NetworkResult.Loading -> {
+                        showLoading()
+                    }
+
+                    is NetworkResult.Error -> {
+                        hideLoading()
+                        showErrorMessage(it.message!!)
+                    }
+                }
+            }
+        }
+
     }
 
 }

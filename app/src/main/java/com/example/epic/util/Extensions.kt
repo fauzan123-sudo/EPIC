@@ -1,7 +1,11 @@
 package com.example.epic.util
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -9,17 +13,85 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.MenuRes
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.epic.R
 import com.example.epic.ui.activity.MainActivity
 import com.google.android.material.appbar.MaterialToolbar
+import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
+data class ApiError(val status: Boolean, val message: String, val data: ErrorData)
+data class ErrorData(val error: String)
+
+fun getMonth(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.MONTH) + 1
+}
+
+fun getYear(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.YEAR)
+}
+
+fun Fragment.pickImage(
+    imageView: ImageView,
+    fromGallery: Boolean = true,
+    onResult: (Uri?) -> Unit
+) {
+    val intent = if (fromGallery) {
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            setDataAndType(null, "image/*")
+        }
+    } else {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    }
+
+    val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            onResult(result.data?.data)
+        }
+    }
+
+    resultLauncher.launch(intent)
+}
+
+
+fun Context.showErrorAlert(errorCode: String, messages: String) {
+    val message = when (errorCode) {
+        "422" -> messages
+        "" -> messages
+        "500" -> messages
+        else -> {
+            "Terjadi kesalahan: $messages"
+        }
+    }
+
+    val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+        .setTitleText("Error")
+        .setContentText(message)
+        .setConfirmClickListener { it.dismissWithAnimation() }
+    sweetAlertDialog.show()
+}
+
+fun getCurrentDateTime(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val currentTime = Date()
+    return dateFormat.format(currentTime)
+}
 
 fun Activity.hideKeyboard() {
     val view = this.currentFocus
@@ -34,17 +106,25 @@ fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     } catch (e: Exception) {
-
+        e.printStackTrace()
     }
 }
 
-fun ImageView.loadImagesWithGlideExt(url: String) {
+fun ImageView.loadImage(url: String) {
     Glide.with(this)
         .load(url)
         .centerCrop()
         .error(R.drawable.ic_no_image)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
-//        .placeholder(R.drawable.movie_loading_animation)
+        .into(this)
+}
+
+fun CircleImageView.loadRoundedImage(url: String) {
+    Glide.with(this)
+        .load(url)
+        .centerCrop()
+        .error(R.drawable.ic_no_image)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
 }
 
