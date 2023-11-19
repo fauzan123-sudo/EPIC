@@ -1,49 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TableLayout
         android:id="@+id/table_heading_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/table_border">
+        android:background="@drawable/table_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_user_name"
+                android:id="@+id/txtNo"
                 style="@style/table_row_item"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/_30sdp"
                 android:layout_column="0"
                 android:layout_margin="1dp"
-                android:layout_weight="1"
                 android:background="@color/white"
-                android:textAlignment="center" />
+                android:text="No"
+                android:textAlignment="center"
+                />
 
             <TextView
-                android:id="@+id/tv_user_age"
+                android:id="@+id/txtCode"
                 style="@style/table_row_item"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/_100sdp"
                 android:layout_column="1"
                 android:layout_margin="1dp"
-                android:layout_weight="1"
                 android:background="@color/white"
+                android:text="Kode"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/tv_user_designation"
+                android:id="@+id/txtProductName"
                 style="@style/table_row_item"
-                android:layout_width="0dp"
-                android:layout_column="2"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_column="3"
                 android:layout_margin="1dp"
-                android:layout_weight="1"
                 android:background="@color/white"
                 android:baselineAligned="false"
+                android:text="Nama Barang"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/txtSales"
+                style="@style/table_row_item"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_column="2"
+                android:layout_margin="1dp"
+                android:background="@color/white"
+                android:baselineAligned="false"
+                android:text="Sales"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/txtSeller"
+                style="@style/table_row_item"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_column="2"
+                android:layout_margin="1dp"
+                android:background="@color/white"
+                android:baselineAligned="false"
+                android:text="Penjualan"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/txtProductReturn"
+                style="@style/table_row_item"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_column="4"
+                android:layout_margin="1dp"
+                android:background="@color/white"
+                android:baselineAligned="false"
+                android:text="Pengembalian Barang"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/txtStock"
+                style="@style/table_row_item"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_column="5"
+                android:layout_margin="1dp"
+                android:background="@color/white"
+                android:baselineAligned="false"
+                android:text="Persediaan"
                 android:textAlignment="center" />
         </TableRow>
     </TableLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

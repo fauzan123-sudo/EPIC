@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
+import com.example.epic.R
 import com.example.epic.databinding.FragmentProfileBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProfileViewModel
@@ -148,7 +149,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     val data = response.data
                     Glide.with(requireContext())
                         .load(data.foto)
+                        .placeholder(R.drawable.progress_animation)
                         .into(binding.userImage)
+
 //                    binding.userImage.loadRoundedImage(data.foto)
                     binding.nameUser.text = data.nama
 

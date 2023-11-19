@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_listProductFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
+        <action
+            android:id="@+id/action_listProductFragment_to_updateProductFragment"
+            app:destination="@id/updateProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/addProductFragment"
@@ -117,7 +120,11 @@
         android:id="@+id/listStockFragment"
         android:name="com.example.epic.ui.fragment.stock.ListStockFragment"
         android:label="fragment_list_stock"
-        tools:layout="@layout/fragment_list_stock" />
+        tools:layout="@layout/fragment_list_stock" >
+        <action
+            android:id="@+id/action_listStockFragment_to_listCategoryByStockFragment"
+            app:destination="@id/listCategoryByStockFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addSalesFragment"
         android:name="com.example.epic.ui.fragment.sales.AddSalesFragment"
@@ -175,4 +182,23 @@
         android:name="com.example.epic.ui.fragment.report.ReportFragment"
         android:label="fragment_report"
         tools:layout="@layout/fragment_report" />
+    <fragment
+        android:id="@+id/updateProductFragment"
+        android:name="com.example.epic.ui.fragment.product.UpdateProductFragment"
+        android:label="fragment_update_product"
+        tools:layout="@layout/fragment_update_product" >
+        <argument
+            android:name="dataProduct"
+            app:argType="com.example.epic.data.model.product.read.Data"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/listCategoryByStockFragment"
+        android:name="com.example.epic.ui.fragment.stock.ListCategoryByStockFragment"
+        android:label="fragment_list_category_by_stock"
+        tools:layout="@layout/fragment_list_category_by_stock" >
+        <argument
+            android:name="dataCategory"
+            app:argType="com.example.epic.data.model.category.read.Data" />
+    </fragment>
 </navigation>

@@ -4,11 +4,11 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.epic.R
 import com.example.epic.data.adapter.MonthAdapter
 import com.example.epic.data.model.month.Month
 import com.example.epic.databinding.FragmentStatisticSellerBinding
@@ -39,8 +39,8 @@ class StatisticSellerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setUpData()
+        val currentMonth = getMonth()
+        setUpData(currentMonth)
         setUpToolbar()
 //        setUpLineChart()
         setUpMonth()
@@ -50,18 +50,29 @@ class StatisticSellerFragment :
 
     private fun setUpMonth() {
         binding.apply {
-            val monthArray = resources.getStringArray(R.array.month)
-//            val months = monthArray.map {
-//                Month(it, false)
-//            }
-
-            val months = ArrayList<Month>()
             val currentMonth = getMonth()
-            for (i in monthArray.indices) {
-                val isSelected = (i == currentMonth - 1)
-                months.add(Month(i + 1, monthArray[i], isSelected))
+            val months = listOf(
+                Month(1, "Januari"),
+                Month(2, "Februari"),
+                Month(3, "Maret"),
+                Month(4, "April"),
+                Month(5, "Mei"),
+                Month(6, "Juni"),
+                Month(7, "Juli"),
+                Month(8, "Agustus"),
+                Month(9, "September"),
+                Month(10, "Oktober"),
+                Month(11, "November"),
+                Month(12, "Desember")
+            )
+
+            for (month in months) {
+                if (month.monthNumber == currentMonth) {
+                    month.isSelected = true
+                }
             }
 
+            monthAdapter.listener = this@StatisticSellerFragment
             monthAdapter.differ.submitList(months)
             rvMonth.apply {
                 layoutManager =
@@ -86,11 +97,11 @@ class StatisticSellerFragment :
     }
 
     private fun setUpData2(data: List<Int>) {
-        val dataValues = arrayOf(4, 2, 5, 3, 5)
         val lineChart = binding.lineChart
+        Log.d("TAG", "data chart: $data")
         val entries = ArrayList<Entry>()
-        for (i in dataValues.indices) {
-            entries.add(Entry(i.toFloat() + 1, dataValues[i].toFloat()))
+        for (i in data.indices) {
+            entries.add(Entry(i.toFloat() + 1, data[i].toFloat()))
         }
 
         // Konfigurasi dataset
@@ -126,7 +137,7 @@ class StatisticSellerFragment :
         val xAxis = lineChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.textColor = Color.BLACK
-        xAxis.setLabelCount(dataValues.size, true)
+        xAxis.setLabelCount(data.size, true)
 
         // Konfigurasi sumbu Y
         val leftYAxis = lineChart.axisLeft
@@ -151,10 +162,9 @@ class StatisticSellerFragment :
         })
     }
 
-    private fun setUpData() {
-        val currentMonth = getMonth()
+    private fun setUpData(monthNumber: Int) {
         val currentYear = getYear()
-        viewModel.requestStatisticSeller(currentMonth, currentYear)
+        viewModel.requestStatisticSeller(monthNumber, currentYear)
         viewModel.readStatisticSeller.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -179,7 +189,7 @@ class StatisticSellerFragment :
     }
 
     override fun onClickItem(data: Month) {
-
+        setUpData(data.monthNumber)
     }
 
     private fun getGradientDrawable(): Drawable {

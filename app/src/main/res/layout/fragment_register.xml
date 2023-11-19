@@ -98,11 +98,12 @@
             android:hint="Ulangi Password" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Registrasi"
+        android:backgroundTint="@color/info"
         android:textAllCaps="true"
         app:layout_constraintBottom_toTopOf="@+id/txt_1"
         app:layout_constraintEnd_toEndOf="parent"

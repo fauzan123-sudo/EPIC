@@ -70,7 +70,7 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
         }
     }
 
-    fun updateProuct(request: RequestEditProduct) {
+    fun updateProduct(request: RequestEditProduct) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
@@ -82,7 +82,7 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
         }
     }
 
-    fun deleteProuct(codeProduct: String) {
+    fun deleteProduct(codeProduct: String) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {

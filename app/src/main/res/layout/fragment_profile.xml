@@ -10,10 +10,12 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_image"
+        android:paddingVertical="@dimen/_5sdp"
+        android:clipToPadding="true"
         android:layout_width="@dimen/_100sdp"
+        android:src="@drawable/ari"
         android:layout_height="@dimen/_100sdp"
         android:elevation="@dimen/_10sdp"
-        android:src="@drawable/ari"
         app:civ_border_color="@color/white"
         app:civ_border_width="@dimen/_2sdp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,9 +24,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="wrap_content"
+    <ImageView
         android:id="@+id/img_change_photo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="@dimen/_10sdp"
         android:src="@drawable/ic_camera"
@@ -37,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_50sdp"
         android:backgroundTint="@color/blue_light"
-        app:cardCornerRadius="@dimen/_2sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +48,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout"
+            android:paddingBottom="@dimen/_20sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_64sdp"
@@ -60,7 +63,9 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp"
+                app:layout_constraintBottom_toTopOf="@+id/textView5"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,41 +74,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pemilik"
+                android:layout_marginVertical="@dimen/_10sdp"
                 android:textColor="@color/grey"
+                app:layout_constraintBottom_toTopOf="@+id/textView21"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameUser" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/textView5">
+                android:text="EPIC INVENTORY CONTROL SYSTEM"
+                android:textColor="@color/info"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/logo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView21"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView21" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EPIC INVENTORY CONTROL SYSTEM"
-                    android:textColor="@color/info"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView8" />
-            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView6"
         android:layout_width="match_parent"
+        android:clipToPadding="true"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="@dimen/_1sdp"
+        app:strokeColor="#347F838B"
+        android:elevation="0dp"
+        app:cardElevation="0dp"
         android:layout_marginTop="@dimen/_30sdp"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView"
@@ -116,11 +128,12 @@
 
             <ImageView
                 android:id="@+id/imageView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_user"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                android:src="@drawable/ic_profile_user"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/txtProfileUser" />
 
             <TextView
                 android:id="@+id/txtProfileUser"
@@ -148,7 +161,11 @@
         android:id="@+id/materialCardView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="@dimen/_1sdp"
+        app:strokeColor="#347F838B"
+        android:elevation="0dp"
+        app:cardElevation="0dp"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView6"
         tools:layout_editor_absoluteX="26dp">
@@ -160,11 +177,13 @@
 
             <ImageView
                 android:id="@+id/imgAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_user"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_map"
+                app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/txtAddress" />
 
             <TextView
                 android:id="@+id/txtAddress"
@@ -192,6 +211,11 @@
         android:id="@+id/materialCardView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="@dimen/_1sdp"
+        app:strokeColor="#347F838B"
+        android:elevation="0dp"
+        app:cardElevation="0dp"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView7"
         tools:layout_editor_absoluteX="26dp">
@@ -203,11 +227,13 @@
 
             <ImageView
                 android:id="@+id/imgSetting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_user"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_setting_new"
+                app:layout_constraintBottom_toBottomOf="@+id/setting"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/setting" />
 
             <TextView
                 android:id="@+id/setting"
@@ -242,11 +268,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView8" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/info"
+        android:backgroundTint="@color/white"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        app:strokeColor="@color/info"
+        app:strokeWidth="2dp"
         android:text="Keluar"
         android:textColor="@color/info"
         app:layout_constraintBottom_toBottomOf="parent"

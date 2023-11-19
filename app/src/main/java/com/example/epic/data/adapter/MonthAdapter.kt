@@ -24,30 +24,25 @@ class MonthAdapter @Inject constructor() :
     }
 
     inner class ViewHolder(val binding: ItemMonthBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(month: Month, position: Int) {
-            Log.d("data", "month is: ${month.isSelected}")
-            binding.tvMonth.text = month.month
-
+        fun bind(item: Month, position: Int) {
+            Log.d("data", "month is: ${item.isSelected}")
+            binding.tvMonth.text = item.month
             binding.tvMonth.setTextColor(
-                if (month.isSelected) Color.parseColor("#0660C7")
+                if (item.isSelected) Color.parseColor("#0660C7")
                 else Color.parseColor("#7F838B")
             )
+            if (item.isSelected) {
+                binding.tvMonth.setTextColor(Color.parseColor("#0660C7"))
+            } else {
+                binding.tvMonth.setTextColor(Color.parseColor("#7F838B"))
+            }
             binding.root.setOnClickListener {
-                if (!month.isSelected) {
-
-                    if (lastClickedPosition != -1) {
-                        val lastClickedMonth = differ.currentList[lastClickedPosition]
-                        lastClickedMonth.isSelected = false
-                        notifyItemChanged(lastClickedPosition)
-                    }
-
-                    month.isSelected = true
-                    binding.tvMonth.setTextColor(Color.parseColor("#0660C7"))
-                    notifyItemChanged(position)
-                    lastClickedPosition = position
+                for (month in differ.currentList) {
+                    month.isSelected = false
                 }
-
-                listener?.onClickItem(month)
+                item.isSelected = true
+                notifyDataSetChanged()
+                listener?.onClickItem(item)
             }
         }
     }

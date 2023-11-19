@@ -9,8 +9,10 @@ import com.example.epic.data.model.category.add.RequestAddCategory
 import com.example.epic.data.model.category.based.SpinnerCategoryResponse
 import com.example.epic.data.model.category.delete.DeleteCategoryResponse
 import com.example.epic.data.model.category.read.CategoryListResponse
+import com.example.epic.data.model.category.spinner.DropDownCategoryResponse
 import com.example.epic.data.model.category.update.RequestEditCategory
 import com.example.epic.data.model.category.update.UpdateCategoryResponse
+import com.example.epic.data.model.stock.search.SearchCategoryResponse
 import com.example.epic.data.repository.CategoryRepository
 import com.example.epic.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +27,10 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
     private val _listCategoryResponse = MutableLiveData<NetworkResult<CategoryListResponse>>()
     val listCategoryResponse: LiveData<NetworkResult<CategoryListResponse>>
         get() = _listCategoryResponse
+
+    private val _showCategoryResponse = MutableLiveData<NetworkResult<DropDownCategoryResponse>>()
+    val showCategoryResponse: LiveData<NetworkResult<DropDownCategoryResponse>>
+        get() = _showCategoryResponse
 
     private val _addCategoryResponse = MutableLiveData<NetworkResult<AddCategoryResponse>>()
     val addCategoryResponse: LiveData<NetworkResult<AddCategoryResponse>>
@@ -41,6 +47,14 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
     private val _basedCategoryResponse = MutableLiveData<NetworkResult<SpinnerCategoryResponse>>()
     val basedCategoryResponse: LiveData<NetworkResult<SpinnerCategoryResponse>>
         get() = _basedCategoryResponse
+
+    private val _searchCategory = MutableLiveData<NetworkResult<SearchCategoryResponse>>()
+    val searchCategory : LiveData<NetworkResult<SearchCategoryResponse>>
+        get() = _searchCategory
+
+    private val _dropDownCategory = MutableLiveData<NetworkResult<DropDownCategoryResponse>>()
+    val dropDownCategory : LiveData<NetworkResult<DropDownCategoryResponse>>
+        get() = _dropDownCategory
 
     fun requestAddCategory(request: RequestAddCategory) {
         viewModelScope.launch {
@@ -63,6 +77,19 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
                 _listCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
     }
+
+    fun requestShowCategory() {
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _showCategoryResponse.postValue(NetworkResult.Loading())
+                _showCategoryResponse.postValue(repository.spinnerCategory())
+            } else
+                _showCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+        }
+    }
+
+
 
     fun updateCategory(request: RequestEditCategory) {
         viewModelScope.launch {
@@ -96,6 +123,31 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
                 _basedCategoryResponse.postValue(repository.baseCategory(idCategory))
             } else {
                 _basedCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
+            }
+        }
+    }
+
+
+    fun requestSearchByCategory(idCategory: Int) {
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _searchCategory.postValue(NetworkResult.Loading())
+                _searchCategory.postValue(repository.searchCategory(idCategory))
+            } else {
+                _searchCategory.postValue(NetworkResult.Error("No Internet Connection"))
+            }
+        }
+    }
+
+    fun requestDropDownCategory(q:String){
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _dropDownCategory.postValue(NetworkResult.Loading())
+                _dropDownCategory.postValue(repository.dropDownCategory(q))
+            }else{
+                _dropDownCategory.postValue(NetworkResult.Error("No Internet Connection"))
             }
         }
     }

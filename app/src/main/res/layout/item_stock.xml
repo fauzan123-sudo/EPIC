@@ -1,77 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="10dp"
     android:layout_margin="@dimen/_5sdp"
     android:layout_marginBottom="@dimen/_15sdp"
-    android:background="@color/white">
+    android:background="@color/white"
+    app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/_8sdp">
+        android:padding="@dimen/_18sdp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/ic_circle_24"
             android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"/>
+            android:layout_height="@dimen/_12sdp"
+            android:src="@drawable/ic_circle_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_product"
-            android:textAlignment="center"
-            android:textSize="@dimen/_16ssp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
-            android:text="Nippon Paint nippe 2000"
-            android:textColor="@color/black"
+            android:text="CAT"
+            android:textAlignment="center"
+            android:textColor="@color/info"
+            android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView12"
-            style="@style/contentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jumlah Total : "
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_product" />
-
-        <TextView
-            android:id="@+id/textView18"
-            style="@style/contentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:text="Kode/Satuan : "
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-        <TextView
-            android:id="@+id/tv_total_product"
-            android:textColor="@color/grey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView12" />
-
-        <TextView
-            android:id="@+id/tv_code_and_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView18" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

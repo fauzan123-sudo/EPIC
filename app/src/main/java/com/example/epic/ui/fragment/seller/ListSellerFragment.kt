@@ -1,6 +1,7 @@
 package com.example.epic.ui.fragment.seller
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -101,6 +102,7 @@ class ListSellerFragment :
                 when (it) {
                     is NetworkResult.Success -> {
                         hideLoading()
+                        viewModel.deleteSellerResponse.removeObservers(viewLifecycleOwner)
                         val response = it.data!!
                         if (response.status) {
                             showSuccessDelete(response.data.message)
@@ -116,11 +118,29 @@ class ListSellerFragment :
 
                     is NetworkResult.Error -> {
                         hideLoading()
+                        viewModel.deleteSellerResponse.removeObservers(viewLifecycleOwner)
                         showErrorMessage(it.message!!)
                     }
                 }
+//                viewModel.deleteSellerResponse.removeObservers(viewLifecycleOwner)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.deleteSellerResponse.removeObservers(viewLifecycleOwner)
+        viewModel.listSellerResponse.removeObservers(viewLifecycleOwner)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "alert is appear: On Resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("TAG", "alert is appear: On Pause")
     }
 
 }

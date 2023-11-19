@@ -47,8 +47,9 @@ class ListSalesFragment :
 //                    viewModel.listSalesResponse.removeObservers(viewLifecycleOwner)
                     hideLoading()
                     val response = it.data!!
+                    val data = response.data
                     salesAdapter.listener = this
-                    salesAdapter.differ.submitList(response.data)
+                    salesAdapter.differ.submitList(data)
                     with(binding.rvSales) {
                         layoutManager =
                             LinearLayoutManager(
@@ -105,6 +106,7 @@ class ListSalesFragment :
                 when (it) {
                     is NetworkResult.Success -> {
                         hideLoading()
+                        viewModel.deleteSalesResponse.removeObservers(viewLifecycleOwner)
                         val response = it.data!!
                         if (response.status) {
                             showSuccessDelete(response.message)
@@ -120,6 +122,7 @@ class ListSalesFragment :
 
                     is NetworkResult.Error -> {
                         hideLoading()
+                        viewModel.deleteSalesResponse.removeObservers(viewLifecycleOwner)
                         showErrorMessage(it.message!!)
                     }
                 }

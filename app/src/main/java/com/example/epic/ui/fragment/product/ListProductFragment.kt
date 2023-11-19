@@ -1,6 +1,7 @@
 package com.example.epic.ui.fragment.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListProductFragment :
-    BaseFragment<FragmentListProductBinding>(FragmentListProductBinding::inflate) {
+    BaseFragment<FragmentListProductBinding>(FragmentListProductBinding::inflate),
+    ProductAdapter.ItemListener {
 
     private val productViewModel: ProductViewModel by viewModels()
 
@@ -106,6 +108,7 @@ class ListProductFragment :
                     requireContext()
                 )
             adapter = productAdapter
+            productAdapter.listener = this@ListProductFragment
         }
     }
 
@@ -132,6 +135,54 @@ class ListProductFragment :
                     "Data Barang"
                 )
             }
+        }
+    }
+
+    override fun updateProduct(data: Data) {
+        try {
+            Log.d("TAG", "updateProduct: $data")
+            val action =
+                ListProductFragmentDirections.actionListProductFragmentToUpdateProductFragment(
+                    data
+                )
+            findNavController().navigate(action)
+
+        } catch (e: Exception) {
+            Log.e("error", "updateCategory: ", e)
+            showErrorMessage(e.toString())
+        }
+    }
+
+    override fun deleteProduct(data: Data) {
+        showWarningMessage("Barang") {
+            productViewModel.deleteProduct(data.kode_barang.toString())
+            productViewModel.deleteProductResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        hideLoading()
+                        productViewModel.deleteProductResponse.removeObservers(viewLifecycleOwner)
+                        val response = it.data!!
+//                        val dataProduct = response.data
+                        if (response.status) {
+                            showSuccessDelete(response.message)
+                            loadProduct()
+                        } else {
+                            showErrorMessage(response.message)
+                        }
+                    }
+
+                    is NetworkResult.Loading -> {
+                        showLoading()
+                    }
+
+                    is NetworkResult.Error -> {
+                        hideLoading()
+                        productViewModel.deleteProductResponse.removeObservers(viewLifecycleOwner)
+                        showErrorMessage(it.message!!)
+                    }
+                }
+            }
+
         }
     }
 

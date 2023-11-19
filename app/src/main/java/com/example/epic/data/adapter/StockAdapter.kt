@@ -1,11 +1,12 @@
 package com.example.epic.data.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.epic.data.model.stock.Data
+import com.example.epic.data.model.category.read.Data
 import com.example.epic.databinding.ItemStockBinding
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,18 +14,27 @@ import javax.inject.Singleton
 @Singleton
 class StockAdapter @Inject constructor() : RecyclerView.Adapter<StockAdapter.ViewHolder>() {
 
+    var listener: ItemListener? = null
+
+    interface ItemListener {
+        fun pickCategory(data: Data)
+    }
+
     inner class ViewHolder(val binding: ItemStockBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(stock: Data) {
-            binding.tvProduct.text = stock.nama_barang
-            binding.tvCodeAndUnit.text = "${stock.id_barang}"
-            binding.tvTotalProduct.text = stock.jumlah_barang
+        fun bind(category: Data) {
+            binding.tvProduct.text = category.nama_kategori
+
+            binding.root.setOnClickListener {
+                listener?.pickCategory(category)
+                Log.d("TAG", "data category : $category")
+            }
         }
     }
 
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Data>() {
         override fun areItemsTheSame(oldItem: Data, newItem: Data) =
-            oldItem.id_persediaan == newItem.id_persediaan
+            oldItem.id_kategori == newItem.id_kategori
 
         override fun areContentsTheSame(oldItem: Data, newItem: Data) = oldItem == newItem
 

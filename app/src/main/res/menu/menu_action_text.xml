@@ -5,6 +5,5 @@
     <item
         android:id="@+id/add_text_action"
         android:title="simpan"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
 </menu>

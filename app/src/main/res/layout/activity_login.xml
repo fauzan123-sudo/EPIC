@@ -45,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
+        android:textColor="@color/grey"
         android:text="Silahkan masuk ke akun yang sudah terdaftar"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -55,10 +56,11 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Masuk"
+        android:text="Login"
+        android:textColor="@color/white"
         android:textAllCaps="false"
-        app:backgroundTint="@color/primary"
-        app:cornerRadius="@dimen/_30sdp"
+        app:backgroundTint="@color/info"
+        app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30sdp"
         android:text="Lupa Kata Sandi ?"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
@@ -79,6 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="41dp"
+        android:textColorHint="@color/grey"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:layout_editor_absoluteX="1dp">
 
@@ -87,6 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"
+            android:textColorHint="@color/grey"
+            android:background="@color/white"
             android:imeOptions="actionGo"
             android:inputType="text"
             android:singleLine="true"
@@ -99,6 +105,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textColorHint="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_username">
@@ -111,6 +118,7 @@
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:background="@color/white"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 

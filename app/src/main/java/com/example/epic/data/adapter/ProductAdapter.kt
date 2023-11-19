@@ -14,6 +14,15 @@ import javax.inject.Singleton
 @Singleton
 class ProductAdapter @Inject constructor() : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
+    var listener: ItemListener? = null
+
+    val deleteListener: ItemListener? = null
+
+    interface ItemListener {
+        fun updateProduct(data: Data)
+        fun deleteProduct(data: Data)
+    }
+
     inner class ViewHolder(val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
@@ -23,6 +32,14 @@ class ProductAdapter @Inject constructor() : RecyclerView.Adapter<ProductAdapter
             val code = product.kode_barang
             val unit = product.satuan
             binding.tvCodeAndUnit.text = "$code/$unit"
+
+            binding.root.setOnClickListener {
+                listener?.updateProduct(product)
+            }
+
+            binding.tvDeleteProduct.setOnClickListener {
+                listener?.deleteProduct(product)
+            }
         }
     }
 

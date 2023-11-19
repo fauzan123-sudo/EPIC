@@ -1,6 +1,7 @@
 package com.example.epic.ui.fragment.seller
 
 import android.R
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -38,6 +39,7 @@ class AddSellerFragment :
     }
 
     private fun setUpSpinner() {
+        binding.designSpinner.hint = "Pilih Barang"
         categoryViewModel.requestListCategory()
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
@@ -57,7 +59,7 @@ class AddSellerFragment :
                             categoryNames
                         )
 
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
 
                         binding.spPickCategory.setAdapter(adapter)
                         binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
@@ -99,29 +101,43 @@ class AddSellerFragment :
                     hideLoading()
                     val response = it.data!!
                     val dataProduct = response.data
-                    val productNames = dataProduct.map { product ->
-                        product.nama_barang
-                    }.toTypedArray()
-
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        productNames
-                    )
-
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-                    binding.designSpinner.setAdapter(adapter)
-
-                    binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
-                        val selectedProductName =
-                            adapter.getItem(position) ?: return@setOnItemClickListener
-                        val selectedProduct = dataProduct.find { product ->
-                            product.nama_barang == selectedProductName
+                    if (dataProduct.isEmpty()) {
+                        binding.apply {
+                            designSpinner.hint = "Data Kosong"
+                            designSpinner.isEnabled = false
+                            designSpinner.isClickable = false
+                            designSpinner.isFocusable = false
                         }
-                        if (selectedProduct != null) {
-                            productCode = selectedProduct.kode_barang
-                            productId = selectedProduct.id_barang.toString()
+                    } else {
+                        binding.designSpinner.hint = "Pilih Barang"
+                        binding.designSpinner.isEnabled = true
+                        val productNames = dataProduct.map { product ->
+                            product.nama_barang
+                        }.toTypedArray()
+
+                        val adapter = ArrayAdapter(
+                            requireContext(),
+                            android.R.layout.simple_dropdown_item_1line,
+                            productNames
+                        )
+
+
+                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+
+                        binding.designSpinner.setAdapter(adapter)
+
+                        binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
+                            val selectedProductName =
+                                adapter.getItem(position) ?: return@setOnItemClickListener
+                            val selectedProduct = dataProduct.find { product ->
+                                product.nama_barang == selectedProductName
+                            }
+                            if (selectedProduct != null) {
+                                productCode = selectedProduct.kode_barang
+                                productId = selectedProduct.id_barang.toString()
+                                binding.etUnitProduct.setText(selectedProduct.satuan)
+
+                            }
                         }
                     }
                 }
@@ -138,13 +154,27 @@ class AddSellerFragment :
         }
     }
 
+
+    private fun handleAddProduct() {
+        val salesInput = binding.etSalesInput.text.toString()
+        if (selectedCategoryId == "") {
+            showErrorMessage("harap pilih kategori dulu!!")
+        } else if (productCode == "") {
+            showErrorMessage("harap pilih barang dulu!!")
+        } else if (salesInput.isEmpty()) {
+            showErrorMessage("harap isi satuan barang dulu!!")
+        } else {
+            addDataSeller(salesInput)
+        }
+    }
+
     private fun setUpToolbar() {
         binding.apply {
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar.myToolbar)
             setupMenu(com.example.epic.R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     com.example.epic.R.id.add_text_action -> {
-                        addDataSeller()
+                        handleAddProduct()
                         true
                     }
 
@@ -162,15 +192,17 @@ class AddSellerFragment :
                 )
             }
         }
+
+        binding.toolbar.myToolbar.setTitleTextColor(Color.parseColor("#0660C7"))
     }
 
-    private fun addDataSeller() {
-        val amountSeller = binding.etMinimumProduct.text.toString()
+    private fun addDataSeller(salesInput: String) {
+//        val amountSeller = binding.etSalesInput.text.toString()
         val date = getCurrentDateTime()
         sellerViewModel.requestCreateSeller(
             RequestCreateSeller(
                 productId,
-                amountSeller,
+                salesInput,
                 date
             )
         )
@@ -178,6 +210,7 @@ class AddSellerFragment :
             when (it) {
                 is NetworkResult.Success -> {
                     hideLoading()
+                    sellerViewModel.createSellerResponse.removeObservers(viewLifecycleOwner)
                     val response = it.data!!
                     showSuccessMessage(response.data.message)
                 }
@@ -188,10 +221,16 @@ class AddSellerFragment :
 
                 is NetworkResult.Error -> {
                     hideLoading()
+                    sellerViewModel.createSellerResponse.removeObservers(viewLifecycleOwner)
                     showErrorMessage(it.message!!)
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sellerViewModel.createSellerResponse.removeObservers(viewLifecycleOwner)
     }
 
 }

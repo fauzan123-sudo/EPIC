@@ -61,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/_12sdp"
-            app:cardCornerRadius="@dimen/_12sdp"
+            app:cardCornerRadius="0dp"
             app:cardElevation="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="@+id/mcv2"
             app:layout_constraintEnd_toStartOf="@+id/mcv2"
@@ -116,15 +116,14 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcv2"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginTop="19dp"
-            app:cardCornerRadius="@dimen/_12sdp"
+            app:cardCornerRadius="0dp"
             app:cardElevation="@dimen/_4sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mcv1"
             app:layout_constraintTop_toBottomOf="@+id/dashboard">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -144,6 +143,7 @@
 
                     <TextView
                         android:id="@+id/h_day"
+                        android:layout_marginHorizontal="@dimen/_20sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
@@ -200,11 +200,12 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_month"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:orientation="horizontal"
-                tools:itemCount="12"
+                tools:itemCount="2"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_month" />
         </com.google.android.material.card.MaterialCardView>
@@ -212,26 +213,24 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/_21sdp"
             app:cardCornerRadius="@dimen/_12sdp"
-            app:cardElevation="@dimen/_4sdp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="25dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/blue_light"
-                android:padding="@dimen/_11sdp">
+                android:paddingHorizontal="@dimen/_20sdp">
 
                 <ImageView
                     android:id="@+id/h_file"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:src="@drawable/ic_open"
-                    app:layout_constraintBottom_toBottomOf="@+id/h_incoming_goods"
+                    app:layout_constraintBottom_toTopOf="@+id/imageView12"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -246,7 +245,7 @@
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/h_file"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/h_file"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -266,7 +265,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/imageView11">
 
                     <TextView
                         android:id="@+id/textView15"
@@ -306,8 +305,10 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="@dimen/_11sdp"
                     android:src="@drawable/undo"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toEndOf="@+id/h_file"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@+id/h_file"
                     app:layout_constraintTop_toBottomOf="@+id/h_file" />
 
@@ -444,10 +445,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/h_incoming_menu"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="@dimen/_12sdp"
-            app:cardElevation="@dimen/_10sdp"
+            app:cardElevation="@dimen/_3sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mc_seller"
             app:layout_constraintHorizontal_bias="0.5"
@@ -463,12 +465,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:src="@drawable/ic_sales"
-                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintBottom_toTopOf="@+id/textView20"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textView20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
@@ -477,7 +480,6 @@
                     android:textColor="@color/grey"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_income"
                     tools:layout_editor_absoluteX="7dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -485,10 +487,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mc_seller"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="@dimen/_12sdp"
+            app:cardElevation="@dimen/_3sdp"
             app:layout_constraintBottom_toBottomOf="@+id/h_incoming_menu"
             app:layout_constraintEnd_toStartOf="@+id/h_stock_menu"
             app:layout_constraintHorizontal_bias="0.5"
@@ -527,7 +530,8 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/h_stock_menu"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            app:cardElevation="@dimen/_3sdp"
+            android:layout_height="@dimen/_80sdp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="@+id/mc_seller"
@@ -548,7 +552,6 @@
                     android:layout_height="0dp"
                     android:src="@drawable/ic_stock"
                     app:layout_constraintBottom_toTopOf="@+id/textView14"
-                    app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:layout_editor_absoluteX="7dp" />
 

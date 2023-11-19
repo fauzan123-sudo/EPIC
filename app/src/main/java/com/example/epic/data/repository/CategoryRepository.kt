@@ -11,6 +11,10 @@ class CategoryRepository @Inject constructor(private val api: CategoryApi) : Bas
         api.listCategory()
     }
 
+    suspend fun spinnerCategory() = safeApiCall {
+        api.spinnerCategory()
+    }
+
     suspend fun addCategory(request:RequestAddCategory) = safeApiCall {
         api.addCategory(request)
     }
@@ -28,6 +32,16 @@ class CategoryRepository @Inject constructor(private val api: CategoryApi) : Bas
     suspend fun baseCategory(basedIdCategory:Int) =
         safeApiCall {
             api.basedIdCategory(basedIdCategory)
+        }
+
+    suspend fun searchCategory(categoryId:Int) =
+        safeApiCall {
+            api.searchCategory(categoryId)
+        }
+
+    suspend fun dropDownCategory(q:String) =
+        safeApiCall {
+            api.dropDownSearch(q)
         }
 
 }

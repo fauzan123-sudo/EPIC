@@ -1,7 +1,6 @@
 package com.example.epic.ui.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.seller.ListSellerResponse
@@ -10,6 +9,7 @@ import com.example.epic.data.model.seller.create.RequestCreateSeller
 import com.example.epic.data.model.seller.delete.DeleteSellerResponse
 import com.example.epic.data.repository.SellerRepository
 import com.example.epic.util.NetworkResult
+import com.example.epic.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import xyz.teamgravity.checkinternet.CheckInternet
@@ -18,15 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SellerViewModel @Inject constructor(private val repository: SellerRepository) : ViewModel() {
 
-    private val _listSellerResponse = MutableLiveData<NetworkResult<ListSellerResponse>>()
+    private val _listSellerResponse = SingleLiveEvent<NetworkResult<ListSellerResponse>>()
     val listSellerResponse: LiveData<NetworkResult<ListSellerResponse>>
         get() = _listSellerResponse
 
-    private val _createSellerResponse = MutableLiveData<NetworkResult<CreateSellerResponse>>()
+    private val _createSellerResponse = SingleLiveEvent<NetworkResult<CreateSellerResponse>>()
     val createSellerResponse: LiveData<NetworkResult<CreateSellerResponse>>
         get() = _createSellerResponse
 
-    private val _deleteSellerResponse = MutableLiveData<NetworkResult<DeleteSellerResponse>>()
+    private val _deleteSellerResponse = SingleLiveEvent<NetworkResult<DeleteSellerResponse>>()
     val deleteSellerResponse: LiveData<NetworkResult<DeleteSellerResponse>>
         get() = _deleteSellerResponse
 
@@ -39,7 +39,6 @@ class SellerViewModel @Inject constructor(private val repository: SellerReposito
             }else{
                 _listSellerResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }
-
         }
     }
 

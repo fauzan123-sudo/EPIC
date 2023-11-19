@@ -26,7 +26,6 @@ class AddProductFragment :
     val viewModel: ProductViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var selectedCategoryId = ""
-    private var productCode = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +67,7 @@ class AddProductFragment :
                             if (selectedData != null) {
                                 selectedCategoryId = selectedData.id_kategori.toString()
                                 val categoryId = selectedData.id_kategori
-                                showProduct(categoryId)
+//                                showProduct(categoryId)
                                 Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
                                     .show()
                             }
@@ -88,53 +87,53 @@ class AddProductFragment :
         }
     }
 
-    private fun showProduct(categoryId: Int) {
-        categoryViewModel.requestProductByCategory(categoryId)
-        categoryViewModel.basedCategoryResponse.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    hideLoading()
-                    val response = it.data!!
-                    val dataProduct = response.data
-                    val productNames = dataProduct.map { product ->
-                        product.nama_barang
-                    }.toTypedArray()
-
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        productNames
-                    )
-
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-                    binding.designSpinner.setAdapter(adapter)
-
-                    binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
-                        val selectedProductName =
-                            adapter.getItem(position) ?: return@setOnItemClickListener
-                        val selectedProduct = dataProduct.find { product ->
-                            product.nama_barang == selectedProductName
-                        }
-                        if (selectedProduct != null) {
-                            productCode = selectedProduct.kode_barang.toString()
-                            Toast.makeText(requireContext(), productCode, Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
-                }
-
-                is NetworkResult.Loading -> {
-                    showLoading()
-                }
-
-                is NetworkResult.Error -> {
-                    hideLoading()
-                    showErrorMessage(it.message!!)
-                }
-            }
-        }
-    }
+//    private fun showProduct(categoryId: Int) {
+//        categoryViewModel.requestProductByCategory(categoryId)
+//        categoryViewModel.basedCategoryResponse.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is NetworkResult.Success -> {
+//                    hideLoading()
+//                    val response = it.data!!
+//                    val dataProduct = response.data
+//                    val productNames = dataProduct.map { product ->
+//                        product.nama_barang
+//                    }.toTypedArray()
+//
+//                    val adapter = ArrayAdapter(
+//                        requireContext(),
+//                        android.R.layout.simple_dropdown_item_1line,
+//                        productNames
+//                    )
+//
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//
+//                    binding.designSpinner.setAdapter(adapter)
+//
+//                    binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
+//                        val selectedProductName =
+//                            adapter.getItem(position) ?: return@setOnItemClickListener
+//                        val selectedProduct = dataProduct.find { product ->
+//                            product.nama_barang == selectedProductName
+//                        }
+//                        if (selectedProduct != null) {
+//                            productCode = selectedProduct.kode_barang.toString()
+//                            Toast.makeText(requireContext(), productCode, Toast.LENGTH_SHORT)
+//                                .show()
+//                        }
+//                    }
+//                }
+//
+//                is NetworkResult.Loading -> {
+//                    showLoading()
+//                }
+//
+//                is NetworkResult.Error -> {
+//                    hideLoading()
+//                    showErrorMessage(it.message!!)
+//                }
+//            }
+//        }
+//    }
 
     private fun setUpToolbar() {
         binding.apply {
@@ -164,6 +163,7 @@ class AddProductFragment :
 
     private fun handleAddProduct() {
         val nameProduct = binding.etNameProduct.text.toString()
+        val productCode = binding.etCodeProduct.text.toString()
         val unitProduct = binding.etUnitProduct.text.toString()
         val minimumProduct = binding.etMinimumProduct.text.toString()
         if (selectedCategoryId == "") {

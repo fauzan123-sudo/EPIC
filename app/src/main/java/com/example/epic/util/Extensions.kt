@@ -19,7 +19,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -144,13 +144,15 @@ fun Fragment.setupMenu(
     showAsAction: Int
 ) =
     (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) =
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menuInflater.inflate(menuId, menu)
+        }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             menuItem.setShowAsAction(showAsAction)
             return onMenuSelected(menuItem)
         }
+
     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
@@ -168,16 +170,17 @@ fun configureToolbarBackPress(
     activity: Activity,
     title: String,
 ) {
+    val navController = Navigation.findNavController(parentVw)
     customToolBar.setNavigationIcon(R.drawable.ic_arrow_back_button)
     customToolBar.title = title
     customToolBar.setNavigationOnClickListener {
-        parentVw.findNavController().popBackStack()
+        navController.popBackStack()
     }
 
     (activity as MainActivity).onBackPressedDispatcher.addCallback(
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                parentVw.findNavController().popBackStack()
+                navController.popBackStack()
             }
         }
     )

@@ -16,7 +16,6 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
         super.onViewCreated(view, savedInstanceState)
 
         setUpToolbar()
-
         clickHandle()
 
     }
@@ -41,7 +40,7 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
             mcProductReturn.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_productReturnFragment)
             }
-            mcGrafic.setOnClickListener {
+            mcChart.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_statisticSellerFragment)
             }
             mcReport.setOnClickListener {

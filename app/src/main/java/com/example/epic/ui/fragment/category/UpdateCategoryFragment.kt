@@ -22,8 +22,8 @@ class UpdateCategoryFragment :
 
     private val args: UpdateCategoryFragmentArgs by navArgs()
 
-
     private val viewModel: CategoryViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

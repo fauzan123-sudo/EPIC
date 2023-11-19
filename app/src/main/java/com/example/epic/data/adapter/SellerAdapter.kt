@@ -21,6 +21,12 @@ class SellerAdapter @Inject constructor() : RecyclerView.Adapter<SellerAdapter.V
 
     inner class ViewHolder (val binding:ItemSellerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(seller: Data) {
+            with(binding){
+                tvDay.text = seller.tanggal_penjualan
+                tvProduct.text = seller.nama_barang
+                tvTotalProduct.text = seller.jumlah_penjualan
+
+            }
             binding.tvDeleteSaller.setOnClickListener {
                 listener?.deleteSeller(seller)
             }

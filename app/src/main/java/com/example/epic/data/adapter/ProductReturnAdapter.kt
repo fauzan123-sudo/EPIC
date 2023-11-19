@@ -14,6 +14,12 @@ import javax.inject.Singleton
 class ProductReturnAdapter @Inject constructor() :
     RecyclerView.Adapter<ProductReturnAdapter.ViewHolder>() {
 
+    var listener: ItemListener? = null
+
+    interface ItemListener {
+        fun deleteSales(data: Data)
+    }
+
 
     inner class ViewHolder(val binding: ItemProductReturnBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,6 +29,10 @@ class ProductReturnAdapter @Inject constructor() :
                 tvProduct.text = data.nama_barang
                 tvDay.text = data.tanggal_pengembalian
                 tvCodeAndUnit.text = data.satuan
+
+                tvDeleteSeller.setOnClickListener {
+                    listener?.deleteSales(data)
+                }
             }
         }
 

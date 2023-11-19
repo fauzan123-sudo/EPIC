@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epic.R
 import com.example.epic.data.adapter.ProductReturnAdapter
+import com.example.epic.data.model.returnProduct.read.Data
 import com.example.epic.databinding.FragmentProductReturnBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProductReturnViewModel
@@ -19,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(FragmentProductReturnBinding::inflate){
+class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(FragmentProductReturnBinding::inflate), ProductReturnAdapter.ItemListener{
 
     private val viewModel:ProductReturnViewModel by viewModels()
     @Inject
@@ -53,7 +54,7 @@ class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(Fragmen
                     toolbar.myToolbar,
                     it,
                     requireActivity(),
-                    "Penjualan"
+                    "Pengembalian Barang"
                 )
             }
         }
@@ -86,6 +87,12 @@ class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(Fragmen
                     showErrorMessage(it.message ?: "Error occur")
                 }
             }
+        }
+    }
+
+    override fun deleteSales(data: Data) {
+        showWarningMessage("Pengembalian Barang") {
+            viewModel
         }
     }
 

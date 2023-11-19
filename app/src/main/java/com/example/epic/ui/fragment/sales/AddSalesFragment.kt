@@ -3,6 +3,7 @@ package com.example.epic.ui.fragment.sales
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
@@ -33,10 +34,10 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
         super.onViewCreated(view, savedInstanceState)
         setUpSpinner()
         setUpToolbar()
-
     }
 
     private fun setUpSpinner() {
+        binding.designSpinner.hint = "Pilih Barang"
         categoryViewModel.requestListCategory()
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
@@ -44,35 +45,44 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
                     hideLoading()
                     val response = it.data!!
                     val categories = response.data
+                    if (categories.isEmpty()) {
+                        disableSpinner()
+                    } else {
+                        val categoryNames = categories.map { category ->
+                            category.nama_kategori
+                        }.toTypedArray()
 
-                    val categoryNames = categories.map { category ->
-                        category.nama_kategori
-                    }.toTypedArray()
+                        if (response.status) {
+                            val adapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.simple_dropdown_item_1line,
+                                categoryNames
+                            )
 
-                    if (response.status) {
-                        val adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.simple_dropdown_item_1line,
-                            categoryNames
-                        )
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            binding.spPickCategory.setAdapter(adapter)
+                            binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
+                                val selectedCategoryName: String =
+                                    adapter.getItem(position) ?: return@setOnItemClickListener
 
-                        binding.spPickCategory.setAdapter(adapter)
-                        binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
-                            val selectedCategoryName: String =
-                                adapter.getItem(position) ?: return@setOnItemClickListener
-
-                            val selectedData =
-                                categories.find { category ->
-                                    category.nama_kategori == selectedCategoryName
+                                val selectedData =
+                                    categories.find { category ->
+                                        category.nama_kategori == selectedCategoryName
+                                    }
+                                if (selectedData != null) {
+                                    selectedCategoryId = selectedData.id_kategori.toString()
+                                    val categoryId = selectedData.id_kategori
+                                    showProduct(categoryId)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "$categoryId",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                } else {
+                                    disableSpinner()
                                 }
-                            if (selectedData != null) {
-                                selectedCategoryId = selectedData.id_kategori.toString()
-                                val categoryId = selectedData.id_kategori
-                                showProduct(categoryId)
-                                Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
-                                    .show()
                             }
                         }
                     }
@@ -90,6 +100,23 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "onResume: ")
+
+    }
+
+    private fun disableSpinner() {
+        with(binding) {
+            designSpinner.hint = "Data Kosong"
+            designSpinner.isEnabled = false
+            designSpinner.isClickable = false
+            designSpinner.isFocusable = false
+            designSpinner.isFocusableInTouchMode = false
+            designSpinner.dismissDropDown()
+        }
+    }
+
     private fun showProduct(categoryId: Int) {
         categoryViewModel.requestProductByCategory(categoryId)
         categoryViewModel.basedCategoryResponse.observe(viewLifecycleOwner) {
@@ -99,12 +126,7 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
                     val response = it.data!!
                     val dataProduct = response.data
                     if (dataProduct.isEmpty()) {
-                        with(binding) {
-                            designSpinner.hint = "Data Kosong"
-                            designSpinner.isEnabled = false
-                            designSpinner.isClickable = false
-                            designSpinner.isFocusable = false
-                        }
+                        disableSpinner()
                     } else {
                         binding.designSpinner.hint = "Pilih Barang"
                         binding.designSpinner.isEnabled = true

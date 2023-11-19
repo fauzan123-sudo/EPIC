@@ -1,6 +1,7 @@
 package com.example.epic.data.model.seller
 
 data class Data(
+    val nama_barang:String,
     val created_at: String,
     val id_barang: String,
     val id_penjualan: Int,

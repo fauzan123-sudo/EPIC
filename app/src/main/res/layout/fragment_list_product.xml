@@ -12,14 +12,6 @@
         android:id="@+id/toolbar"
         layout="@layout/main_toolbar" />
 
-    <!--    <com.google.android.material.search.SearchBar-->
-    <!--        android:id="@+id/search_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="48dp"-->
-    <!--        android:contentDescription="@string/search_here"-->
-    <!--        android:theme="@style/AppTheme"-->
-    <!--        app:iconifiedByDefault="false"-->
-    <!--        app:queryHint="Cari" />-->
 
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:layout_marginHorizontal="@dimen/_20sdp"

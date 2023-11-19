@@ -68,11 +68,12 @@
 
         <TextView
             android:id="@+id/tv_code_and_unit"
+            style="@style/contentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ARG12/Liter"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/v_code_and_unit" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_total_product" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

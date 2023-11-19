@@ -7,7 +7,6 @@
     android:background="@color/blue_light"
     tools:context=".ui.fragment.statistic.StatisticSellerFragment">
 
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/main_toolbar" />
@@ -16,7 +15,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_42sdp"
+        android:layout_margin="@dimen/_10sdp"
         android:elevation="@dimen/_4sdp"
         android:orientation="horizontal"
         app:cardCornerRadius="@dimen/_10sdp"
@@ -38,6 +37,8 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChart"
+        android:background="@color/white"
+        android:layout_margin="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_12sdp"
