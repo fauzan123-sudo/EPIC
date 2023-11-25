@@ -18,12 +18,11 @@ class StockProductAdapter @Inject constructor() : RecyclerView.Adapter<StockProd
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(product: Data) {
-            binding.tvProduct.text = product.nama_kategori
+            binding.tvProduct.text = product.nama_barang
             binding.tvTotalProduct.text = product.persediaan
             val code = product.kode_barang
             val unit = product.satuan
             binding.tvCodeAndUnit.text = "$code/$unit"
-
 
         }
     }
