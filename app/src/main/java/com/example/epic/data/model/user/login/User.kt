@@ -10,5 +10,10 @@ data class User(
     val password: String,
     val foto: String,
     val created_at: String,
-    val updated_at: String
+    val updated_at: String,
+    val alamat: String,
+    val ttl: String,
+    val tempat_lahir: String,
+    val jk: String,
+    val no_tlp: String
 )

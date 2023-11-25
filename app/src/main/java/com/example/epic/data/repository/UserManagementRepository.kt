@@ -6,4 +6,7 @@ import javax.inject.Inject
 class UserManagementRepository @Inject constructor(private val api: UserManagementApi) :
     BaseRepository() {
 
+        suspend fun readUser() = safeApiCall {
+            api.readUser()
+        }
 }

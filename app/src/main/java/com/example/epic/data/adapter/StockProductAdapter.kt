@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.epic.data.model.stock.search.Data
-import com.example.epic.databinding.ItemProductBinding
+import com.example.epic.databinding.ItemStockCategoryBinding
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class StockProductAdapter @Inject constructor() : RecyclerView.Adapter<StockProductAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemProductBinding) :
+    inner class ViewHolder(val binding: ItemStockCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(product: Data) {
@@ -40,7 +40,7 @@ class StockProductAdapter @Inject constructor() : RecyclerView.Adapter<StockProd
     val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ItemStockCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun getItemCount() = differ.currentList.size

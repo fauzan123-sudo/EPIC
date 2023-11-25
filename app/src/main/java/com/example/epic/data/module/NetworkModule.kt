@@ -2,6 +2,7 @@ package com.example.epic.data.module
 
 import com.example.epic.data.network.AuthApi
 import com.example.epic.data.network.CategoryApi
+import com.example.epic.data.network.HomeApi
 import com.example.epic.data.network.ProductApi
 import com.example.epic.data.network.ProductReturnApi
 import com.example.epic.data.network.ProfileApi
@@ -127,5 +128,11 @@ object NetworkModule {
     @Provides
     fun reportApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): ReportApi {
         return retrofitBuilder.client(okHttpClient).build().create(ReportApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun homeApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): HomeApi {
+        return retrofitBuilder.client(okHttpClient).build().create(HomeApi::class.java)
     }
 }

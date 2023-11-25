@@ -1,7 +1,10 @@
 package com.example.epic.ui.fragment.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -10,12 +13,15 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.epic.R
 import com.example.epic.data.adapter.MonthAdapter
+import com.example.epic.data.model.home.RequestHome
 import com.example.epic.data.model.month.Month
 import com.example.epic.databinding.FragmentHomeBinding
 import com.example.epic.ui.fragment.BaseFragment
+import com.example.epic.ui.viewModel.HomeViewModel
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.getMonth
+import com.example.epic.util.getYear
 import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -28,11 +34,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     lateinit var monthAdapter: MonthAdapter
 
     private val viewModel: ProfileViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         loadData()
+        val thisMonth = getMonth()
+        loadApi(thisMonth)
 
         val callBack = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -97,12 +106,46 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = monthAdapter
+
+                monthAdapter.listener = this@HomeFragment
             }
             imgProfile.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
             }
         }
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadApi(thisMonth: Int) {
+        val thisYear = getYear()
+        homeViewModel.requestHome(RequestHome("$thisYear-$thisMonth"))
+        homeViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    hideLoading()
+                    with(binding) {
+                        val response = it.data!!
+                        val data = response.data
+                        hIncomingGoods.text = "${data.sales} Barang"
+                        tvTotalSeller.text = "${data.penjualan} Barang"
+                        txtReturnProduct.text = "${data.pengembalian} Barang"
+                        txtTotalStock.text = "${data.persediaan} Barang"
+                    }
+
+                }
+
+                is NetworkResult.Loading -> {
+                    showLoading()
+                }
+
+                is NetworkResult.Error -> {
+                    hideLoading()
+                    showErrorMessage(it.message!!)
+                    Log.e("TAG", "loadApi: ${it.message}")
+                }
+            }
+        }
     }
 
     private fun loadData() {
@@ -152,7 +195,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     override fun onClickItem(data: Month) {
-        TODO("Not yet implemented")
+        Toast.makeText(requireContext(), data.month, Toast.LENGTH_SHORT).show()
+        loadApi(data.monthNumber)
     }
 
 

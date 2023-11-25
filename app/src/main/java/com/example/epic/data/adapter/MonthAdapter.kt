@@ -1,7 +1,6 @@
 package com.example.epic.data.adapter
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -25,7 +24,6 @@ class MonthAdapter @Inject constructor() :
 
     inner class ViewHolder(val binding: ItemMonthBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Month, position: Int) {
-            Log.d("data", "month is: ${item.isSelected}")
             binding.tvMonth.text = item.month
             binding.tvMonth.setTextColor(
                 if (item.isSelected) Color.parseColor("#0660C7")
