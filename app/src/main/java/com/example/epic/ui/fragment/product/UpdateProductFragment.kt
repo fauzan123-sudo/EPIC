@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -32,6 +33,8 @@ class UpdateProductFragment :
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var selectedCategoryId = ""
     private lateinit var defaultData: Data
+
+    private var categories: List<Data>? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,9 +92,9 @@ class UpdateProductFragment :
                 is NetworkResult.Success -> {
                     hideLoading()
                     val response = it.data!!
-                    val categories = response.data
+                    categories = response.data
 
-                    val categoryNames = categories.map { category ->
+                    val categoryNames = categories!!.map { category ->
                         category.nama_kategori
                     }.toTypedArray()
 
@@ -108,7 +111,7 @@ class UpdateProductFragment :
                                 args.dataProduct?.nama_kategori ?: "-"
                             )
 
-                        val defaultIndex = categories.indexOf(defaultData)
+                        val defaultIndex = categories!!.indexOf(defaultData)
 
                         if (defaultIndex != -1) {
                             binding.spPickCategory.setText(defaultData.nama_kategori, false)
@@ -121,7 +124,7 @@ class UpdateProductFragment :
                                 adapter.getItem(position) ?: return@setOnItemClickListener
 
                             val selectedData =
-                                categories.find { category ->
+                                categories!!.find { category ->
                                     category.nama_kategori == selectedCategoryName
                                 }
                             if (selectedData != null) {
@@ -155,8 +158,8 @@ class UpdateProductFragment :
                 when (menuItem.itemId) {
                     R.id.add_text_action -> {
 
-//                        handleUpdateProduct()
-                        actionAdd()
+                        handleUpdateProduct()
+//                        actionAdd()
                         true
                     }
 
@@ -177,20 +180,15 @@ class UpdateProductFragment :
     }
 
     private fun actionAdd() {
-        val selectedData = binding.spPickCategory.text.toString()
-        if (selectedData.isNotEmpty()) {
-            val adapter = binding.spPickCategory.adapter as ArrayAdapter<Data>
-            val selectedPosition = adapter.getPosition(Data(0, selectedData))
+       val selectedText = binding.spPickCategory.text.toString()
 
-            if (selectedPosition != -1) {
-                val idKategori = adapter.getItem(selectedPosition)?.id_kategori
-                Log.d("SpinnerActivity", "id_kategori: $idKategori")
-                // Ubah Toast ke Log untuk melihat hasilnya di Logcat
-            }
-        } else {
-            val idKategoriDefault = defaultData.id_kategori
-            Log.d("SpinnerActivity", "id_kategori default: $idKategoriDefault")
-            // Ubah Toast ke Log untuk melihat hasilnya di Logcat
+        if (selectedText.isNotEmpty()){
+            val selectedData: Data? = categories?.find { it.nama_kategori == selectedText }
+            val selectedId = selectedData?.id_kategori ?: -1
+            Toast.makeText(requireContext(), "Selected ID: $selectedId", Toast.LENGTH_SHORT)
+                .show()
+        } else{
+            Toast.makeText(requireContext(), selectedCategoryId, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -199,9 +197,10 @@ class UpdateProductFragment :
         val productCode = binding.etCodeProduct.text.toString()
         val unitProduct = binding.etUnitProduct.text.toString()
         val minimumProduct = binding.etMinimumProduct.text.toString()
-        if (selectedCategoryId == "") {
-            showErrorMessage("harap pilih kategori dulu!!")
-        } else if (productCode == "") {
+        val selectedText = binding.spPickCategory.text.toString()
+        val selectedData: Data? = categories?.find { it.nama_kategori == selectedText }
+        val selectedId = selectedData?.id_kategori ?: -1
+        if (productCode == "") {
             showErrorMessage("harap pilih barang dulu!!")
         } else if (nameProduct.isEmpty()) {
             showErrorMessage("harap isi nama barang dulu!!")
@@ -211,7 +210,7 @@ class UpdateProductFragment :
             showErrorMessage("harap isi satuan barang dulu!!")
         } else {
             addData(
-                selectedCategoryId,
+                selectedId.toString(),
                 productCode,
                 nameProduct,
                 unitProduct,

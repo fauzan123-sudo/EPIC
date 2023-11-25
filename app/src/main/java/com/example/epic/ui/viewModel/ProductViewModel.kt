@@ -1,7 +1,6 @@
 package com.example.epic.ui.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.product.create.AddProductResponse
@@ -13,6 +12,7 @@ import com.example.epic.data.model.product.update.UpdateProductResponse
 import com.example.epic.data.model.statistic.StatisticResponse
 import com.example.epic.data.repository.ProductRepository
 import com.example.epic.util.NetworkResult
+import com.example.epic.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import xyz.teamgravity.checkinternet.CheckInternet
@@ -22,27 +22,27 @@ import javax.inject.Inject
 class ProductViewModel @Inject constructor(private val repository: ProductRepository) :
     ViewModel() {
 
-    private val _createProductResponse = MutableLiveData<NetworkResult<AddProductResponse>>()
+    private val _createProductResponse = SingleLiveEvent<NetworkResult<AddProductResponse>>()
     val createProductResponse: LiveData<NetworkResult<AddProductResponse>>
         get() = _createProductResponse
 
-    private val _readProductResponse = MutableLiveData<NetworkResult<ProductListResponse>>()
+    private val _readProductResponse = SingleLiveEvent<NetworkResult<ProductListResponse>>()
     val readProductResponse: LiveData<NetworkResult<ProductListResponse>>
         get() = _readProductResponse
 
-    private val _updateProductResponse = MutableLiveData<NetworkResult<UpdateProductResponse>>()
+    private val _updateProductResponse = SingleLiveEvent<NetworkResult<UpdateProductResponse>>()
     val updateProductResponse: LiveData<NetworkResult<UpdateProductResponse>>
         get() = _updateProductResponse
 
-    private val _deleteProductResponse = MutableLiveData<NetworkResult<DeleteProductResponse>>()
+    private val _deleteProductResponse = SingleLiveEvent<NetworkResult<DeleteProductResponse>>()
     val deleteProductResponse: LiveData<NetworkResult<DeleteProductResponse>>
         get() = _deleteProductResponse
 
-    private val _searchProductResponse = MutableLiveData<NetworkResult<ProductListResponse>>()
+    private val _searchProductResponse = SingleLiveEvent<NetworkResult<ProductListResponse>>()
     val searchProductResponse: LiveData<NetworkResult<ProductListResponse>>
         get() = _searchProductResponse
 
-    private val _readStatisticSeller = MutableLiveData<NetworkResult<StatisticResponse>>()
+    private val _readStatisticSeller = SingleLiveEvent<NetworkResult<StatisticResponse>>()
     val readStatisticSeller: LiveData<NetworkResult<StatisticResponse>>
         get() = _readStatisticSeller
 

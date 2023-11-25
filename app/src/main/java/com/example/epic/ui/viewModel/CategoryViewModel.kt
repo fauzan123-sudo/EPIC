@@ -1,7 +1,6 @@
 package com.example.epic.ui.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.category.add.AddCategoryResponse
@@ -15,6 +14,7 @@ import com.example.epic.data.model.category.update.UpdateCategoryResponse
 import com.example.epic.data.model.stock.search.SearchCategoryResponse
 import com.example.epic.data.repository.CategoryRepository
 import com.example.epic.util.NetworkResult
+import com.example.epic.util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import xyz.teamgravity.checkinternet.CheckInternet
@@ -24,35 +24,35 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(private val repository: CategoryRepository) :
     ViewModel() {
 
-    private val _listCategoryResponse = MutableLiveData<NetworkResult<CategoryListResponse>>()
+    private val _listCategoryResponse = SingleLiveEvent<NetworkResult<CategoryListResponse>>()
     val listCategoryResponse: LiveData<NetworkResult<CategoryListResponse>>
         get() = _listCategoryResponse
 
-    private val _showCategoryResponse = MutableLiveData<NetworkResult<DropDownCategoryResponse>>()
+    private val _showCategoryResponse = SingleLiveEvent<NetworkResult<DropDownCategoryResponse>>()
     val showCategoryResponse: LiveData<NetworkResult<DropDownCategoryResponse>>
         get() = _showCategoryResponse
 
-    private val _addCategoryResponse = MutableLiveData<NetworkResult<AddCategoryResponse>>()
+    private val _addCategoryResponse = SingleLiveEvent<NetworkResult<AddCategoryResponse>>()
     val addCategoryResponse: LiveData<NetworkResult<AddCategoryResponse>>
         get() = _addCategoryResponse
 
-    private val _updateCategoryResponse = MutableLiveData<NetworkResult<UpdateCategoryResponse>>()
+    private val _updateCategoryResponse = SingleLiveEvent<NetworkResult<UpdateCategoryResponse>>()
     val updateCategoryResponse: LiveData<NetworkResult<UpdateCategoryResponse>>
         get() = _updateCategoryResponse
 
-    private val _deleteCategoryResponse = MutableLiveData<NetworkResult<DeleteCategoryResponse>>()
+    private val _deleteCategoryResponse = SingleLiveEvent<NetworkResult<DeleteCategoryResponse>>()
     val deleteCategoryResponse: LiveData<NetworkResult<DeleteCategoryResponse>>
         get() = _deleteCategoryResponse
 
-    private val _basedCategoryResponse = MutableLiveData<NetworkResult<SpinnerCategoryResponse>>()
+    private val _basedCategoryResponse = SingleLiveEvent<NetworkResult<SpinnerCategoryResponse>>()
     val basedCategoryResponse: LiveData<NetworkResult<SpinnerCategoryResponse>>
         get() = _basedCategoryResponse
 
-    private val _searchCategory = MutableLiveData<NetworkResult<SearchCategoryResponse>>()
+    private val _searchCategory = SingleLiveEvent<NetworkResult<SearchCategoryResponse>>()
     val searchCategory : LiveData<NetworkResult<SearchCategoryResponse>>
         get() = _searchCategory
 
-    private val _dropDownCategory = MutableLiveData<NetworkResult<DropDownCategoryResponse>>()
+    private val _dropDownCategory = SingleLiveEvent<NetworkResult<DropDownCategoryResponse>>()
     val dropDownCategory : LiveData<NetworkResult<DropDownCategoryResponse>>
         get() = _dropDownCategory
 

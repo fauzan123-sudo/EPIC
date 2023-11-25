@@ -1,6 +1,5 @@
 package com.example.epic.ui.fragment.product_return
 
-import android.R
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -23,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddProductReturnFragment :
     BaseFragment<FragmentAddProductReturnBinding>(FragmentAddProductReturnBinding::inflate) {
 
-    private val viewModel:ProductReturnViewModel by viewModels()
+    private val viewModel: ProductReturnViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var selectedCategoryId = ""
     private var productCode = ""
@@ -44,7 +43,7 @@ class AddProductReturnFragment :
             setupMenu(com.example.epic.R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     com.example.epic.R.id.add_text_action -> {
-                        addDataReturn()
+                        handleAddProduct()
                         true
                     }
 
@@ -64,6 +63,19 @@ class AddProductReturnFragment :
         }
     }
 
+    private fun handleAddProduct() {
+        val salesInput = binding.etSalesInput.text.toString()
+        if (selectedCategoryId == "") {
+            showErrorMessage("harap pilih kategori dulu!!")
+        } else if (productCode == "") {
+            showErrorMessage("harap pilih barang dulu!!")
+        } else if (salesInput.isEmpty()) {
+            showErrorMessage("harap isi satuan barang dulu!!")
+        } else {
+            addDataReturn()
+        }
+    }
+
     private fun setUpSpinner() {
         categoryViewModel.requestListCategory()
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
@@ -72,35 +84,43 @@ class AddProductReturnFragment :
                     hideLoading()
                     val response = it.data!!
                     val categories = response.data
+                    if (categories.isEmpty()) {
+                        disableCategorySpinner()
+                    } else {
 
-                    val categoryNames = categories.map { category ->
-                        category.nama_kategori
-                    }.toTypedArray()
+                        val categoryNames = categories.map { category ->
+                            category.nama_kategori
+                        }.toTypedArray()
 
-                    if (response.status) {
-                        val adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.simple_dropdown_item_1line,
-                            categoryNames
-                        )
+                        if (response.status) {
+                            val adapter = ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_dropdown_item_1line,
+                                categoryNames
+                            )
 
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-                        binding.spPickCategory.setAdapter(adapter)
-                        binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
-                            val selectedCategoryName: String =
-                                adapter.getItem(position) ?: return@setOnItemClickListener
+                            binding.spPickCategory.setAdapter(adapter)
+                            binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
+                                val selectedCategoryName: String =
+                                    adapter.getItem(position) ?: return@setOnItemClickListener
 
-                            val selectedData =
-                                categories.find { category ->
-                                    category.nama_kategori == selectedCategoryName
+                                val selectedData =
+                                    categories.find { category ->
+                                        category.nama_kategori == selectedCategoryName
+                                    }
+                                if (selectedData != null) {
+                                    selectedCategoryId = selectedData.id_kategori.toString()
+                                    val categoryId = selectedData.id_kategori
+                                    showProduct(categoryId)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "$categoryId",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
                                 }
-                            if (selectedData != null) {
-                                selectedCategoryId = selectedData.id_kategori.toString()
-                                val categoryId = selectedData.id_kategori
-                                showProduct(categoryId)
-                                Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
-                                    .show()
                             }
                         }
                     }
@@ -126,30 +146,38 @@ class AddProductReturnFragment :
                     hideLoading()
                     val response = it.data!!
                     val dataProduct = response.data
-                    val productNames = dataProduct.map { product ->
-                        product.nama_barang
-                    }.toTypedArray()
+                    if (dataProduct.isEmpty()) {
+                        disableProductSpinner()
+                    } else {
+                        binding.spProduct.text.clear()
+                        binding.tilProduct.hint = "Pilih Barang"
+                        binding.spProduct.isEnabled = true
+                        binding.spProduct.isEnabled = true
+                        val productNames = dataProduct.map { product ->
+                            product.nama_barang
+                        }.toTypedArray()
 
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        R.layout.simple_dropdown_item_1line,
-                        productNames
-                    )
+                        val adapter = ArrayAdapter(
+                            requireContext(),
+                            android.R.layout.simple_dropdown_item_1line,
+                            productNames
+                        )
 
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-                    binding.designSpinner.setAdapter(adapter)
+                        binding.spProduct.setAdapter(adapter)
 
-                    binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
-                        val selectedProductName =
-                            adapter.getItem(position) ?: return@setOnItemClickListener
-                        val selectedProduct = dataProduct.find { product ->
-                            product.nama_barang == selectedProductName
-                        }
-                        if (selectedProduct != null) {
-                            productCode = selectedProduct.kode_barang
-                            productId = selectedProduct.id_barang.toString()
-                            binding.etUnitProduct.setText(selectedProduct.satuan)
+                        binding.spProduct.setOnItemClickListener { _, _, position, _ ->
+                            val selectedProductName =
+                                adapter.getItem(position) ?: return@setOnItemClickListener
+                            val selectedProduct = dataProduct.find { product ->
+                                product.nama_barang == selectedProductName
+                            }
+                            if (selectedProduct != null) {
+                                productCode = selectedProduct.kode_barang
+                                productId = selectedProduct.id_barang.toString()
+                                binding.etUnitProduct.setText(selectedProduct.satuan)
+                            }
                         }
                     }
                 }
@@ -166,8 +194,30 @@ class AddProductReturnFragment :
         }
     }
 
+
+    private fun disableCategorySpinner() {
+        with(binding) {
+            val spinnerCategory = spPickCategory
+            spinnerCategory.isEnabled = false
+            spinnerCategory.text.clear()
+            tilCategory.hint = "data kosong"
+            spinnerCategory.setAdapter(null)
+        }
+    }
+
+    private fun disableProductSpinner() {
+        with(binding) {
+            spProduct.text.clear()
+            spProduct.isEnabled = false
+            tilProduct.hint = "data kosong"
+            spProduct.setAdapter(null)
+            productCode = ""
+            etUnitProduct.text.clear()
+        }
+    }
+
     private fun addDataReturn() {
-        val amountSeller = binding.etMinimumProduct.text.toString()
+        val amountSeller = binding.etSalesInput.text.toString()
         val date = getCurrentDateTime()
         viewModel.createProductReturnRequest(
             RequestAddReturn(
@@ -192,6 +242,8 @@ class AddProductReturnFragment :
                     hideLoading()
                     showErrorMessage(it.message!!)
                 }
+
+                else -> {}
             }
         }
     }

@@ -34,6 +34,7 @@
                 android:textColor="@color/black" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_category"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +48,7 @@
                 app:layout_constraintVertical_bias="0.15"
                 app:layout_constraintWidth_percent="0.9">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/sp_pick_category"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -79,6 +80,7 @@
                 android:textColor="@color/black" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_product"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,8 +94,8 @@
                 app:layout_constraintVertical_bias="0.15"
                 app:layout_constraintWidth_percent="0.9">
 
-                <AutoCompleteTextView
-                    android:id="@+id/designSpinner"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/sp_product"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="none" />
@@ -129,8 +131,8 @@
                 android:layout_height="@dimen/_40sdp"
                 android:background="@color/white"
                 android:backgroundTint="@color/white"
-                android:hint="satuan barang"
                 android:focusableInTouchMode="false"
+                android:hint="satuan barang"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:singleLine="true"

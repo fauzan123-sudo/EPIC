@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epic.R
 import com.example.epic.data.adapter.ProductReturnAdapter
+import com.example.epic.data.model.returnProduct.RequestDeleteReturn
 import com.example.epic.data.model.returnProduct.read.Data
 import com.example.epic.databinding.FragmentProductReturnBinding
 import com.example.epic.ui.fragment.BaseFragment
@@ -20,9 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(FragmentProductReturnBinding::inflate), ProductReturnAdapter.ItemListener{
+class ProductReturnFragment :
+    BaseFragment<FragmentProductReturnBinding>(FragmentProductReturnBinding::inflate),
+    ProductReturnAdapter.ItemListener {
 
-    private val viewModel:ProductReturnViewModel by viewModels()
+    private val viewModel: ProductReturnViewModel by viewModels()
+
     @Inject
     lateinit var productReturnAdapter: ProductReturnAdapter
 
@@ -62,10 +66,11 @@ class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(Fragmen
 
     private fun loadData() {
         viewModel.listProductReturnRequest()
-        viewModel.listReturnResponse.observe(viewLifecycleOwner){
-            when(it){
-                is NetworkResult.Success ->{
+        viewModel.listReturnResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
                     hideLoading()
+                    viewModel.listReturnResponse.removeObservers(viewLifecycleOwner)
                     val response = it.data!!
                     val data = response.data
                     productReturnAdapter.differ.submitList(data)
@@ -75,15 +80,19 @@ class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(Fragmen
                                 requireContext()
                             )
                         adapter = productReturnAdapter
+
+                        productReturnAdapter.listener = this@ProductReturnFragment
                     }
                 }
 
-                is NetworkResult.Loading ->{
+                is NetworkResult.Loading -> {
                     showLoading()
+//                    viewModel.listReturnResponse.removeObservers(viewLifecycleOwner)
                 }
 
-                is NetworkResult.Error ->{
+                is NetworkResult.Error -> {
                     hideLoading()
+                    viewModel.listReturnResponse.removeObservers(viewLifecycleOwner)
                     showErrorMessage(it.message ?: "Error occur")
                 }
             }
@@ -92,7 +101,33 @@ class ProductReturnFragment : BaseFragment<FragmentProductReturnBinding>(Fragmen
 
     override fun deleteSales(data: Data) {
         showWarningMessage("Pengembalian Barang") {
-            viewModel
+            viewModel.requestdeleteReturnProduct(RequestDeleteReturn(data.id_data_pengembalian_barang))
+            viewModel.deleteReturnResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        hideLoading()
+                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
+                        val response = it.data!!
+                        val deleteResponse = response.data
+                        if (response.status) {
+                            showSuccessDelete(deleteResponse.message)
+                            loadData()
+                        } else {
+                            showErrorMessage(deleteResponse.message)
+                        }
+                    }
+
+                    is NetworkResult.Loading -> {
+                        showLoading()
+//                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
+                    }
+
+                    is NetworkResult.Error -> {
+                        hideLoading()
+                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
+                    }
+                }
+            }
         }
     }
 

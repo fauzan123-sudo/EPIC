@@ -1,6 +1,5 @@
 package com.example.epic.ui.fragment.seller
 
-import android.R
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
@@ -26,9 +25,11 @@ class AddSellerFragment :
 
     private val sellerViewModel: SellerViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private var selectedCategoryId = ""
-    private var productCode = ""
-    private var productId = ""
+
+    private val listIdCategory = ArrayList<Int>()
+    private val listIdProduct = ArrayList<Int>()
+    private val listNameCategory = ArrayList<String>()
+    private val listNameProduct = ArrayList<String>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,7 +40,6 @@ class AddSellerFragment :
     }
 
     private fun setUpSpinner() {
-        binding.designSpinner.hint = "Pilih Barang"
         categoryViewModel.requestListCategory()
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
@@ -47,35 +47,27 @@ class AddSellerFragment :
                     hideLoading()
                     val response = it.data!!
                     val categories = response.data
+                    if (categories.isEmpty()) {
+                        disableSpinnerCategory()
+                    } else {
+                        val spinnerCategory = binding.spPickCategory
+                        categories.forEach { category ->
+                            listIdCategory.add(category.id_kategori)
+                            listNameCategory.add(category.nama_kategori)
+                        }
 
-                    val categoryNames = categories.map { category ->
-                        category.nama_kategori
-                    }.toTypedArray()
-
-                    if (response.status) {
-                        val adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.simple_dropdown_item_1line,
-                            categoryNames
+                        spinnerCategory.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_dropdown_item_1line, listNameCategory
+                            )
                         )
-
-                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-
-                        binding.spPickCategory.setAdapter(adapter)
-                        binding.spPickCategory.setOnItemClickListener { _, _, position, _ ->
-                            val selectedCategoryName: String =
-                                adapter.getItem(position) ?: return@setOnItemClickListener
-
-                            val selectedData =
-                                categories.find { category ->
-                                    category.nama_kategori == selectedCategoryName
-                                }
-                            if (selectedData != null) {
-                                selectedCategoryId = selectedData.id_kategori.toString()
-                                val categoryId = selectedData.id_kategori
-                                showProduct(categoryId)
-                                Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
-                                    .show()
+                        var lastSelectedPosition = -1
+                        spinnerCategory.setOnItemClickListener { _, _, position, _ ->
+                            if (position != lastSelectedPosition) {
+                                val selectedCategory = categories[position]
+                                lastSelectedPosition = position
+                                showProduct(selectedCategory.id_kategori)
                             }
                         }
                     }
@@ -93,6 +85,16 @@ class AddSellerFragment :
         }
     }
 
+    private fun disableSpinnerCategory() {
+        val spinnerCategory = binding.spPickCategory
+        listIdCategory.clear()
+        listNameCategory.clear()
+        spinnerCategory.isEnabled = false
+        spinnerCategory.text.clear()
+        binding.tilCategory.hint = "data kosong"
+        spinnerCategory.setAdapter(null)
+    }
+
     private fun showProduct(categoryId: Int) {
         categoryViewModel.requestProductByCategory(categoryId)
         categoryViewModel.basedCategoryResponse.observe(viewLifecycleOwner) {
@@ -100,44 +102,44 @@ class AddSellerFragment :
                 is NetworkResult.Success -> {
                     hideLoading()
                     val response = it.data!!
-                    val dataProduct = response.data
-                    if (dataProduct.isEmpty()) {
-                        binding.apply {
-                            designSpinner.hint = "Data Kosong"
-                            designSpinner.isEnabled = false
-                            designSpinner.isClickable = false
-                            designSpinner.isFocusable = false
-                        }
+                    val listProduct = response.data
+                    val spinnerProduct = binding.spProduct
+                    if (listProduct.isEmpty()) {
+                        binding.etUnitProduct.text.clear()
+                        listNameProduct.clear()
+                        listIdProduct.clear()
+                        spinnerProduct.text.clear()
+                        spinnerProduct.isEnabled = false
+                        binding.tilProduct.hint = "data kosong"
+                        spinnerProduct.setAdapter(null)
                     } else {
-                        binding.designSpinner.hint = "Pilih Barang"
-                        binding.designSpinner.isEnabled = true
-                        val productNames = dataProduct.map { product ->
-                            product.nama_barang
-                        }.toTypedArray()
+                        spinnerProduct.text.clear()
+                        binding.tilProduct.hint = "Pilih Barang"
+                        spinnerProduct.isEnabled = true
+                        listProduct.forEach { product ->
+                            listNameProduct.add(product.nama_barang)
+                            listIdProduct.add(product.id_barang)
+                        }
 
-                        val adapter = ArrayAdapter(
-                            requireContext(),
-                            android.R.layout.simple_dropdown_item_1line,
-                            productNames
+                        spinnerProduct.setAdapter(
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_dropdown_item_1line,
+                                listNameProduct
+                            )
                         )
 
+                        spinnerProduct.setOnItemClickListener { _, _, position, _ ->
+                            val productPosition = listProduct[position]
+                            val unitProduct = productPosition.satuan
 
-                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                            binding.etUnitProduct.setText(unitProduct)
 
-                        binding.designSpinner.setAdapter(adapter)
-
-                        binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
-                            val selectedProductName =
-                                adapter.getItem(position) ?: return@setOnItemClickListener
-                            val selectedProduct = dataProduct.find { product ->
-                                product.nama_barang == selectedProductName
-                            }
-                            if (selectedProduct != null) {
-                                productCode = selectedProduct.kode_barang
-                                productId = selectedProduct.id_barang.toString()
-                                binding.etUnitProduct.setText(selectedProduct.satuan)
-
-                            }
+                            Toast.makeText(
+                                requireContext(),
+                                "${productPosition.nama_barang} dan ${productPosition.satuan}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -156,15 +158,22 @@ class AddSellerFragment :
 
 
     private fun handleAddProduct() {
+        val selectedCategoryText = binding.spPickCategory.text.toString()
+        val selectedProductText = binding.spProduct.text.toString()
+
+        val selectedCategoryPosition = listNameCategory.indexOf(selectedCategoryText)
+        val selectedProductPosition = listNameProduct.indexOf(selectedProductText)
         val salesInput = binding.etSalesInput.text.toString()
-        if (selectedCategoryId == "") {
+        if (selectedCategoryPosition == -1) {
             showErrorMessage("harap pilih kategori dulu!!")
-        } else if (productCode == "") {
+        } else if (selectedProductPosition == -1) {
             showErrorMessage("harap pilih barang dulu!!")
         } else if (salesInput.isEmpty()) {
             showErrorMessage("harap isi satuan barang dulu!!")
         } else {
-            addDataSeller(salesInput)
+            val selectedCategoryId = listIdCategory[selectedCategoryPosition]
+            val selectedProductId = listIdProduct[selectedProductPosition]
+            addDataSeller(selectedProductId, salesInput)
         }
     }
 
@@ -196,12 +205,11 @@ class AddSellerFragment :
         binding.toolbar.myToolbar.setTitleTextColor(Color.parseColor("#0660C7"))
     }
 
-    private fun addDataSeller(salesInput: String) {
-//        val amountSeller = binding.etSalesInput.text.toString()
+    private fun addDataSeller(selectedProductId: Int, salesInput: String) {
         val date = getCurrentDateTime()
         sellerViewModel.requestCreateSeller(
             RequestCreateSeller(
-                productId,
+                selectedProductId.toString(),
                 salesInput,
                 date
             )

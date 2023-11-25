@@ -42,7 +42,6 @@ class StatisticSellerFragment :
         val currentMonth = getMonth()
         setUpData(currentMonth)
         setUpToolbar()
-//        setUpLineChart()
         setUpMonth()
 
 
@@ -171,6 +170,8 @@ class StatisticSellerFragment :
                     hideLoading()
                     val response = it.data!!
                     setUpData2(response.data)
+                    viewModel.readStatisticSeller.removeObservers(viewLifecycleOwner)
+                    binding.lineChart.visibility = View.VISIBLE
 
                 }
 

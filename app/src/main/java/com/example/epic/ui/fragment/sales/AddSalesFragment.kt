@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.epic.data.model.sales.create.RequestCreateSales
@@ -37,16 +36,16 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
     }
 
     private fun setUpSpinner() {
-        binding.designSpinner.hint = "Pilih Barang"
         categoryViewModel.requestListCategory()
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     hideLoading()
+//                    categoryViewModel.listCategoryResponse.removeObservers(viewLifecycleOwner)
                     val response = it.data!!
                     val categories = response.data
                     if (categories.isEmpty()) {
-                        disableSpinner()
+                        disableCategorySpinner()
                     } else {
                         val categoryNames = categories.map { category ->
                             category.nama_kategori
@@ -74,14 +73,6 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
                                     selectedCategoryId = selectedData.id_kategori.toString()
                                     val categoryId = selectedData.id_kategori
                                     showProduct(categoryId)
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "$categoryId",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                } else {
-                                    disableSpinner()
                                 }
                             }
                         }
@@ -90,10 +81,12 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
 
                 is NetworkResult.Loading -> {
                     showLoading()
+//                    categoryViewModel.listCategoryResponse.removeObservers(viewLifecycleOwner)
                 }
 
                 is NetworkResult.Error -> {
                     hideLoading()
+//                    categoryViewModel.listCategoryResponse.removeObservers(viewLifecycleOwner)
                     showErrorMessage(it.message!!)
                 }
             }
@@ -106,14 +99,24 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
 
     }
 
-    private fun disableSpinner() {
+    private fun disableCategorySpinner() {
         with(binding) {
-            designSpinner.hint = "Data Kosong"
-            designSpinner.isEnabled = false
-            designSpinner.isClickable = false
-            designSpinner.isFocusable = false
-            designSpinner.isFocusableInTouchMode = false
-            designSpinner.dismissDropDown()
+            val spinnerCategory = spPickCategory
+            spinnerCategory.isEnabled = false
+            spinnerCategory.text.clear()
+            tilCategory.hint = "data kosong"
+            spinnerCategory.setAdapter(null)
+        }
+    }
+
+    private fun disableProductSpinner() {
+        with(binding) {
+            spProduct.text.clear()
+            spProduct.isEnabled = false
+            tilProduct.hint = "data kosong"
+            spProduct.setAdapter(null)
+            productCode = ""
+            etUnitProduct.text.clear()
         }
     }
 
@@ -123,13 +126,16 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
             when (it) {
                 is NetworkResult.Success -> {
                     hideLoading()
+//                    categoryViewModel.basedCategoryResponse.removeObservers(viewLifecycleOwner)
                     val response = it.data!!
                     val dataProduct = response.data
                     if (dataProduct.isEmpty()) {
-                        disableSpinner()
+                        disableProductSpinner()
                     } else {
-                        binding.designSpinner.hint = "Pilih Barang"
-                        binding.designSpinner.isEnabled = true
+                        binding.spProduct.text.clear()
+                        binding.tilProduct.hint = "Pilih Barang"
+                        binding.spProduct.isEnabled = true
+                        binding.spProduct.isEnabled = true
                         val productNames = dataProduct.map { product ->
                             product.nama_barang
                         }.toTypedArray()
@@ -142,9 +148,9 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
 
                         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
 
-                        binding.designSpinner.setAdapter(adapter)
+                        binding.spProduct.setAdapter(adapter)
 
-                        binding.designSpinner.setOnItemClickListener { _, _, position, _ ->
+                        binding.spProduct.setOnItemClickListener { _, _, position, _ ->
                             val selectedProductName =
                                 adapter.getItem(position) ?: return@setOnItemClickListener
                             val selectedProduct = dataProduct.find { product ->
@@ -163,10 +169,12 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
 
                 is NetworkResult.Loading -> {
                     showLoading()
+//                    categoryViewModel.basedCategoryResponse.removeObservers(viewLifecycleOwner)
                 }
 
                 is NetworkResult.Error -> {
                     hideLoading()
+//                    categoryViewModel.basedCategoryResponse.removeObservers(viewLifecycleOwner)
                     showErrorMessage(it.message!!)
                 }
             }
@@ -208,6 +216,7 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
         } else if (salesInput.isEmpty()) {
             showErrorMessage("harap isi satuan barang dulu!!")
         } else {
+//            Toast.makeText(requireContext(), productCode, Toast.LENGTH_SHORT).show()
             addData(salesInput)
         }
     }
