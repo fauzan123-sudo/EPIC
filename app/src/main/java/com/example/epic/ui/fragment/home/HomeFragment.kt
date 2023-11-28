@@ -20,10 +20,14 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.HomeViewModel
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
+import com.example.epic.util.getCurrentDate
+import com.example.epic.util.getCurrentDay
 import com.example.epic.util.getMonth
+import com.example.epic.util.getMonthAndYear
 import com.example.epic.util.getYear
 import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -118,7 +122,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun loadCalendar() {
-        binding
+        val currentDay = Date().getCurrentDay()
+        val currentDate = Date().getCurrentDate()
+        val monthAndYear = Date().getMonthAndYear()
+        binding.hDay.text = currentDay
+        binding.tvDate.text = currentDate
+        binding.hDayYear.text = monthAndYear
     }
 
     @SuppressLint("SetTextI18n")

@@ -100,7 +100,17 @@ fun Date.toFormattedString(): String {
 }
 
 fun Date.getCurrentDate(): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
+    return dateFormat.format(this)
+}
+
+fun Date.getCurrentDay(): String {
+    val dateFormat = SimpleDateFormat("EEEE", Locale("id", "ID"))
+    return dateFormat.format(this)
+}
+
+fun Date.getMonthAndYear(): String {
+    val dateFormat = SimpleDateFormat("MM-yyyy", Locale("id", "ID"))
     return dateFormat.format(this)
 }
 
