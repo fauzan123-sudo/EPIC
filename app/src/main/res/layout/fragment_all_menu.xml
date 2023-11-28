@@ -369,7 +369,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_user_management"
+            android:id="@+id/mc_user_management"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shadow_bg"

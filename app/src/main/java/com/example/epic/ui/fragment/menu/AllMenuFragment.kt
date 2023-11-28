@@ -7,6 +7,7 @@ import com.example.epic.R
 import com.example.epic.databinding.FragmentAllMenuBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +18,17 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
 
         setUpToolbar()
         clickHandle()
+        checkUser()
 
+    }
+
+    private fun checkUser() {
+        val userSaved = readLoginResponse()
+        if (userSaved?.user?.role == "1") {
+            binding.fb3.visibility = View.VISIBLE
+        } else {
+            binding.fb3.visibility = View.GONE
+        }
     }
 
     private fun clickHandle() {
@@ -45,6 +56,9 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
             }
             mcReport.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_reportFragment)
+            }
+            mcUserManagement.setOnClickListener {
+                findNavController().navigate(R.id.action_allMenuFragment_to_listStoreFragment)
             }
         }
     }

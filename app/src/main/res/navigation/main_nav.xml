@@ -72,6 +72,9 @@
         <action
             android:id="@+id/action_allMenuFragment_to_reportFragment"
             app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_listStoreFragment"
+            app:destination="@id/listStoreFragment" />
     </fragment>
     <fragment
         android:id="@+id/listSalesFragment"
@@ -201,4 +204,18 @@
             android:name="dataCategory"
             app:argType="com.example.epic.data.model.category.read.Data" />
     </fragment>
+    <fragment
+        android:id="@+id/listStoreFragment"
+        android:name="com.example.epic.ui.fragment.store_management.ListStoreFragment"
+        android:label="fragment_list_store"
+        tools:layout="@layout/fragment_list_store" >
+        <action
+            android:id="@+id/action_listStoreFragment_to_createStoreFragment"
+            app:destination="@id/createStoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createStoreFragment"
+        android:name="com.example.epic.ui.fragment.store_management.CreateStoreFragment"
+        android:label="fragment_create_store"
+        tools:layout="@layout/fragment_create_store" />
 </navigation>
