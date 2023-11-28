@@ -42,6 +42,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         loadData()
         val thisMonth = getMonth()
         loadApi(thisMonth)
+        loadCalendar()
 
         val callBack = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -114,6 +115,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
 
+    }
+
+    private fun loadCalendar() {
+        binding
     }
 
     @SuppressLint("SetTextI18n")

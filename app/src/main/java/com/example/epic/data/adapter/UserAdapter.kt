@@ -12,6 +12,12 @@ import com.example.epic.databinding.ItemUserBinding
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
+    var listener: ItemListener? = null
+
+    interface ItemListener {
+        fun updateUser(data: Data)
+    }
+
     inner class ViewHolder(val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: Data) {
             Glide.with(itemView)
@@ -19,6 +25,10 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
                 .error(R.drawable.ic_no_image)
                 .placeholder(R.drawable.progress_animation)
                 .into(binding.userImage)
+
+            binding.root.setOnClickListener {
+                listener?.updateUser(user)
+            }
         }
     }
 
@@ -42,6 +52,6 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = differ.currentList[position]
-       holder.bind(user)
+        holder.bind(user)
     }
 }

@@ -212,10 +212,22 @@
         <action
             android:id="@+id/action_listStoreFragment_to_createStoreFragment"
             app:destination="@id/createStoreFragment" />
+        <action
+            android:id="@+id/action_listStoreFragment_to_updateStoreFragment"
+            app:destination="@id/updateStoreFragment" />
     </fragment>
     <fragment
         android:id="@+id/createStoreFragment"
         android:name="com.example.epic.ui.fragment.store_management.CreateStoreFragment"
         android:label="fragment_create_store"
         tools:layout="@layout/fragment_create_store" />
+    <fragment
+        android:id="@+id/updateStoreFragment"
+        android:name="com.example.epic.ui.fragment.store_management.UpdateStoreFragment"
+        android:label="fragment_update_store"
+        tools:layout="@layout/fragment_update_store" >
+        <argument
+            android:name="userData"
+            app:argType="com.example.epic.data.model.user.management.read.Data" />
+    </fragment>
 </navigation>

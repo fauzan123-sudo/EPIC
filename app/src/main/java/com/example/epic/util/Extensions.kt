@@ -93,6 +93,18 @@ fun getCurrentDateTime(): String {
     return dateFormat.format(currentTime)
 }
 
+fun Date.toFormattedString(): String {
+    val locale = Locale("id", "ID")
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", locale)
+    return dateFormat.format(this)
+}
+
+fun Date.getCurrentDate(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dateFormat.format(this)
+}
+
+
 fun Activity.hideKeyboard() {
     val view = this.currentFocus
     if (view != null) {

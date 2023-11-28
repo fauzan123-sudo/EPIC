@@ -48,10 +48,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout"
-            android:paddingBottom="@dimen/_20sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_64sdp"
+            android:paddingBottom="@dimen/_20sdp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -73,8 +73,8 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pemilik"
                 android:layout_marginVertical="@dimen/_10sdp"
+                android:text="Pemilik"
                 android:textColor="@color/grey"
                 app:layout_constraintBottom_toTopOf="@+id/textView21"
                 app:layout_constraintEnd_toEndOf="parent"

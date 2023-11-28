@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.epic.R
 import com.example.epic.data.adapter.UserAdapter
+import com.example.epic.data.model.user.management.read.Data
 import com.example.epic.databinding.FragmentListStoreBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.UserManagementViewModel
@@ -19,10 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ListStoreFragment :
-    BaseFragment<FragmentListStoreBinding>(FragmentListStoreBinding::inflate) {
+    BaseFragment<FragmentListStoreBinding>(FragmentListStoreBinding::inflate), UserAdapter.ItemListener {
 
     private val viewModel: UserManagementViewModel by viewModels()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,6 +71,7 @@ class ListStoreFragment :
                         adapter = userAdapter
 
                         userAdapter.differ.submitList(data)
+                        userAdapter.listener = this@ListStoreFragment
                     }
                 }
 
@@ -83,6 +84,11 @@ class ListStoreFragment :
                 }
             }
         }
+    }
+
+    override fun updateUser(data: Data) {
+        val action = ListStoreFragmentDirections.actionListStoreFragmentToUpdateStoreFragment(data)
+        findNavController().navigate(action)
     }
 
 }
