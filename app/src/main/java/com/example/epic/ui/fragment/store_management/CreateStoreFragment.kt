@@ -46,7 +46,6 @@ class CreateStoreFragment :
 
         binding.spPickGender.setAdapter(adapter)
         binding.spPickGender.setOnItemClickListener { _, _, position, _ ->
-//            handleButtonClick()
         }
 
     }

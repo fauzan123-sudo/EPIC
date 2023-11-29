@@ -12,4 +12,6 @@ interface AuthApi {
     suspend fun loginUser(
         @Body request: RequestLogin
     ): Response<LoginResponse>
+
+
 }

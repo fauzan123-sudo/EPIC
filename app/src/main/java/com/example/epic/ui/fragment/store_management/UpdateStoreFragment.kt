@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -70,6 +72,7 @@ class UpdateStoreFragment :
                     val response = it.data!!
                     if (response.status) {
                         binding.userImage.setImageURI(result)
+
                     }
                 }
 
@@ -130,6 +133,31 @@ class UpdateStoreFragment :
             .error(R.drawable.ic_no_image)
             .placeholder(R.drawable.progress_animation)
             .into(binding.userImage)
+
+        val genderOptions = arrayOf(
+            getString(R.string.female),
+            getString(R.string.male),
+        )
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            genderOptions
+        )
+
+        val getGender = data.jk
+        val defaultText = if (getGender == "1") {
+            getString(R.string.female)
+        } else {
+            getString(R.string.male)
+        }
+
+        binding.spPickGender.setText(defaultText, false)
+
+        binding.spPickGender.setAdapter(adapter)
+        binding.spPickGender.setOnItemClickListener { _, _, position, _ ->
+//            handleButtonClick()
+        }
     }
 
     private fun touchImageCamera() {
@@ -160,7 +188,7 @@ class UpdateStoreFragment :
             setupMenu(R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_text_action -> {
-//                        handleInput()
+                        handleInput()
                         true
                     }
 
@@ -178,6 +206,39 @@ class UpdateStoreFragment :
                 )
             }
         }
+    }
+
+    private fun handleInput() {
+        binding.apply {
+            val getNameStore = edtStoreName.text.toString()
+            val getUserName = edtStoreName.text.toString()
+            val getGender = spPickGender.text.toString()
+            if (getNameStore.isEmpty()) {
+                edtStoreName.error = "Harap isi Nama"
+            } else if (getUserName.isEmpty()) {
+                edtUsername.error = "Harap isi Username"
+            } else if (getGender.isEmpty()) {
+                Toast.makeText(requireContext(), "Harap pilih jenis kelamin!!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                handleButtonClick(getNameStore, getUserName, getGender)
+            }
+        }
+    }
+
+    private fun handleButtonClick(
+        nameStore: String,
+        userName: String,
+        gender: String
+    ) {
+        val getGender = if (gender == getString(R.string.female)) {
+            "1"
+        } else {
+            "2"
+        }
+
+        showSuccessMessage("$nameStore,$userName,$getGender")
+        Log.d("TAG", "data: $nameStore , $userName , $getGender")
     }
 
 }

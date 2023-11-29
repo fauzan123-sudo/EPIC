@@ -18,9 +18,7 @@ import io.paperdb.Paper
 //        return Paper.book().read<LoginResponse>("user")
 //    }
 
-    fun deleteData() {
-        Paper.book().delete("user")
-    }
+
 
     fun getNotification(): NotificationData? {
         return Paper.book().read(notifyCount)
@@ -40,5 +38,9 @@ import io.paperdb.Paper
 
     fun readLoginResponse(): LoginResponse? {
         return Paper.book().read<LoginResponse>(USER_SAVED, null)
+    }
+
+    fun deleteUserData() {
+        Paper.book().delete(USER_SAVED)
     }
 

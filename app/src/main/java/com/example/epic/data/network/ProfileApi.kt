@@ -1,5 +1,6 @@
 package com.example.epic.data.network
 
+import com.example.epic.data.model.user.logOut.LogOutResponse
 import com.example.epic.data.model.user.profile.UserProfileResponse
 import com.example.epic.data.model.user.profile.image.ImageChangeResponse
 import okhttp3.MultipartBody
@@ -23,4 +24,7 @@ interface ProfileApi {
         @Path("userID") userID: String,
         @Part foto: MultipartBody.Part
     ) : Response<ImageChangeResponse>
+
+    @GET("logout")
+    suspend fun logOut() : Response<LogOutResponse>
 }

@@ -263,13 +263,13 @@
         android:layout_height="wrap_content"
         android:text="Bantuan!"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/btn_log_out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView8" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button3"
+        android:id="@+id/btn_log_out"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -277,7 +277,7 @@
         app:elevation="0dp"
         app:strokeColor="@color/info"
         app:strokeWidth="2dp"
-        android:text="Keluar"
+        android:text="Keluar Dari Akun"
         android:textColor="@color/info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

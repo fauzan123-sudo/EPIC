@@ -1,5 +1,6 @@
 package com.example.epic.ui.fragment.profile
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,12 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.epic.R
 import com.example.epic.databinding.FragmentProfileBinding
+import com.example.epic.ui.activity.LoginActivity
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.TokenManager
+import com.example.epic.util.deleteUserData
 import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -52,6 +55,52 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
             } ?: Log.e("Error", "Result is null")
         }
+
+    private fun logOut() {
+        binding.btnLogOut.setOnClickListener {
+            SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Konfirmasi Logout")
+                .setContentText("Apakah Anda yakin ingin keluar?")
+                .setConfirmText("Ya")
+                .setConfirmClickListener {
+                    viewModel.logOut()
+                    viewModel.logOutResponse.observe(viewLifecycleOwner) {
+                        when (it) {
+                            is NetworkResult.Success -> {
+                                hideLoading()
+                                val response = it.data!!
+                                if (response.status) {
+                                    requireActivity().startActivity(
+                                        Intent(
+                                            requireActivity(),
+                                            LoginActivity::class.java
+                                        )
+                                    )
+                                    deleteUserData()
+                                    tokenManager.deleteToken()
+                                }
+                            }
+
+                            is NetworkResult.Loading -> {
+                                showLoading()
+                            }
+
+                            is NetworkResult.Error -> {
+                                hideLoading()
+                                showErrorMessage(it.message!!)
+                                Log.e("TAG", "${it.message}")
+                            }
+                        }
+                    }
+                    it.dismissWithAnimation()
+                }
+                .setCancelText("Tidak")
+                .setCancelClickListener { it.dismissWithAnimation() }
+                .show()
+
+
+        }
+    }
 
     private fun loadDataUpdatePhoto(result: Uri) {
         viewModel.updateProfilePhoto.observe(viewLifecycleOwner) {
@@ -110,6 +159,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         loadData()
         setUpToolbar()
         touchImageCamera()
+        logOut()
     }
 
     private fun touchImageCamera() {

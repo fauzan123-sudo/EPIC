@@ -18,4 +18,8 @@ class UserProfileRepository @Inject constructor(private val api: ProfileApi) : B
         val photoPart = MultipartBody.Part.createFormData("foto", photoFile.name, requestFile)
         api.updateProfilePhoto(userID, photoPart)
     }
+
+    suspend fun logOut() = safeApiCall {
+        api.logOut()
+    }
 }
