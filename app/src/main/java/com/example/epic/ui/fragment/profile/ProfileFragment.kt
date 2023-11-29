@@ -78,6 +78,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                                     )
                                     deleteUserData()
                                     tokenManager.deleteToken()
+                                    requireActivity().finish()
                                 }
                             }
 
