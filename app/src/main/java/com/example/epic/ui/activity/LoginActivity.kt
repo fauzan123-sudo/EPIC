@@ -47,7 +47,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                             hideLoading()
                             val response = it.data!!
                             if (response.status) {
-                                tokenManager.saveToken(response.access_token)
+                                tokenManager.saveToken(response.access_token ?: "")
                                 saveUser(response)
                                 startActivity(Intent(this, MainActivity::class.java))
                             } else {

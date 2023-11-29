@@ -128,6 +128,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.hDay.text = currentDay
         binding.tvDate.text = currentDate
         binding.hDayYear.text = monthAndYear
+
+        val userData = readLoginResponse()
+
+        Glide.with(requireContext())
+            .load(userData?.user?.foto)
+            .placeholder(R.drawable.progress_animation)
+            .error(R.drawable.ic_no_image)
+            .into(binding.imgStore)
+
+        binding.tvStoreName.text = userData?.user?.nama_toko
     }
 
     @SuppressLint("SetTextI18n")
