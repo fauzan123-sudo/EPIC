@@ -3,7 +3,7 @@ package com.example.epic.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         checkLogin()
+        backPress()
 
         setContentView(binding.root)
 
@@ -58,21 +59,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
-        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Apakah Anda yakin?")
-            .setContentText("")
-            .setConfirmText("Ya, Keluar")
-            .setCancelText("Batal")
-            .setConfirmClickListener {
-                it.dismissWithAnimation()
-                finish()
-                exitProcess(0)
+    private fun backPress() {
+        val dispatcher = onBackPressedDispatcher
+        dispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                SweetAlertDialog(this@MainActivity, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Apakah Anda yakin?")
+                    .setContentText("")
+                    .setConfirmText("Ya, Keluar")
+                    .setCancelText("Batal")
+                    .setConfirmClickListener {
+                        it.dismissWithAnimation()
+                        finish()
+                        exitProcess(0)
+                    }
+                    .setCancelClickListener {
+                        it.dismissWithAnimation()
+                    }
+                    .show()
             }
-            .setCancelClickListener {
-                it.dismissWithAnimation()
-            }
-            .show()
-        return super.getOnBackInvokedDispatcher()
+        })
     }
 }

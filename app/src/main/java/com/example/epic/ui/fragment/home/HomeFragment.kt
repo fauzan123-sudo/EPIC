@@ -47,19 +47,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         val thisMonth = getMonth()
         loadApi(thisMonth)
         loadCalendar()
+        backPress()
 
-        val callBack = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val navController = findNavController()
-                if (navController.currentDestination?.id == R.id.homeFragment) {
-                    showExitConfirmationDialog()
-                } else {
-                    navController.navigateUp()
-                }
-            }
-        }
+//        val callBack = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                val navController = findNavController()
+//                if (navController.currentDestination?.id == R.id.homeFragment) {
+//                    showExitConfirmationDialog()
+//                } else {
+//                    navController.navigateUp()
+//                }
+//            }
+//        }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callBack)
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callBack)
 
         binding.apply {
 
@@ -140,6 +141,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.tvStoreName.text = userData?.user?.nama_toko
     }
 
+    private fun backPress() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navController = findNavController()
+                if (navController.currentDestination?.id == R.id.homeFragment) {
+                    showExitConfirmationDialog()
+                } else {
+                    navController.navigateUp()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun loadApi(thisMonth: Int) {
         val thisYear = getYear()
@@ -211,6 +226,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             .setConfirmClickListener {
                 it.dismissWithAnimation()
                 requireActivity().finish()
+//                        exitProcess(0)
             }
             .setCancelClickListener {
                 it.dismissWithAnimation()

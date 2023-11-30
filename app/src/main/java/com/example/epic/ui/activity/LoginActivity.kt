@@ -3,7 +3,7 @@ package com.example.epic.ui.activity
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.epic.data.model.user.login.RequestLogin
@@ -27,6 +27,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override fun onViewCreated(binding: ActivityLoginBinding) {
 
         checkLogin()
+        backPress()
 
         binding.btnLogin.setOnClickListener {
             val username = binding.etUsername.text.toString()
@@ -70,6 +71,28 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         }
     }
 
+    private fun backPress() {
+        val dispatcher = onBackPressedDispatcher
+        dispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                SweetAlertDialog(this@LoginActivity, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Apakah Anda yakin?")
+                    .setContentText("")
+                    .setConfirmText("Ya, Keluar")
+                    .setCancelText("Batal")
+                    .setConfirmClickListener {
+                        it.dismissWithAnimation()
+                        finish()
+                        exitProcess(0)
+                    }
+                    .setCancelClickListener {
+                        it.dismissWithAnimation()
+                    }
+                    .show()
+            }
+        })
+    }
+
     private fun checkLogin() {
         showLoading()
         Log.d("tokenya", "${tokenManager.getToken()}")
@@ -87,22 +110,23 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         checkLogin()
     }
 
-    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
-        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Apakah Anda yakin?")
-            .setContentText("")
-            .setConfirmText("Ya, Keluar")
-            .setCancelText("Batal")
-            .setConfirmClickListener {
-                it.dismissWithAnimation()
-                finish()
-                exitProcess(0)
-            }
-            .setCancelClickListener {
-                it.dismissWithAnimation()
-            }
-            .show()
-        return super.getOnBackInvokedDispatcher()
-    }
+
+//    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
+//        SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//            .setTitleText("Apakah Anda yakin?")
+//            .setContentText("")
+//            .setConfirmText("Ya, Keluar")
+//            .setCancelText("Batal")
+//            .setConfirmClickListener {
+//                it.dismissWithAnimation()
+//                finish()
+//                exitProcess(0)
+//            }
+//            .setCancelClickListener {
+//                it.dismissWithAnimation()
+//            }
+//            .show()
+//        return super.getOnBackInvokedDispatcher()
+//    }
 
 }
