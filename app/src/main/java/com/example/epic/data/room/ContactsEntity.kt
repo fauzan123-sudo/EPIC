@@ -2,7 +2,7 @@ package com.example.epic.data.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.epic.util.Constans.CONTACTS_TABLE
+import com.example.epic.util.Constants.CONTACTS_TABLE
 
 @Entity(tableName = CONTACTS_TABLE)
 data class ContactsEntity(

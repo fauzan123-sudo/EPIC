@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.epic.R
@@ -44,9 +43,7 @@ class CreateStoreFragment :
             genderOptions
         )
 
-        binding.spPickGender.setAdapter(adapter)
-        binding.spPickGender.setOnItemClickListener { _, _, position, _ ->
-        }
+
 
     }
 
@@ -54,30 +51,12 @@ class CreateStoreFragment :
         getNameStore: String,
         getUserName: String,
         getPassword: String,
-        getGender: String
     ) {
-
-        val getNumberGender = when (getGender) {
-            getString(R.string.female) -> "1"
-            getString(R.string.male) -> "2"
-            else -> ""
-        }
-
-        Toast.makeText(requireContext(), getNumberGender, Toast.LENGTH_SHORT).show()
-
         viewModel.requestCreateUser(
             RequestCreateUser(
                 getNameStore,
-                "-",
-                "-",
                 getUserName,
                 getPassword,
-                "2",
-                "-",
-                "1111-11-11",
-                "-",
-                getNumberGender,
-                "-"
             )
         )
 
@@ -104,6 +83,8 @@ class CreateStoreFragment :
                     hideLoading()
                     showErrorMessage(it.message!!)
                 }
+
+                else -> {}
             }
         }
 
@@ -140,27 +121,16 @@ class CreateStoreFragment :
     private fun handleInput() {
         binding.apply {
             val getNameStore = edtStoreName.text.toString()
-            val getName = edtName.text.toString()
             val getUserName = edtUsername.text.toString()
             val getPassword = edtPassword.text.toString()
-            val getNoTlp = edtNoTlp.text.toString()
-            val getEmail = edtEmail.text.toString()
-            val getateBirth = edtDateBirth.text.toString()
-            val getPlaceBirth = edtPlaceBirth.text.toString()
-            val getAddress = edtAddress.text.toString()
-            val getGender = spPickGender.text.toString()
-
             if (getNameStore.isEmpty()) {
                 edtStoreName.error = "Harap isi Nama"
             } else if (getUserName.isEmpty()) {
                 edtUsername.error = "Harap isi Username"
             } else if (getPassword.isEmpty()) {
                 edtPassword.error = "Harap isi Password"
-            } else if (getGender.isEmpty()) {
-                Toast.makeText(requireContext(), "Harap pilih jenis kelamin!!", Toast.LENGTH_SHORT)
-                    .show()
             } else {
-                handleButtonClick(getNameStore, getUserName, getPassword, getGender)
+                handleButtonClick(getNameStore, getUserName, getPassword)
             }
 
         }

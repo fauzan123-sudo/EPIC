@@ -1,5 +1,6 @@
 package com.example.epic.data.model.category.delete
 
 data class RequestDeleteCategory(
-    val kode_barang: String
+    val id_kategori: Int,
+    val id_user: Int
 )

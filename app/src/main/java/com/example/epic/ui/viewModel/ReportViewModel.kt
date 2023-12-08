@@ -19,12 +19,12 @@ class ReportViewModel @Inject constructor(val repository: ReportRepository) : Vi
     val readReportResponse: LiveData<NetworkResult<ReportProductResponse>>
         get() = _readReport
 
-    fun requestReport() {
+    fun requestReport(userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _readReport.postValue(NetworkResult.Loading())
-                _readReport.postValue(repository.readReport())
+                _readReport.postValue(repository.readReport(userId))
             } else {
                 _readReport.postValue(NetworkResult.Error("No Internet Connection"))
             }

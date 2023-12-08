@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.epic.R
 import com.example.epic.databinding.ActivityMainBinding
+import com.example.epic.util.Constants.FirebaseToken
 import com.example.epic.util.TokenManager
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         checkLogin()
         backPress()
+        tokenFirebase()
 
         setContentView(binding.root)
 
@@ -47,6 +49,19 @@ class MainActivity : AppCompatActivity() {
             }
             val token = task.result
             Log.d("MainActivity", "FCM registration token: $token")
+        }
+    }
+
+    private fun tokenFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d(FirebaseToken, "$FirebaseToken $token")
+                Log.d("fcm founded", "")
+
+            } else {
+                Log.d("no fcm founded", "")
+            }
         }
     }
 

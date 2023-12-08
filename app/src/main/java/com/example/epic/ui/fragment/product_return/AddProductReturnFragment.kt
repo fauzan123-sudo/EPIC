@@ -15,6 +15,7 @@ import com.example.epic.ui.viewModel.ProductReturnViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getCurrentDateTime
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,11 @@ class AddProductReturnFragment :
 
 
         setUpToolbar()
-        setUpSpinner()
+        if (savedUser?.role == "1") {
+            setUpSpinner(getUserId()!!.toInt())
+        } else {
+            setUpSpinner(savedUser!!.id_user)
+        }
 
     }
 
@@ -43,7 +48,12 @@ class AddProductReturnFragment :
             setupMenu(com.example.epic.R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     com.example.epic.R.id.add_text_action -> {
-                        handleAddProduct()
+                        if (savedUser?.role == "1") {
+                            val userId = getUserId()?.toInt()!!
+                            handleAddProduct(userId)
+                        } else {
+                            handleAddProduct(savedUser!!.id_user)
+                        }
                         true
                     }
 
@@ -63,21 +73,21 @@ class AddProductReturnFragment :
         }
     }
 
-    private fun handleAddProduct() {
+    private fun handleAddProduct(userId: Int) {
         val salesInput = binding.etSalesInput.text.toString()
         if (selectedCategoryId == "") {
             showErrorMessage("harap pilih kategori dulu!!")
         } else if (productCode == "") {
             showErrorMessage("harap pilih barang dulu!!")
         } else if (salesInput.isEmpty()) {
-            showErrorMessage("harap isi satuan barang dulu!!")
+            showErrorMessage("harap isi jumlah barang dulu!!")
         } else {
-            addDataReturn()
+            addDataReturn(userId)
         }
     }
 
-    private fun setUpSpinner() {
-        categoryViewModel.requestListCategory()
+    private fun setUpSpinner(idUser: Int) {
+        categoryViewModel.requestListCategory(idUser)
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -194,7 +204,6 @@ class AddProductReturnFragment :
         }
     }
 
-
     private fun disableCategorySpinner() {
         with(binding) {
             val spinnerCategory = spPickCategory
@@ -216,14 +225,15 @@ class AddProductReturnFragment :
         }
     }
 
-    private fun addDataReturn() {
+    private fun addDataReturn(userId: Int) {
         val amountSeller = binding.etSalesInput.text.toString()
         val date = getCurrentDateTime()
         viewModel.createProductReturnRequest(
             RequestAddReturn(
                 productId,
                 amountSeller,
-                date
+                date,
+                userId
             )
         )
         viewModel.createReturnResponse.observe(viewLifecycleOwner) {

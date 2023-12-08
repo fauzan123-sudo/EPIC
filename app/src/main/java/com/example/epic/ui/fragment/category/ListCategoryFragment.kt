@@ -6,9 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.epic.R
 import com.example.epic.data.adapter.CategoryAdapter
 import com.example.epic.data.model.category.read.Data
@@ -17,6 +15,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.CategoryViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,51 +33,55 @@ class ListCategoryFragment :
         super.onViewCreated(view, savedInstanceState)
 
         initLoading()
-        loadDataCategory()
+        setUpData()
         movePage()
         setUpToolbar()
-        deleteCategory()
+//        deleteCategory()
     }
 
-    private fun deleteCategory() {
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ) = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-
-                val data = categoryAdapter.differ.currentList[position]
-                val deletedCategory =
-                    categoryAdapter.differ.currentList[position].id_kategori.toString()
-
-                viewModel.deleteCategory(deletedCategory)
-                viewModel.deleteCategoryResponse.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            hideLoading()
-                            categoryAdapter.deleteItem(position)
-//                            categoryAdapter.notifyItemRemoved(position)
-                        }
-
-                        is NetworkResult.Loading -> {
-                            showLoading()
-                        }
-
-                        is NetworkResult.Error -> {
-                            hideLoading()
-                            showErrorMessage(it.message!!)
-                            categoryAdapter.addItem(data)
-                        }
-                    }
-                }
-
-            }
-        }).attachToRecyclerView(binding.rvCategory)
-    }
+//    private fun deleteCategory() {
+//        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ) = false
+//
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                val position = viewHolder.adapterPosition
+//
+//                val data = categoryAdapter.differ.currentList[position]
+//                val deletedCategory =
+//                    categoryAdapter.differ.currentList[position].id_kategori
+//
+//                viewModel.deleteCategory(
+//                    RequestDeleteCategory(
+//                        deletedCategory,
+//                        getUserId()?.toInt() ?: savedUser!!.id_user
+//                    )
+//                )
+//                viewModel.deleteCategoryResponse.observe(viewLifecycleOwner) {
+//                    when (it) {
+//                        is NetworkResult.Success -> {
+//                            hideLoading()
+//                            setUpData()
+//                        }
+//
+//                        is NetworkResult.Loading -> {
+//                            showLoading()
+//                        }
+//
+//                        is NetworkResult.Error -> {
+//                            hideLoading()
+//                            showErrorMessage(it.message!!)
+////                            categoryAdapter.addItem(data)
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }).attachToRecyclerView(binding.rvCategory)
+//    }
 
     private fun setUpToolbar() {
         binding.apply {
@@ -102,9 +105,9 @@ class ListCategoryFragment :
         }
     }
 
-    private fun loadDataCategory() {
+    private fun setUpData() {
         binding.apply {
-            viewModel.requestListCategory()
+            viewModel.requestListCategory(getUserId()?.toInt() ?: savedUser!!.id_user)
             viewModel.listCategoryResponse.observe(viewLifecycleOwner) {
                 when (it) {
                     is NetworkResult.Loading -> {

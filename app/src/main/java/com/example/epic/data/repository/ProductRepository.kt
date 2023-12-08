@@ -13,14 +13,14 @@ class ProductRepository @Inject constructor(private val api: ProductApi) :
             api.addProduct(request)
         }
 
-    suspend fun readProduct() =
+    suspend fun readProduct(userId: Int) =
         safeApiCall {
-            api.getProduct()
+            api.getProduct(userId)
         }
 
-    suspend fun searchProduct(q:String) =
+    suspend fun searchProduct(q: String, userId: Int) =
         safeApiCall {
-            api.searchProduct(q)
+            api.searchProduct(q, userId)
         }
 
     suspend fun updateProduct(request: RequestEditProduct) =

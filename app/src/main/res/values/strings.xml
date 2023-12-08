@@ -5,16 +5,16 @@
     <string name="select_category">Pilih Kategori</string>
     <string name="select_product">Pilih Barang</string>
     <string name="select_gender">Jenis Kelamin</string>
+    <string name="pilih_toko">Pilih Toko</string>
+    <string name="all_store">Semua Toko</string>
     <string name="incoming_goods">Sales</string>
     <string name="outgoing_goods">Penjualan</string>
-    <string name="return_goods">Pengembalia Barang</string>
+    <string name="return_goods">Pengembalian Barang</string>
     <string name="inventory">Persediaan</string>
     <string name="sales">Sales</string>
     <string name="search_here">Cari Disini</string>
-
     <string name="male">Laki-Laki</string>
     <string name="female">Perempuan</string>
-
 
 
     <string-array name="month">

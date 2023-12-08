@@ -19,12 +19,12 @@ class StockViewModel @Inject constructor(private val repository: StockRepository
     val listStockResponse: LiveData<NetworkResult<StockProductResponse>>
         get() = _listStockResponse
 
-    fun requestListStock() {
+    fun requestListStock(userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _listStockResponse.postValue(NetworkResult.Loading())
-                _listStockResponse.postValue(repository.getListStock())
+                _listStockResponse.postValue(repository.getListStock(userId))
             } else {
                 _listStockResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }

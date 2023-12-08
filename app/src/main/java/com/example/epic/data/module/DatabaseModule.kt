@@ -2,9 +2,10 @@ package com.example.epic.data.module
 
 import android.content.Context
 import androidx.room.Room
+import com.example.epic.data.model.user.management.read.Data
 import com.example.epic.data.room.ContactsDB
 import com.example.epic.data.room.ContactsEntity
-import com.example.epic.util.Constans.CONTACTS_DATABASE
+import com.example.epic.util.Constants.CONTACTS_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,8 +29,15 @@ object DatabaseModule {
     @Singleton
     fun provideDao(db: ContactsDB) = db.contactsDao()
 
+    @Provides
+    @Singleton
+    fun storeNameDao(db: ContactsDB) = db.storeNameDao()
+
 
     @Provides
     fun provideEntity() = ContactsEntity()
+
+    @Provides
+    fun provideNewContactsEntity() = Data()
 
 }

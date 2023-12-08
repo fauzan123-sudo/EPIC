@@ -6,5 +6,6 @@ data class RequestAddProduct(
     val satuan:String,
     val id_kategori:String,
     val minimal_persediaan:String,
-    val is_create:Int =1
+    val is_create:Int =1,
+    val id_user:Int
 )

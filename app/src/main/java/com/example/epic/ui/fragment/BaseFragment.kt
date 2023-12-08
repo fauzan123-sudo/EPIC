@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.epic.util.readLoginResponse
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val bindingInflater: (inflater: LayoutInflater) -> VB
@@ -19,6 +20,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         get() = _binding as VB
 
     lateinit var sweetAlertDialog: SweetAlertDialog
+    val savedUser = readLoginResponse()?.user
 
     override fun onCreateView(
         inflater: LayoutInflater,

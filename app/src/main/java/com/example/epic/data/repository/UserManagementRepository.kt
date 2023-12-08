@@ -1,6 +1,8 @@
 package com.example.epic.data.repository
 
 import com.example.epic.data.model.user.management.create.RequestCreateUser
+import com.example.epic.data.model.user.management.delete.RequestDeleteUser
+import com.example.epic.data.model.user.management.update.RequestUpdateUser
 import com.example.epic.data.network.UserManagementApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -23,5 +25,13 @@ class UserManagementRepository @Inject constructor(private val api: UserManageme
         val requestFile = photoFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
         val photoPart = MultipartBody.Part.createFormData("foto", photoFile.name, requestFile)
         api.updateProfilePhoto(userID, photoPart)
+    }
+
+    suspend fun deleteUser(request: RequestDeleteUser) = safeApiCall {
+        api.deleteUser(request)
+    }
+
+    suspend fun updateUser(request: RequestUpdateUser) = safeApiCall {
+        api.updateUser(request)
     }
 }

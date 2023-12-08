@@ -4,6 +4,7 @@ import com.example.epic.data.model.category.add.AddCategoryResponse
 import com.example.epic.data.model.category.add.RequestAddCategory
 import com.example.epic.data.model.category.based.SpinnerCategoryResponse
 import com.example.epic.data.model.category.delete.DeleteCategoryResponse
+import com.example.epic.data.model.category.delete.RequestDeleteCategory
 import com.example.epic.data.model.category.read.CategoryListResponse
 import com.example.epic.data.model.category.spinner.DropDownCategoryResponse
 import com.example.epic.data.model.category.update.RequestEditCategory
@@ -11,8 +12,6 @@ import com.example.epic.data.model.category.update.UpdateCategoryResponse
 import com.example.epic.data.model.stock.search.SearchCategoryResponse
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -26,7 +25,9 @@ interface CategoryApi {
     ): Response<AddCategoryResponse>
 
     @GET("kategori/list")
-    suspend fun listCategory(): Response<CategoryListResponse>
+    suspend fun listCategory(
+        @Query("id_user") userId: Int
+    ): Response<CategoryListResponse>
 
     @GET("kategori/list")
     suspend fun spinnerCategory(): Response<DropDownCategoryResponse>
@@ -34,9 +35,10 @@ interface CategoryApi {
     @POST("kategori/update")
     suspend fun updateCategory(@Body request: RequestEditCategory): Response<UpdateCategoryResponse>
 
-    @FormUrlEncoded
     @POST("kategori/delete")
-    suspend fun deleteCategory(@Field("id_kategori") categoryId: String): Response<DeleteCategoryResponse>
+    suspend fun deleteCategory(
+        @Body body: RequestDeleteCategory
+    ): Response<DeleteCategoryResponse>
 
     @GET("barang/list-by-kategori/{id_kategori}")
     suspend fun basedIdCategory(
@@ -50,7 +52,7 @@ interface CategoryApi {
 
     @GET("barang/dropdown-search")
     suspend fun dropDownSearch(
-        @Query("q") query:String
-    ) : Response<DropDownCategoryResponse>
+        @Query("q") query: String
+    ): Response<DropDownCategoryResponse>
 
 }

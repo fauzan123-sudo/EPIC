@@ -7,6 +7,7 @@ import com.example.epic.data.model.category.add.AddCategoryResponse
 import com.example.epic.data.model.category.add.RequestAddCategory
 import com.example.epic.data.model.category.based.SpinnerCategoryResponse
 import com.example.epic.data.model.category.delete.DeleteCategoryResponse
+import com.example.epic.data.model.category.delete.RequestDeleteCategory
 import com.example.epic.data.model.category.read.CategoryListResponse
 import com.example.epic.data.model.category.spinner.DropDownCategoryResponse
 import com.example.epic.data.model.category.update.RequestEditCategory
@@ -67,12 +68,12 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
         }
     }
 
-    fun requestListCategory() {
+    fun requestListCategory(userId:Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _listCategoryResponse.postValue(NetworkResult.Loading())
-                _listCategoryResponse.postValue(repository.listCategory())
+                _listCategoryResponse.postValue(repository.listCategory(userId))
             } else
                 _listCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
@@ -103,12 +104,12 @@ class CategoryViewModel @Inject constructor(private val repository: CategoryRepo
         }
     }
 
-    fun deleteCategory(idCategory: String) {
+    fun deleteCategory(request: RequestDeleteCategory) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _deleteCategoryResponse.postValue(NetworkResult.Loading())
-                _deleteCategoryResponse.postValue(repository.deleteCategory(idCategory))
+                _deleteCategoryResponse.postValue(repository.deleteCategory(request))
             } else {
                 _deleteCategoryResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }

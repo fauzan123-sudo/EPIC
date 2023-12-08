@@ -16,6 +16,7 @@ import com.example.epic.ui.viewModel.SellerViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getCurrentDateTime
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +41,7 @@ class AddSellerFragment :
     }
 
     private fun setUpSpinner() {
-        categoryViewModel.requestListCategory()
+        categoryViewModel.requestListCategory(getUserId()?.toInt() ?: savedUser!!.id_user)
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -156,7 +157,6 @@ class AddSellerFragment :
         }
     }
 
-
     private fun handleAddProduct() {
         val selectedCategoryText = binding.spPickCategory.text.toString()
         val selectedProductText = binding.spProduct.text.toString()
@@ -211,7 +211,8 @@ class AddSellerFragment :
             RequestCreateSeller(
                 selectedProductId.toString(),
                 salesInput,
-                date
+                date,
+                getUserId()?.toInt() ?: savedUser!!.id_user
             )
         )
         sellerViewModel.createSellerResponse.observe(viewLifecycleOwner) {

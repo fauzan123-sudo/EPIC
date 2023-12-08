@@ -1,18 +1,22 @@
 package com.example.epic.ui.fragment.stock
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.epic.R
 import com.example.epic.data.adapter.StockAdapter
 import com.example.epic.data.model.category.read.Data
 import com.example.epic.databinding.FragmentListStockBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.CategoryViewModel
+import com.example.epic.ui.viewModel.NotificationViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,6 +26,7 @@ class ListStockFragment :
     StockAdapter.ItemListener {
 
     private val viewModel: CategoryViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
     @Inject
     lateinit var stockAdapter: StockAdapter
@@ -31,6 +36,7 @@ class ListStockFragment :
 
         loadStock()
         setUpToolbar()
+        loadData()
 //        searchProduct()
 
     }
@@ -56,12 +62,45 @@ class ListStockFragment :
 //        }
 //    }
 
+    private fun loadData() {
+        notificationViewModel.requestWarningRefill(getUserId()?.toInt() ?: savedUser!!.id_user)
+        notificationViewModel.warningRefillResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    hideLoading()
+                    val response = it.data!!
+                    val data = response.data
+                    val totalData = data.size
+                    binding.toolbars.imageBadgeView.badgeValue = totalData
+                    Log.d("TAG", "total notification: $totalData")
+                }
+
+                is NetworkResult.Loading -> {
+                    showLoading()
+                }
+
+                is NetworkResult.Error -> {
+                    hideLoading()
+                    Log.e("TAG", "loadData: ${it.message}")
+                    showErrorMessage(it.message!!)
+                }
+            }
+        }
+    }
+
     private fun setUpToolbar() {
         binding.apply {
-            (requireActivity() as AppCompatActivity).setSupportActionBar(toolbars.toolbar)
+            toolbars.imageBadgeView.setOnClickListener {
+                try {
+                    findNavController().navigate(R.id.action_listStockFragment_to_listWarningRefillFragment)
+                } catch (e: Exception) {
+                    showErrorMessage(e.toString())
+                }
+            }
+            (requireActivity() as AppCompatActivity).setSupportActionBar(toolbars.myToolbar)
             view?.let {
                 configureToolbarBackPress(
-                    toolbars.toolbar,
+                    toolbars.myToolbar,
                     it,
                     requireActivity(),
                     "Persediaan Barang"
@@ -71,7 +110,7 @@ class ListStockFragment :
     }
 
     private fun loadStock() {
-        viewModel.requestListCategory()
+        viewModel.requestListCategory(getUserId()?.toInt() ?: 0)
         viewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {

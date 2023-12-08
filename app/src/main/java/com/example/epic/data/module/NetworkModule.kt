@@ -3,6 +3,7 @@ package com.example.epic.data.module
 import com.example.epic.data.network.AuthApi
 import com.example.epic.data.network.CategoryApi
 import com.example.epic.data.network.HomeApi
+import com.example.epic.data.network.NotificationApi
 import com.example.epic.data.network.ProductApi
 import com.example.epic.data.network.ProductReturnApi
 import com.example.epic.data.network.ProfileApi
@@ -12,7 +13,7 @@ import com.example.epic.data.network.SellerApi
 import com.example.epic.data.network.StockApi
 import com.example.epic.data.network.UserManagementApi
 import com.example.epic.util.AuthInterceptor
-import com.example.epic.util.Constans
+import com.example.epic.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -35,7 +36,7 @@ object NetworkModule {
         val gson = GsonBuilder().setLenient().create()
 
         return Builder()
-            .baseUrl(Constans.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
 //            .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(MoshiConverterFactory.create().asLenient())
     }
@@ -134,5 +135,11 @@ object NetworkModule {
     @Provides
     fun homeApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): HomeApi {
         return retrofitBuilder.client(okHttpClient).build().create(HomeApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun notificationApi(retrofitBuilder: Builder, okHttpClient: OkHttpClient): NotificationApi {
+        return retrofitBuilder.client(okHttpClient).build().create(NotificationApi::class.java)
     }
 }

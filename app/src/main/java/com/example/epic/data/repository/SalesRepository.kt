@@ -11,9 +11,9 @@ class SalesRepository @Inject constructor(private val api: SalesApi) : BaseRepos
             api.createSales(requestAddSales)
         }
 
-    suspend fun readSales() =
+    suspend fun readSales(userId:Int) =
         safeApiCall {
-            api.readSales()
+            api.readSales(userId)
         }
 
     suspend fun deleteSales(idSales: String) =

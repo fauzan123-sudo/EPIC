@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class StockRepository @Inject constructor(private val api:StockApi) : BaseRepository() {
 
-    suspend fun getListStock() =
+    suspend fun getListStock(userId: Int) =
         safeApiCall {
-            api.listStock()
+            api.listStock(userId)
         }
 }

@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -17,11 +16,13 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.TokenManager
+import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.deleteStoreName
 import com.example.epic.util.deleteUserData
+import com.example.epic.util.deleteUserId
 import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,29 +33,48 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     @Inject
     lateinit var tokenManager: TokenManager
-    private val userSaved = readLoginResponse()!!
+//    private val userSaved = readLoginResponse()!!
 
-    private val resultGallery =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { result ->
-            result?.let { uri ->
-                try {
-                    val inputStream = requireContext().contentResolver.openInputStream(uri)
-                    val file = File(requireContext().cacheDir, "user_image.png")
-                    val outputStream = FileOutputStream(file)
-                    inputStream?.use { input ->
-                        outputStream.use { output ->
-                            input.copyTo(output)
-                        }
-                    }
-                    viewModel.requestUpdatePhoto(userSaved.user.id_user.toString(), file)
-                    loadDataUpdatePhoto(result)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Log.e("Error", "Failed to create a temporary file")
-                }
-
-            } ?: Log.e("Error", "Result is null")
-        }
+//    private val resultGallery =
+//        registerForActivityResult(ActivityResultContracts.GetContent()) { result ->
+//            result?.let { uri ->
+//                try {
+//                    val inputStream = requireContext().contentResolver.openInputStream(uri)
+//                    val file = File(requireContext().cacheDir, "user_image.png")
+//                    val outputStream = FileOutputStream(file)
+//                    inputStream?.use { input ->
+//                        outputStream.use { output ->
+//                            input.copyTo(output)
+//                        }
+//                    }
+//                    viewModel.requestUpdatePhoto(userSaved.user.id_user.toString(), file)
+//                    loadDataUpdatePhoto(result)
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                    Log.e("Error", "Failed to create a temporary file")
+//                }
+//
+//            } ?: Log.e("Error", "Result is null")
+//        }
+//
+//    private val resultCamera = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+//        try {
+//            val inputStream = requireContext().contentResolver.openInputStream(uriImage)
+//            val file = File(requireContext().cacheDir, "user_image.png")
+//            val outputStream = FileOutputStream(file)
+//            inputStream?.use { input ->
+//                outputStream.use { output ->
+//                    input.copyTo(output)
+//                }
+//            }
+//            viewModel.requestUpdatePhoto(userSaved.user.id_user.toString(), file)
+//            loadDataUpdatePhoto(uriImage)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Log.e("Error", "Failed to create a temporary file")
+//        }
+//
+//    }
 
     private fun logOut() {
         binding.btnLogOut.setOnClickListener {
@@ -78,6 +98,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                                     )
                                     deleteUserData()
                                     tokenManager.deleteToken()
+
+                                    val isDeleted: Boolean = deleteUserId()
+                                    val isNameStoreDelete: Boolean = deleteStoreName()
+
+                                    if (isDeleted && isNameStoreDelete) {
+                                        println("Penghapusan berhasil.")
+                                    } else {
+                                        println("Penghapusan tidak berhasil atau data ID dan Nama Pengguna tidak ditemukan.")
+                                    }
+
                                     requireActivity().finish()
                                 }
                             }
@@ -128,30 +158,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private val resultCamera = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-        try {
-            val inputStream = requireContext().contentResolver.openInputStream(uriImage)
-            val file = File(requireContext().cacheDir, "user_image.png")
-            val outputStream = FileOutputStream(file)
-            inputStream?.use { input ->
-                outputStream.use { output ->
-                    input.copyTo(output)
-                }
-            }
-            viewModel.requestUpdatePhoto(userSaved.user.id_user.toString(), file)
-            loadDataUpdatePhoto(uriImage)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("Error", "Failed to create a temporary file")
-        }
-
-    }
-
     private fun createImageUri(): Uri? {
         val image = File(requireContext().filesDir, "camera_photo.png")
         return FileProvider.getUriForFile(requireContext(), "com.example.epic.provider", image)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -159,34 +169,43 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         uriImage = createImageUri()!!
         loadData()
         setUpToolbar()
-        touchImageCamera()
+//        touchImageCamera()
         logOut()
     }
 
-    private fun touchImageCamera() {
-        binding.imgChangePhoto.setOnClickListener {
-            SweetAlertDialog(requireContext(), SweetAlertDialog.NORMAL_TYPE)
-                .setTitleText("Pilih Aksi")
-                .setContentText("Ambil gambar dari")
-                .setConfirmText("Galleri")
-                .setCancelText("Kamera")
-                .setConfirmClickListener {
-                    resultGallery.launch("image/*")
-                    it.dismissWithAnimation()
-                }
-                .setCancelClickListener {
-                    resultCamera.launch(uriImage)
-//                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//                    resultCamera.launch(intent)
-                    it.dismissWithAnimation()
-                }
-                .show()
-        }
-
-    }
+//    private fun touchImageCamera() {
+//        binding.imgChangePhoto.setOnClickListener {
+//            SweetAlertDialog(requireContext(), SweetAlertDialog.NORMAL_TYPE)
+//                .setTitleText("Pilih Aksi")
+//                .setContentText("Ambil gambar dari")
+//                .setConfirmText("Galleri")
+//                .setCancelText("Kamera")
+//                .setConfirmClickListener {
+//                    resultGallery.launch("image/*")
+//                    it.dismissWithAnimation()
+//                }
+//                .setCancelClickListener {
+//                    resultCamera.launch(uriImage)
+////                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+////                    resultCamera.launch(intent)
+//                    it.dismissWithAnimation()
+//                }
+//                .show()
+//        }
+//
+//    }
 
     private fun setUpToolbar() {
-
+        binding.apply {
+            view?.let {
+                configureToolbarBackPress(
+                    toolbar.myToolbar,
+                    it,
+                    requireActivity(),
+                    "Profil"
+                )
+            }
+        }
     }
 
     private fun loadData() {
@@ -201,11 +220,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     Glide.with(requireContext())
                         .load(data.foto)
                         .placeholder(R.drawable.progress_animation)
+                        .error(R.drawable.ic_no_image)
                         .into(binding.userImage)
-
-//                    binding.userImage.loadRoundedImage(data.foto)
-                    binding.nameUser.text = data.nama
-
+                    binding.nameUser.text = data.nama_toko
+                    if (data.role == "1") {
+                        binding.tvRole.text = "Pemilik"
+                    } else {
+                        binding.tvRole.text = "Admin"
+                    }
 
                 }
 
@@ -218,7 +240,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     showErrorMessage(it.message!!)
                 }
 
-                else -> {}
+
             }
         }
     }

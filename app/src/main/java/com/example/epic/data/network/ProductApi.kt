@@ -22,6 +22,11 @@ interface ProductApi {
         @Body request: RequestAddProduct
     ): Response<AddProductResponse>
 
+    @GET("barang/list")
+    suspend fun getProduct(
+        @Query("id_user") userId: Int
+    ): Response<ProductListResponse>
+
     @POST("barang/update")
     suspend fun updateProduct(
         @Body request: RequestEditProduct
@@ -33,12 +38,10 @@ interface ProductApi {
         @Field("kode_barang") codeProduct: String
     ): Response<DeleteProductResponse>
 
-    @GET("barang/list")
-    suspend fun getProduct(): Response<ProductListResponse>
-
     @GET("barang/dropdown-search?q=premium")
     suspend fun searchProduct(
         @Query("q") q: String? = null,
+        @Query("id_user") userId: Int
     ): Response<ProductListResponse>
 
     @GET("statistik/penjualan")

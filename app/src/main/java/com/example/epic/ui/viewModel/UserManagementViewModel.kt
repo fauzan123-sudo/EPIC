@@ -5,7 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.user.management.create.CreateUserResponse
 import com.example.epic.data.model.user.management.create.RequestCreateUser
+import com.example.epic.data.model.user.management.delete.DeleteUserResponse
+import com.example.epic.data.model.user.management.delete.RequestDeleteUser
 import com.example.epic.data.model.user.management.read.UserListResponse
+import com.example.epic.data.model.user.management.update.RequestUpdateUser
+import com.example.epic.data.model.user.management.update.UpdateUserResponse
 import com.example.epic.data.model.user.profile.image.ImageChangeResponse
 import com.example.epic.data.repository.UserManagementRepository
 import com.example.epic.util.NetworkResult
@@ -28,8 +32,16 @@ class UserManagementViewModel @Inject constructor(private val repository: UserMa
     val createUserResponse: LiveData<NetworkResult<CreateUserResponse>>
         get() = _createUserResponse
 
-    private val _updateUserResponse = SingleLiveEvent<NetworkResult<ImageChangeResponse>>()
+    private val _updateImageUserResponse = SingleLiveEvent<NetworkResult<ImageChangeResponse>>()
     val updateProfilePhoto: LiveData<NetworkResult<ImageChangeResponse>>
+        get() = _updateImageUserResponse
+
+    private val _deleteUserResponse = SingleLiveEvent<NetworkResult<DeleteUserResponse>>()
+    val deleteUserResponse: LiveData<NetworkResult<DeleteUserResponse>>
+        get() = _deleteUserResponse
+
+    private val _updateUserResponse = SingleLiveEvent<NetworkResult<UpdateUserResponse>>()
+    val updateUserResponse : LiveData<NetworkResult<UpdateUserResponse>>
         get() = _updateUserResponse
 
     fun requestCreateUser(request:RequestCreateUser) {
@@ -60,12 +72,36 @@ class UserManagementViewModel @Inject constructor(private val repository: UserMa
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
+                _updateImageUserResponse.postValue(NetworkResult.Loading())
+                _updateImageUserResponse.postValue(repository.updateProfilePhoto(userId, photoFile))
+            } else {
+                _updateImageUserResponse.postValue(NetworkResult.Loading())
+            }
+        }
+    }
+
+
+
+    fun requestDeleteUser(request:RequestDeleteUser) =
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
+                _deleteUserResponse.postValue(NetworkResult.Loading())
+                _deleteUserResponse.postValue(repository.deleteUser(request))
+            } else {
+                _deleteUserResponse.postValue(NetworkResult.Loading())
+            }
+        }
+
+    fun requestUpdateUser(request: RequestUpdateUser) =
+        viewModelScope.launch {
+            val connected = CheckInternet().check()
+            if (connected) {
                 _updateUserResponse.postValue(NetworkResult.Loading())
-                _updateUserResponse.postValue(repository.updateProfilePhoto(userId, photoFile))
+                _updateUserResponse.postValue(repository.updateUser(request))
             } else {
                 _updateUserResponse.postValue(NetworkResult.Loading())
             }
         }
-    }
 
 }

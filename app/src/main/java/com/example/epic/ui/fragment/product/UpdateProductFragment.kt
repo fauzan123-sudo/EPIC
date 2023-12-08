@@ -19,6 +19,7 @@ import com.example.epic.ui.viewModel.CategoryViewModel
 import com.example.epic.ui.viewModel.ProductViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +36,6 @@ class UpdateProductFragment :
     private lateinit var defaultData: Data
 
     private var categories: List<Data>? = null
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -157,9 +157,12 @@ class UpdateProductFragment :
             setupMenu(R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_text_action -> {
-
-                        handleUpdateProduct()
-//                        actionAdd()
+                        if (savedUser?.role == "1") {
+                            val userId = getUserId()?.toInt()!!
+                            handleUpdateProduct(userId)
+                        } else {
+                            handleUpdateProduct(savedUser!!.id_user)
+                        }
                         true
                     }
 
@@ -180,19 +183,19 @@ class UpdateProductFragment :
     }
 
     private fun actionAdd() {
-       val selectedText = binding.spPickCategory.text.toString()
+        val selectedText = binding.spPickCategory.text.toString()
 
-        if (selectedText.isNotEmpty()){
+        if (selectedText.isNotEmpty()) {
             val selectedData: Data? = categories?.find { it.nama_kategori == selectedText }
             val selectedId = selectedData?.id_kategori ?: -1
             Toast.makeText(requireContext(), "Selected ID: $selectedId", Toast.LENGTH_SHORT)
                 .show()
-        } else{
+        } else {
             Toast.makeText(requireContext(), selectedCategoryId, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun handleUpdateProduct() {
+    private fun handleUpdateProduct(userId: Int) {
         val nameProduct = binding.etNameProduct.text.toString()
         val productCode = binding.etCodeProduct.text.toString()
         val unitProduct = binding.etUnitProduct.text.toString()
@@ -215,7 +218,8 @@ class UpdateProductFragment :
                 nameProduct,
                 unitProduct,
                 minimumProduct,
-                args.dataProduct?.id_barang.toString()
+                args.dataProduct?.id_barang.toString(),
+                userId
             )
             Log.d(
                 "TAG",
@@ -230,7 +234,8 @@ class UpdateProductFragment :
         nameProduct: String,
         unitProduct: String,
         minimumProduct: String,
-        productId: String
+        productId: String,
+        userId: Int
     ) {
         viewModel.updateProduct(
             RequestEditProduct(
@@ -240,6 +245,8 @@ class UpdateProductFragment :
                 unitProduct,
                 categoryId,
                 minimumProduct,
+                0,
+                userId
             )
         )
         viewModel.updateProductResponse.observe(viewLifecycleOwner) {

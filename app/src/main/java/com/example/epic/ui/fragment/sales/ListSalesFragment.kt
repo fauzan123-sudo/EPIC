@@ -1,9 +1,9 @@
 package com.example.epic.ui.fragment.sales
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +16,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.SalesViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -39,8 +40,12 @@ class ListSalesFragment :
     }
 
     private fun setUpData() {
-        Log.d("mulai", "mulai onViewCreated: ")
-        viewModel.listSalesRequest()
+        Toast.makeText(
+            requireContext(),
+            "${getUserId()?.toInt() ?: savedUser?.id_user}",
+            Toast.LENGTH_SHORT
+        ).show()
+        viewModel.listSalesRequest(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.listSalesResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -109,8 +114,12 @@ class ListSalesFragment :
                         viewModel.deleteSalesResponse.removeObservers(viewLifecycleOwner)
                         val response = it.data!!
                         if (response.status) {
-                            showSuccessDelete(response.message)
-                            setUpData()
+                            if (response.data.message == "Jumlah persediaan tidak mencukupi") {
+                                showErrorMessage(response.data.message)
+                            } else {
+                                showSuccessDelete(response.data.message)
+                                setUpData()
+                            }
                         } else {
                             showErrorMessage(response.message)
                         }

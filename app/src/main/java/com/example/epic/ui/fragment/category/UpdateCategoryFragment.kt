@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.epic.R
+import com.example.epic.data.model.category.delete.RequestDeleteCategory
 import com.example.epic.data.model.category.update.RequestEditCategory
 import com.example.epic.databinding.FragmentUpdateCategoryBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.CategoryViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,12 +34,51 @@ class UpdateCategoryFragment :
         val nameCategory = data.nama_kategori
         setUpToolbar()
         setUpData(codeCategory, nameCategory)
+        deleteCategory()
 
     }
 
     private fun setUpData(codeCategory: String, nameCategory: String) {
-        binding.etCodeCategory.setText(codeCategory)
-        binding.etNameCategory.setText(nameCategory)
+        binding.apply {
+            etCodeCategory.setText(codeCategory)
+            etNameCategory.setText(nameCategory)
+        }
+    }
+
+    private fun deleteCategory() {
+        binding.btnDeleteCategory.setOnClickListener {
+            showWarningMessage("Kategori") {
+                viewModel.deleteCategory(
+                    RequestDeleteCategory(
+                        args.dataCategory.id_kategori,
+                        getUserId()?.toInt() ?: savedUser!!.id_user
+                    )
+                )
+                viewModel.deleteCategoryResponse.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            hideLoading()
+                            val response = it.data!!
+                            if (response.status) {
+                                showSuccessMessage(response.data.message)
+                            } else {
+                                showErrorMessage(response.data.message)
+                            }
+                        }
+
+                        is NetworkResult.Loading -> {
+                            showLoading()
+                        }
+
+                        is NetworkResult.Error -> {
+                            hideLoading()
+                            showErrorMessage(it.message!!)
+//                            categoryAdapter.addItem(data)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun currentUpdateData() {
@@ -49,7 +90,8 @@ class UpdateCategoryFragment :
             RequestEditCategory(
                 idCategory.toString(),
                 codeCategoryUpdate,
-                nameCategoryUpdate
+                nameCategoryUpdate,
+                savedUser!!.id_user
             )
         )
         viewModel.updateCategoryResponse.observe(viewLifecycleOwner) {

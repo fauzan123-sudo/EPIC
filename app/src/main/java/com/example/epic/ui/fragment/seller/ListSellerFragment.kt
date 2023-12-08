@@ -16,6 +16,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.SellerViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -64,7 +65,7 @@ class ListSellerFragment :
     }
 
     private fun loadSellerData() {
-        viewModel.requestListSeller()
+        viewModel.requestListSeller(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.listSellerResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {

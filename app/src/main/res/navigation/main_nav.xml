@@ -127,6 +127,9 @@
         <action
             android:id="@+id/action_listStockFragment_to_listCategoryByStockFragment"
             app:destination="@id/listCategoryByStockFragment" />
+        <action
+            android:id="@+id/action_listStockFragment_to_listWarningRefillFragment"
+            app:destination="@id/listWarningRefillFragment" />
     </fragment>
     <fragment
         android:id="@+id/addSalesFragment"
@@ -203,6 +206,9 @@
         <argument
             android:name="dataCategory"
             app:argType="com.example.epic.data.model.category.read.Data" />
+        <action
+            android:id="@+id/action_listCategoryByStockFragment_to_listWarningRefillFragment"
+            app:destination="@id/listWarningRefillFragment" />
     </fragment>
     <fragment
         android:id="@+id/listStoreFragment"
@@ -230,4 +236,9 @@
             android:name="userData"
             app:argType="com.example.epic.data.model.user.management.read.Data" />
     </fragment>
+    <fragment
+        android:id="@+id/listWarningRefillFragment"
+        android:name="com.example.epic.ui.fragment.stock.ListWarningRefillFragment"
+        android:label="fragment_list_warning_refill"
+        tools:layout="@layout/fragment_list_warning_refill" />
 </navigation>

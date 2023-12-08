@@ -16,6 +16,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProductReturnViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -65,7 +66,7 @@ class ProductReturnFragment :
     }
 
     private fun loadData() {
-        viewModel.listProductReturnRequest()
+        viewModel.listProductReturnRequest(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.listReturnResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -101,31 +102,40 @@ class ProductReturnFragment :
 
     override fun deleteSales(data: Data) {
         showWarningMessage("Pengembalian Barang") {
-            viewModel.requestdeleteReturnProduct(RequestDeleteReturn(data.id_data_pengembalian_barang))
-            viewModel.deleteReturnResponse.observe(viewLifecycleOwner) {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        hideLoading()
-                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
-                        val response = it.data!!
-                        val deleteResponse = response.data
-                        if (response.status) {
-                            showSuccessDelete(deleteResponse.message)
-                            loadData()
-                        } else {
-                            showErrorMessage(deleteResponse.message)
-                        }
-                    }
+            deleteData(data)
+        }
+    }
 
-                    is NetworkResult.Loading -> {
-                        showLoading()
+    private fun deleteData(data: Data) {
+        viewModel.requestdeleteReturnProduct(
+            RequestDeleteReturn(
+                data.id_data_pengembalian_barang,
+                getUserId()?.toInt() ?: savedUser!!.id_user
+            )
+        )
+        viewModel.deleteReturnResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    hideLoading()
+                    viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
+                    val response = it.data!!
+                    val deleteResponse = response.data
+                    if (response.status) {
+                        showSuccessDelete(deleteResponse.message)
+                        /* loadData(userId)*/
+                    } else {
+                        showErrorMessage(deleteResponse.message)
+                    }
+                }
+
+                is NetworkResult.Loading -> {
+                    showLoading()
 //                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
-                    }
+                }
 
-                    is NetworkResult.Error -> {
-                        hideLoading()
-                        viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
-                    }
+                is NetworkResult.Error -> {
+                    hideLoading()
+                    viewModel.deleteReturnResponse.removeObservers(viewLifecycleOwner)
                 }
             }
         }

@@ -9,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SalesApi {
 
@@ -18,7 +19,9 @@ interface SalesApi {
     ) : Response<CreateSalesResponse>
 
     @GET("sales/list")
-    suspend fun readSales(): Response<ListSalesResponse>
+    suspend fun readSales(
+        @Query("id_user") userId: Int
+    ): Response<ListSalesResponse>
 
     @POST("")
     suspend fun updateSales():Response<Any>

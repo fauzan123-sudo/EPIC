@@ -81,6 +81,7 @@ class PdfService {
     }
 
     fun createUserTable(
+        title: String,
         data: List<ItemPdf>,
         fileName: String,
         onFinish: (file: File) -> Unit,

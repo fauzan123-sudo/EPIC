@@ -22,6 +22,8 @@ import com.example.epic.ui.fragment.report.pdf.PdfService
 import com.example.epic.ui.viewModel.ReportViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getStoreName
+import com.example.epic.util.getUserId
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
@@ -42,8 +44,10 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         setUpData()
         clickDownloadPdf()
         setUpToolbar()
+        Toast.makeText(requireContext(), getStoreName() ?: "-", Toast.LENGTH_SHORT).show()
 
     }
+
     private fun setUpToolbar() {
         binding.apply {
             view?.let {
@@ -64,7 +68,12 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
     }
 
     private fun setUpData() {
-        viewModel.requestReport()
+        Toast.makeText(
+            requireContext(),
+            "${getUserId()?.toInt() ?: savedUser!!.id_user}",
+            Toast.LENGTH_SHORT
+        ).show()
+        viewModel.requestReport(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.readReportResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -85,8 +94,8 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
                         myItem.add(dataItem)
                     }
 
-                    adapter.also {
-                        it.differ.submitList(myItem)
+                    adapter.also { newAdapter ->
+                        newAdapter.differ.submitList(myItem)
 //                        val newItem = ItemPdf(
 //                            "No",
 //                            "Kode",
@@ -97,10 +106,9 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
 //                            "Persediaan"
 //                        )
 //                        it.addHeaderItem(newItem)
-
                         binding.rvReport.apply {
                             layoutManager = LinearLayoutManager(requireContext())
-                            adapter = it
+                            adapter = newAdapter
                         }
                     }
                 }
@@ -154,6 +162,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         }
 
         pdfService.createUserTable(
+            title = getStoreName() ?: "-",
             data = data,
             fileName = fileName,
             onFinish = onFinish,

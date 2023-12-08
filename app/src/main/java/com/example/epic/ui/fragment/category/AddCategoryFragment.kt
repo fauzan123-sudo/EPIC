@@ -3,6 +3,7 @@ package com.example.epic.ui.fragment.category
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.epic.R
@@ -12,6 +13,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.CategoryViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,9 +26,13 @@ class AddCategoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         setUpToolbar()
+        setUp()
 
+    }
+
+    private fun setUp() {
+        Toast.makeText(requireContext(), "${getUserId()?.toInt() ?: savedUser!!.id_user}", Toast.LENGTH_SHORT).show()
     }
 
     private fun setUpToolbar() {
@@ -61,7 +67,13 @@ class AddCategoryFragment :
             val codeCategory = etCodeCategory.text.toString()
             val nameCategory = etNameCategory.text.toString()
 
-            viewModel.requestAddCategory(RequestAddCategory(codeCategory, nameCategory))
+            viewModel.requestAddCategory(
+                RequestAddCategory(
+                    codeCategory,
+                    nameCategory,
+                    getUserId()?.toInt() ?: savedUser!!.id_user
+                )
+            )
             viewModel.addCategoryResponse.observe(viewLifecycleOwner) {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -82,6 +94,8 @@ class AddCategoryFragment :
                         hideLoading()
                         showErrorMessage(it.message ?: "error found")
                     }
+
+                    else -> {}
                 }
             }
         }

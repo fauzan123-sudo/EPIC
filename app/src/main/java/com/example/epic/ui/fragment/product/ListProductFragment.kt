@@ -16,6 +16,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProductViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.hideKeyboard
 import com.example.epic.util.setupMenu
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -36,7 +37,7 @@ class ListProductFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setUpToolbar()
-        loadProduct()
+        setUpData()
         searchProduct()
 
     }
@@ -49,7 +50,10 @@ class ListProductFragment :
 
                 override fun onSearchConfirmed(text: CharSequence?) {
                     view?.let { hideKeyboard(it) }
-                    productViewModel.searchProduct(text.toString())
+                    productViewModel.searchProduct(
+                        text.toString(),
+                        getUserId()?.toInt() ?: savedUser!!.id_user
+                    )
                     productViewModel.searchProductResponse.observe(viewLifecycleOwner) {
                         when (it) {
                             is NetworkResult.Success -> {
@@ -77,8 +81,8 @@ class ListProductFragment :
         }
     }
 
-    private fun loadProduct() {
-        productViewModel.readProduct()
+    private fun setUpData() {
+        productViewModel.readProduct(getUserId()?.toInt() ?: savedUser!!.id_user)
         productViewModel.readProductResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -162,10 +166,16 @@ class ListProductFragment :
                         hideLoading()
                         productViewModel.deleteProductResponse.removeObservers(viewLifecycleOwner)
                         val response = it.data!!
-//                        val dataProduct = response.data
                         if (response.status) {
-                            showSuccessDelete(response.message)
-                            loadProduct()
+                            showSuccessDelete(response.data.message)
+
+//                            val position = productAdapter.differ.currentList.indexOf(data)
+//                            if (position != -1) {
+//                                productAdapter.differ.currentList.toMutableList().removeAt(position)
+//                                productAdapter.notifyItemRemoved(position)
+//                            }else{
+//                                Toast.makeText(requireContext(), "position is 1", Toast.LENGTH_SHORT).show()
+//                            }
                         } else {
                             showErrorMessage(response.message)
                         }

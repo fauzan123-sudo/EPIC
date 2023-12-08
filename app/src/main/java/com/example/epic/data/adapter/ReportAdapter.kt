@@ -15,9 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class ReportAdapter @Inject constructor() : RecyclerView.Adapter<ReportAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binding: ItemNewReportBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    inner class ViewHolder(val binding: ItemNewReportBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val diffCallBack = object : DiffUtil.ItemCallback<ItemPdf>() {
         override fun areItemsTheSame(oldItem: ItemPdf, newItem: ItemPdf): Boolean {

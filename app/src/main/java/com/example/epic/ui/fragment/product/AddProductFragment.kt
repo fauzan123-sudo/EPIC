@@ -15,6 +15,7 @@ import com.example.epic.ui.viewModel.CategoryViewModel
 import com.example.epic.ui.viewModel.ProductViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +35,7 @@ class AddProductFragment :
     }
 
     private fun setUpSpinner() {
-        categoryViewModel.requestListCategory()
+        categoryViewModel.requestListCategory(getUserId()?.toInt() ?: 0)
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -141,7 +142,12 @@ class AddProductFragment :
             setupMenu(R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     R.id.add_text_action -> {
-                        handleAddProduct()
+                        if (savedUser!!.role == "1") {
+                            val userId = getUserId()?.toInt()!!
+                            handleAddProduct(userId)
+                        } else {
+                            handleAddProduct(savedUser.id_user)
+                        }
                         true
                     }
 
@@ -161,7 +167,7 @@ class AddProductFragment :
         }
     }
 
-    private fun handleAddProduct() {
+    private fun handleAddProduct(userId: Int) {
         val nameProduct = binding.etNameProduct.text.toString()
         val productCode = binding.etCodeProduct.text.toString()
         val unitProduct = binding.etUnitProduct.text.toString()
@@ -177,7 +183,14 @@ class AddProductFragment :
         } else if (unitProduct.isEmpty()) {
             showErrorMessage("harap isi satuan barang dulu!!")
         } else {
-            addData(selectedCategoryId, productCode, nameProduct, unitProduct, minimumProduct)
+            addData(
+                selectedCategoryId,
+                productCode,
+                nameProduct,
+                unitProduct,
+                minimumProduct,
+                userId
+            )
         }
     }
 
@@ -186,7 +199,8 @@ class AddProductFragment :
         productCode: String,
         nameProduct: String,
         unitProduct: String,
-        minimumProduct: String
+        minimumProduct: String,
+        userId: Int
     ) {
         viewModel.createProduct(
             RequestAddProduct(
@@ -195,7 +209,9 @@ class AddProductFragment :
                 unitProduct,
                 categoryId,
                 minimumProduct,
-                )
+                1,
+                userId
+            )
         )
         viewModel.createProductResponse.observe(viewLifecycleOwner) {
             when (it) {

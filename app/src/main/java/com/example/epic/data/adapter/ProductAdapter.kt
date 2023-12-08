@@ -16,8 +16,6 @@ class ProductAdapter @Inject constructor() : RecyclerView.Adapter<ProductAdapter
 
     var listener: ItemListener? = null
 
-    val deleteListener: ItemListener? = null
-
     interface ItemListener {
         fun updateProduct(data: Data)
         fun deleteProduct(data: Data)

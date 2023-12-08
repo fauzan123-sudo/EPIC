@@ -9,12 +9,13 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SellerApi {
 
     @GET("penjualan/list")
     suspend fun listSeller(
-
+        @Query("id_user") userId: Int
     ) : Response<ListSellerResponse>
 
     @POST("penjualan/create")

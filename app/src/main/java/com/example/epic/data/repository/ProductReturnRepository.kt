@@ -8,8 +8,8 @@ import javax.inject.Inject
 class ProductReturnRepository @Inject constructor(private val api: ProductReturnApi) :
     BaseRepository() {
 
-    suspend fun readReturnProduct() = safeApiCall {
-        api.getListReturnProduct()
+    suspend fun readReturnProduct(userId: Int) = safeApiCall {
+        api.getListReturnProduct(userId)
     }
 
     suspend fun createReturnProduct(request: RequestAddReturn) = safeApiCall {

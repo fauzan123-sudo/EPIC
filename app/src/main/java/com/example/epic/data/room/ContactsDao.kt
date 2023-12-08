@@ -1,7 +1,7 @@
 package com.example.epic.data.room
 
 import androidx.room.*
-import com.example.epic.util.Constans.CONTACTS_TABLE
+import com.example.epic.util.Constants.CONTACTS_TABLE
 import kotlinx.coroutines.flow.Flow
 
 @Dao

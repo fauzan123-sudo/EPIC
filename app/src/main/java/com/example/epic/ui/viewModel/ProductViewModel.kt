@@ -58,12 +58,12 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
         }
     }
 
-    fun readProduct() {
+    fun readProduct(userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _readProductResponse.postValue(NetworkResult.Loading())
-                _readProductResponse.postValue(repository.readProduct())
+                _readProductResponse.postValue(repository.readProduct(userId))
             } else {
                 _readProductResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }
@@ -94,12 +94,12 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
         }
     }
 
-    fun searchProduct(q: String) {
+    fun searchProduct(q: String, userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _searchProductResponse.postValue(NetworkResult.Loading())
-                _searchProductResponse.postValue(repository.searchProduct(q))
+                _searchProductResponse.postValue(repository.searchProduct(q, userId))
             } else {
                 _searchProductResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }

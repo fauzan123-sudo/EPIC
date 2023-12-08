@@ -15,7 +15,7 @@ import com.example.epic.data.room.ContactsDB
 import com.example.epic.data.room.ContactsDao
 import com.example.epic.data.room.ContactsEntity
 import com.example.epic.ui.activity.MainActivity
-import com.example.epic.util.Constans.CONTACTS_DATABASE
+import com.example.epic.util.Constants.CONTACTS_DATABASE
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.paperdb.Paper
@@ -59,10 +59,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val notificationData = NotificationData(title, body)
-        val notifications = Paper.book().read(Constans.notify, mutableListOf<NotificationData>())
+        val notifications = Paper.book().read(Constants.notify, mutableListOf<NotificationData>())
         Log.d("data", "$notifications")
         notifications!!.add(notificationData)
-        Paper.book().write(Constans.notify, notifications)
+        Paper.book().write(Constants.notify, notifications)
 //        adapter.setNotifications(notifications)
 //        adapter.notifyDataSetChanged()
     }

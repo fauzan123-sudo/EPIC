@@ -30,12 +30,12 @@ class SellerViewModel @Inject constructor(private val repository: SellerReposito
     val deleteSellerResponse: LiveData<NetworkResult<DeleteSellerResponse>>
         get() = _deleteSellerResponse
 
-    fun requestListSeller() {
+    fun requestListSeller(userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected) {
                 _listSellerResponse.postValue(NetworkResult.Loading())
-                _listSellerResponse.postValue(repository.listSeller())
+                _listSellerResponse.postValue(repository.listSeller(userId))
             }else{
                 _listSellerResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }

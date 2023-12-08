@@ -59,12 +59,12 @@ class ProductReturnViewModel @Inject constructor(val repository: ProductReturnRe
         }
     }
 
-    fun listProductReturnRequest() {
+    fun listProductReturnRequest(userId: Int) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected){
                 _listReturnResponse.postValue(NetworkResult.Loading())
-                _listReturnResponse.postValue(repository.readReturnProduct())
+                _listReturnResponse.postValue(repository.readReturnProduct(userId))
             }else{
                 _listReturnResponse.postValue(NetworkResult.Loading())
             }

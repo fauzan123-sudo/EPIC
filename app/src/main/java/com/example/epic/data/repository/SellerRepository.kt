@@ -13,8 +13,8 @@ class SellerRepository @Inject constructor(private val api: SellerApi) : BaseRep
 //            })
 //        }.flowOn(Dispatchers.IO)
 
-    suspend fun listSeller() = safeApiCall {
-        api.listSeller()
+    suspend fun listSeller(userId: Int) = safeApiCall {
+        api.listSeller(userId)
     }
 
 

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class ReportRepository @Inject constructor(val api: ReportApi) : BaseRepository() {
 
-    suspend fun readReport() = safeApiCall {
-        api.readReportProduct()
+    suspend fun readReport(userId: Int) = safeApiCall {
+        api.readReportProduct(userId)
     }
 }

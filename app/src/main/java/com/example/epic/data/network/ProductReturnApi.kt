@@ -9,12 +9,13 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ProductReturnApi {
 
     @GET("return/list")
     suspend fun getListReturnProduct(
-
+        @Query("id_user") userId: Int
     ): Response<ReturnProductResponse>
 
     @POST("return/create")

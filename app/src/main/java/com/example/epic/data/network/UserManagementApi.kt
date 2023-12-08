@@ -2,7 +2,11 @@ package com.example.epic.data.network
 
 import com.example.epic.data.model.user.management.create.CreateUserResponse
 import com.example.epic.data.model.user.management.create.RequestCreateUser
+import com.example.epic.data.model.user.management.delete.DeleteUserResponse
+import com.example.epic.data.model.user.management.delete.RequestDeleteUser
 import com.example.epic.data.model.user.management.read.UserListResponse
+import com.example.epic.data.model.user.management.update.RequestUpdateUser
+import com.example.epic.data.model.user.management.update.UpdateUserResponse
 import com.example.epic.data.model.user.profile.image.ImageChangeResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -17,8 +21,8 @@ interface UserManagementApi {
 
     @POST("user/create")
     suspend fun createUser(
-        @Body request:RequestCreateUser
-    ) : Response<CreateUserResponse>
+        @Body request: RequestCreateUser
+    ): Response<CreateUserResponse>
 
     @GET("user/list")
     suspend fun readUser(): Response<UserListResponse>
@@ -29,5 +33,15 @@ interface UserManagementApi {
         @Path("id_user") userID: String,
         @Part foto: MultipartBody.Part
     ): Response<ImageChangeResponse>
+
+    @POST("user/delete")
+    suspend fun deleteUser(
+        @Body body: RequestDeleteUser
+    ): Response<DeleteUserResponse>
+
+    @POST("user/update")
+    suspend fun updateUser(
+        @Body body: RequestUpdateUser
+    ): Response<UpdateUserResponse>
 
 }

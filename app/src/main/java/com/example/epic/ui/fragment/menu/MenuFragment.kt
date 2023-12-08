@@ -10,7 +10,7 @@ import com.example.epic.data.model.NotificationData
 import com.example.epic.databinding.FragmentMenuBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.DatabaseViewModel
-import com.example.epic.util.Constans
+import com.example.epic.util.Constants
 import com.example.epic.util.DataStatus
 import com.example.epic.util.getNotification
 import com.example.epic.util.isVisible
@@ -32,7 +32,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(FragmentMenuBinding::infl
         with(binding) {
 
             val notifications =
-                Paper.book().read(Constans.notify, mutableListOf<NotificationData>())
+                Paper.book().read(Constants.notify, mutableListOf<NotificationData>())
             val unreadNotifications = notifications!!.filter { !it.isRead }
             val unreadCount = unreadNotifications.size
             unreadNotificationCountTextView.text = unreadCount.toString()

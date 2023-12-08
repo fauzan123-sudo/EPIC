@@ -17,6 +17,7 @@ import com.example.epic.ui.viewModel.SalesViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getCurrentDateTime
+import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,12 +32,18 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpSpinner()
+        if (savedUser?.role == "1") {
+            val userId = getUserId()?.toInt()!!
+            setUpSpinner(userId)
+        } else {
+            val userId = savedUser!!.id_user
+            setUpSpinner(userId)
+        }
         setUpToolbar()
     }
 
-    private fun setUpSpinner() {
-        categoryViewModel.requestListCategory()
+    private fun setUpSpinner(userId: Int) {
+        categoryViewModel.requestListCategory(userId)
         categoryViewModel.listCategoryResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -228,7 +235,8 @@ class AddSalesFragment : BaseFragment<FragmentAddSalesBinding>(FragmentAddSalesB
             RequestCreateSales(
                 productId,
                 salesInput,
-                getCurrentDateTime()
+                getCurrentDateTime(),
+                getUserId()?.toInt() ?: savedUser!!.id_user
             )
         )
         salesViewModel.createSalesResponse.observe(viewLifecycleOwner) {
