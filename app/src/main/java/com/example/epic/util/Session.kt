@@ -3,7 +3,6 @@ package com.example.epic.util
 import com.example.epic.data.model.NotificationData
 import com.example.epic.data.model.user.login.LoginResponse
 import com.example.epic.data.model.user.management.read.Data
-import com.example.epic.data.model.user.management.read.UserListResponse
 import com.example.epic.util.Constants.STORE_NAME
 import com.example.epic.util.Constants.USER_ID
 import com.example.epic.util.Constants.USER_LIST
@@ -125,39 +124,38 @@ fun updateStoreName(newValue: String) {
     }
 }
 
-fun readStore(): UserListResponse? {
-    return Paper.book().read<UserListResponse>(USER_LIST, null)
+fun saveStore(data: Data) {
+    Paper.book().write(USER_LIST, data)
 }
 
-fun saveStore(newData: Data) {
-    val currentData = readStore() ?: UserListResponse(emptyList(), "", false)
-
-    val newDataList = currentData.data.toMutableList()
-    newDataList.add(newData)
-
-    saveStore(currentData.copy(data = newDataList))
+fun readStore(): Data? {
+    return Paper.book().read<Data>(USER_LIST, null)
 }
 
-fun saveStore(updatedData: UserListResponse) {
-    Paper.book().write(USER_LIST, updatedData)
-}
+fun updateStore(data: Data) {
+    val existingData = readStore()
 
-fun deleteStore() {
-    Paper.book().delete(USER_LIST)
-}
+    if (existingData != null) {
+        existingData.alamat = data.alamat
+        existingData.email = data.email
+        existingData.foto = data.foto
+        existingData.id_user = data.id_user
+        existingData.jk = data.jk
+        existingData.nama = data.nama
+        existingData.nama_toko = data.nama_toko
+        existingData.no_tlp = data.no_tlp
+        existingData.role = data.role
+        existingData.tempat_lahir = data.tempat_lahir
+        existingData.ttl = data.ttl
+        existingData.username = data.username
+        existingData.password_show = data.password_show
 
-fun updateStore(updatedData: Data) {
-    val currentData = readStore() ?: UserListResponse(emptyList(), "", false)
-
-    val dataIndex = currentData.data.indexOfFirst { it.id_user == updatedData.id_user }
-
-    if (dataIndex != -1) {
-        val newDataList = currentData.data.toMutableList()
-        newDataList[dataIndex] = updatedData
-
-        saveStore(currentData.copy(data = newDataList))
+        saveStore(existingData)
     }
 }
+
+
+
 
 
 

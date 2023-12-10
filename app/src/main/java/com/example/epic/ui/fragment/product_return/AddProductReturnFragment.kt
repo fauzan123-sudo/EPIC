@@ -241,7 +241,11 @@ class AddProductReturnFragment :
                 is NetworkResult.Success -> {
                     hideLoading()
                     val response = it.data!!
-                    showSuccessMessage(response.data.message)
+                    if (response.status) {
+                        showSuccessMessage("Sukses Menambahkan Pengembalian")
+                    }else{
+                        showErrorMessage(response.message)
+                    }
                 }
 
                 is NetworkResult.Loading -> {

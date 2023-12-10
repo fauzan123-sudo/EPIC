@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -34,6 +33,13 @@ import com.example.epic.util.getStoreName
 import com.example.epic.util.getUserId
 import com.example.epic.util.getYear
 import com.example.epic.util.readLoginResponse
+import com.example.epic.util.readStore
+import com.example.epic.util.saveStore
+import com.example.epic.util.saveStoreName
+import com.example.epic.util.saveUserId
+import com.example.epic.util.updateStore
+import com.example.epic.util.updateStoreName
+import com.example.epic.util.updateUserId
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
@@ -55,19 +61,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val listNameStore = ArrayList<String>()
 
     private var defaultSpinner: Data? = null
+    private var stores: List<Data>? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Toast.makeText(requireContext(), "$defaultSpinner", Toast.LENGTH_SHORT).show()
         loadData()
         loadApi(getMonth())
         loadCalendar()
         pickStore()
-//        pickStore(response[0])
         getNameStore()
         loadStore()
         backPress()
         checkFcm()
+
 
         binding.apply {
 
@@ -198,15 +204,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 tilStore.visibility = View.VISIBLE
                 tvStoreName.visibility = View.GONE
 
-                mcv2.setOnClickListener {
-                    val currentStore = getUserId()
-                    if (currentStore != null) {
-                        Toast.makeText(requireContext(), "$currentStore", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(requireContext(), "current data is null", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
+//                mcv2.setOnClickListener {
+//                    val currentStore = getUserId()
+//                    if (currentStore != null) {
+//                        Toast.makeText(requireContext(), "$currentStore", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "current data is null", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                }
 
                 hIncomingMenu.setOnClickListener {
                     if (getUserId() == null) {
@@ -311,8 +317,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                             listNameStore.add(store.nama_toko ?: "-")
                         }
 
-                        Log.d("TAG", "pickStore: $listNameStore")
-
                         spinnerCategory.setAdapter(
                             ArrayAdapter(
                                 requireContext(),
@@ -321,16 +325,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                             )
                         )
 
-                        val defaultIndex = stores.indexOf(defaultSpinner)
-
-                        if (defaultIndex != -1) {
-                            binding.spPickStore.setText(defaultSpinner!!.nama_toko, false)
-                            Toast.makeText(
-                                requireContext(),
-                                "${defaultSpinner!!.nama_toko}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        if (readStore()?.nama_toko == null) {
+                            binding.spPickStore.hint = "pilih toko"
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "data is null and please fill",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+                        } else {
+                            binding.spPickStore.hint = "${readStore()?.nama_toko}"
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "data is not null and filled ${readStore()}",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
                         }
+
 
                         var lastSelectedPosition = -1
                         spinnerCategory.setOnItemClickListener { _, _, position, _ ->
@@ -341,23 +351,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                                 val thisMonth = getMonth()
                                 val getNameStore = getStoreName()
                                 loadApi(thisMonth)
-                                homeViewModel.saveStoreName(selectedStore)
-//                                val userSave =
-//                                if (getNameStore == null && getUserId == null ) {
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        "saving id and name user coz null property",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                    saveUserId(selectedStore.id_user.toString())
-//                                    homeViewModel.saveStoreName(selectedStore)
-//                                    saveStoreName(selectedStore.nama_toko ?: "-")
-//                                } else {
-//                                    Toast.makeText(requireContext(), "${getStoreName()}", Toast.LENGTH_SHORT).show()
-//                                    homeViewModel.saveStoreName(selectedStore)
-//                                    updateUserId(selectedStore.id_user.toString())
-//                                    updateStoreName(selectedStore.nama_toko ?: "-")
-//                                }
+                                if (getNameStore == null && getUserId == null && readStore() == null) {
+                                    saveUserId(selectedStore.id_user.toString())
+                                    saveStoreName(selectedStore.nama_toko ?: "-")
+                                    saveStore(selectedStore)
+                                } else {
+                                    updateStore(selectedStore)
+                                    updateUserId(selectedStore.id_user.toString())
+                                    updateStoreName(selectedStore.nama_toko ?: "-")
+                                }
                                 lastSelectedPosition = position
                             }
                         }

@@ -1,5 +1,6 @@
 package com.example.epic.data.repository
 
+import com.example.epic.data.model.user.profile.update.RequestUpdateProfile
 import com.example.epic.data.network.ProfileApi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -21,5 +22,9 @@ class UserProfileRepository @Inject constructor(private val api: ProfileApi) : B
 
     suspend fun logOut() = safeApiCall {
         api.logOut()
+    }
+
+    suspend fun updateProfile(userId: String, request: RequestUpdateProfile) = safeApiCall {
+        api.updateProfile(userId, request)
     }
 }

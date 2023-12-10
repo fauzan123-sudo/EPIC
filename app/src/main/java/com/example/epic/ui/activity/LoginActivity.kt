@@ -2,7 +2,6 @@ package com.example.epic.ui.activity
 
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -30,43 +29,50 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         backPress()
 
         binding.btnLogin.setOnClickListener {
-            val username = binding.etUsername.text.toString()
-            val password = binding.etPassword.text.toString()
+            val username = binding.etUsername.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
 
-            if (username.isEmpty()) {
-                Toast.makeText(this, "username must be filled", Toast.LENGTH_SHORT).show()
-            } else if (password.isEmpty()) {
-                Toast.makeText(this, "password must be filled", Toast.LENGTH_SHORT).show()
-            } else if (username.isEmpty() && password.isEmpty()) {
-                Toast.makeText(this, "password must be filled", Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.requestUserLogin(RequestLogin(username, password))
-                viewModel.userResponse.observe(this) {
+            when {
+                username.isEmpty() && password.isEmpty() -> {
+                    showErrorMessage("Harap isi username dan password dulu!!")
+                }
+
+                username.isEmpty() -> {
+                    showErrorMessage("Harap isi username dulu!!")
+                }
+
+                password.isEmpty() -> {
+                    showErrorMessage("Harap isi password dulu!!")
+                }
+
+                else -> {
+                    viewModel.requestUserLogin(RequestLogin(username, password))
+                    viewModel.userResponse.observe(this) {
 //                    binding.progressBar.isVisible = false
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            hideLoading()
-                            val response = it.data!!
-                            if (response.status) {
-                                tokenManager.saveToken(response.access_token ?: "")
-                                saveUser(response)
-                                startActivity(Intent(this, MainActivity::class.java))
-                            } else {
-                                showErrorMessage(response.message)
+                        when (it) {
+                            is NetworkResult.Success -> {
+                                hideLoading()
+                                val response = it.data!!
+                                if (response.status) {
+                                    tokenManager.saveToken(response.access_token ?: "")
+                                    saveUser(response)
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                } else {
+                                    showErrorMessage(response.message)
+                                }
                             }
-                        }
 
-                        is NetworkResult.Loading -> {
-                            showLoading()
-                        }
+                            is NetworkResult.Loading -> {
+                                showLoading()
+                            }
 
-                        is NetworkResult.Error -> {
-                            hideLoading()
-                            showErrorMessage(it.message!!)
+                            is NetworkResult.Error -> {
+                                hideLoading()
+                                showErrorMessage(it.message!!)
+                            }
                         }
                     }
                 }
-
             }
         }
     }

@@ -176,7 +176,7 @@ class UpdateProductFragment :
                     toolbar.myToolbar,
                     it,
                     requireActivity(),
-                    "Update Barang"
+                    "Edit Data Barang"
                 )
             }
         }

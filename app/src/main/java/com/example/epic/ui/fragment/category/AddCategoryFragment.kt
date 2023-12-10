@@ -3,7 +3,6 @@ package com.example.epic.ui.fragment.category
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.epic.R
@@ -27,12 +26,7 @@ class AddCategoryFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setUpToolbar()
-        setUp()
 
-    }
-
-    private fun setUp() {
-        Toast.makeText(requireContext(), "${getUserId()?.toInt() ?: savedUser!!.id_user}", Toast.LENGTH_SHORT).show()
     }
 
     private fun setUpToolbar() {
@@ -55,7 +49,7 @@ class AddCategoryFragment :
                     toolbar.myToolbar,
                     it,
                     requireActivity(),
-                    "Kategori"
+                    "Tambah Kategori"
                 )
             }
         }
@@ -67,35 +61,43 @@ class AddCategoryFragment :
             val codeCategory = etCodeCategory.text.toString()
             val nameCategory = etNameCategory.text.toString()
 
-            viewModel.requestAddCategory(
-                RequestAddCategory(
-                    codeCategory,
-                    nameCategory,
-                    getUserId()?.toInt() ?: savedUser!!.id_user
+            if (codeCategory.isEmpty()) {
+                showErrorMessage("Harap isi kode kategori dulu!!")
+            } else if (nameCategory.isEmpty()) {
+                showErrorMessage("Harap isi nama kategori dulu!!")
+            } else if (codeCategory.isEmpty() && nameCategory.isEmpty()) {
+                showErrorMessage("Harap isi kode kategori dan nama kategori dulu!!")
+            } else {
+                viewModel.requestAddCategory(
+                    RequestAddCategory(
+                        codeCategory,
+                        nameCategory,
+                        getUserId()?.toInt() ?: savedUser!!.id_user
+                    )
                 )
-            )
-            viewModel.addCategoryResponse.observe(viewLifecycleOwner) {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        hideLoading()
-                        val response = it.data!!
-                        if (response.status) {
-                            showSuccessMessage(response.message)
-                        } else {
-                            showErrorMessage(response.message)
+                viewModel.addCategoryResponse.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            hideLoading()
+                            val response = it.data!!
+                            if (response.status) {
+                                showSuccessMessage(response.message)
+                            } else {
+                                showErrorMessage(response.message)
+                            }
                         }
-                    }
 
-                    is NetworkResult.Loading -> {
-                        showLoading()
-                    }
+                        is NetworkResult.Loading -> {
+                            showLoading()
+                        }
 
-                    is NetworkResult.Error -> {
-                        hideLoading()
-                        showErrorMessage(it.message ?: "error found")
-                    }
+                        is NetworkResult.Error -> {
+                            hideLoading()
+                            showErrorMessage(it.message ?: "error found")
+                        }
 
-                    else -> {}
+                        else -> {}
+                    }
                 }
             }
         }

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.user.logOut.LogOutResponse
 import com.example.epic.data.model.user.profile.UserProfileResponse
 import com.example.epic.data.model.user.profile.image.ImageChangeResponse
+import com.example.epic.data.model.user.profile.update.RequestUpdateProfile
+import com.example.epic.data.model.user.profile.update.UpdateProfileResponse
 import com.example.epic.data.repository.UserProfileRepository
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.SingleLiveEvent
@@ -30,6 +32,10 @@ class ProfileViewModel @Inject constructor(private val repository: UserProfileRe
     private val _logOutResponse = SingleLiveEvent<NetworkResult<LogOutResponse>>()
     val logOutResponse: LiveData<NetworkResult<LogOutResponse>>
         get() = _logOutResponse
+
+    private val _updateProfileResponse = SingleLiveEvent<NetworkResult<UpdateProfileResponse>>()
+    val updateProfileResponse: LiveData<NetworkResult<UpdateProfileResponse>>
+        get() = _updateProfileResponse
 
     fun requestProfile(userId: Int) {
         viewModelScope.launch {
@@ -64,6 +70,16 @@ class ProfileViewModel @Inject constructor(private val repository: UserProfileRe
             } else {
                 _logOutResponse.postValue(NetworkResult.Error("No Internet Connection"))
             }
+        }
+    }
+
+    fun updateProfileRequest(userId: String, request: RequestUpdateProfile) = viewModelScope.launch {
+        val connected = CheckInternet().check()
+        if (connected) {
+            _updateProfileResponse.postValue(NetworkResult.Loading())
+            _updateProfileResponse.postValue(repository.updateProfile(userId, request))
+        } else {
+            _updateProfileResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
     }
 }

@@ -121,7 +121,8 @@ class ProductReturnFragment :
                     val response = it.data!!
                     val deleteResponse = response.data
                     if (response.status) {
-                        showSuccessDelete(deleteResponse.message)
+                        showSuccessDelete("Sukses hapus barang")
+                        loadData()
                         /* loadData(userId)*/
                     } else {
                         showErrorMessage(deleteResponse.message)

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.epic.R
@@ -171,6 +172,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         setUpToolbar()
 //        touchImageCamera()
         logOut()
+        gotoStoreAddress()
+    }
+
+    private fun gotoStoreAddress() {
+        binding.mcStoreAddress.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_storeAddressFragment)
+        }
     }
 
 //    private fun touchImageCamera() {
@@ -217,6 +225,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
+
+                    binding.mcFullProfile.setOnClickListener {
+                        val action =
+                            ProfileFragmentDirections.actionProfileFragmentToDetailProfileFragment(
+                                data
+                            )
+                        findNavController().navigate(action)
+                    }
+
                     Glide.with(requireContext())
                         .load(data.foto)
                         .placeholder(R.drawable.progress_animation)
@@ -228,7 +245,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     } else {
                         binding.tvRole.text = "Admin"
                     }
-
                 }
 
                 is NetworkResult.Loading -> {
@@ -239,8 +255,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     hideLoading()
                     showErrorMessage(it.message!!)
                 }
-
-
             }
         }
     }

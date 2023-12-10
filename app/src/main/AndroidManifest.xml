@@ -2,20 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".MyApplication"
-        tools:replace="android:icon"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_new_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_new_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.EPIC"
+        tools:replace="android:icon"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false">
@@ -24,7 +28,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,6 +52,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -55,7 +60,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path_camera"/>
+                android:resource="@xml/file_path_camera" />
         </provider>
     </application>
 

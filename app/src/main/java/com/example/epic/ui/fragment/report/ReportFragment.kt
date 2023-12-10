@@ -24,6 +24,7 @@ import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getStoreName
 import com.example.epic.util.getUserId
+import com.example.epic.util.readStore
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import javax.inject.Inject
@@ -44,7 +45,8 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         setUpData()
         clickDownloadPdf()
         setUpToolbar()
-        Toast.makeText(requireContext(), getStoreName() ?: "-", Toast.LENGTH_SHORT).show()
+        val store = readStore()
+        Toast.makeText(requireContext(), store?.nama_toko ?: "-", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -68,11 +70,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
     }
 
     private fun setUpData() {
-        Toast.makeText(
-            requireContext(),
-            "${getUserId()?.toInt() ?: savedUser!!.id_user}",
-            Toast.LENGTH_SHORT
-        ).show()
         viewModel.requestReport(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.readReportResponse.observe(viewLifecycleOwner) {
             when (it) {

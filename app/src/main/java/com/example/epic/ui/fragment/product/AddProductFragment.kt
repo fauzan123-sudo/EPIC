@@ -161,7 +161,7 @@ class AddProductFragment :
                     toolbar.myToolbar,
                     it,
                     requireActivity(),
-                    "Data Barang"
+                    "Tambah Data Barang"
                 )
             }
         }
@@ -175,7 +175,7 @@ class AddProductFragment :
         if (selectedCategoryId == "") {
             showErrorMessage("harap pilih kategori dulu!!")
         } else if (productCode == "") {
-            showErrorMessage("harap pilih barang dulu!!")
+            showErrorMessage("harap isi kode barang dulu!!")
         } else if (nameProduct.isEmpty()) {
             showErrorMessage("harap isi nama barang dulu!!")
         } else if (minimumProduct.isEmpty()) {

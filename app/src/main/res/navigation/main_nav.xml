@@ -42,6 +42,12 @@
         <action
             android:id="@+id/action_profileFragment_to_imagePickerFragment"
             app:destination="@id/imagePickerFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_detailProfileFragment"
+            app:destination="@id/detailProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_storeAddressFragment"
+            app:destination="@id/storeAddressFragment" />
     </fragment>
     <fragment
         android:id="@+id/allMenuFragment"
@@ -241,4 +247,38 @@
         android:name="com.example.epic.ui.fragment.stock.ListWarningRefillFragment"
         android:label="fragment_list_warning_refill"
         tools:layout="@layout/fragment_list_warning_refill" />
+    <fragment
+        android:id="@+id/detailProfileFragment"
+        android:name="com.example.epic.ui.fragment.profile.DetailProfileFragment"
+        android:label="fragment_detail_profile"
+        tools:layout="@layout/fragment_detail_profile" >
+        <argument
+            android:name="detailProfile"
+            app:argType="com.example.epic.data.model.user.profile.Data" />
+        <action
+            android:id="@+id/action_detailProfileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.epic.ui.fragment.profile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <argument
+            android:name="dataValue"
+            app:argType="string" />
+        <argument android:name="dataTitle"
+            app:argType="string" />
+        <argument
+            android:name="dataName"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeAddressFragment"
+        android:name="com.example.epic.ui.fragment.profile.StoreAddressFragment"
+        android:label="fragment_store_address"
+        tools:layout="@layout/fragment_store_address" />
 </navigation>

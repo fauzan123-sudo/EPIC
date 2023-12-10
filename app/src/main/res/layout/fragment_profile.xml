@@ -106,7 +106,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView6"
+        android:id="@+id/mc_full_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"
@@ -158,7 +158,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView7"
+        android:id="@+id/mc_store_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"
@@ -166,7 +166,7 @@
         android:elevation="0dp"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView6"
+        app:layout_constraintTop_toBottomOf="@+id/mc_full_profile"
         app:strokeColor="#347F838B"
         app:strokeWidth="@dimen/_1sdp"
         tools:layout_editor_absoluteX="26dp">
@@ -217,7 +217,7 @@
         android:elevation="0dp"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView7"
+        app:layout_constraintTop_toBottomOf="@+id/mc_store_address"
         app:strokeColor="#347F838B"
         app:strokeWidth="@dimen/_1sdp"
         tools:layout_editor_absoluteX="26dp">

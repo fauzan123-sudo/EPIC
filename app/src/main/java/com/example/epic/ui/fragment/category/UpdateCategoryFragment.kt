@@ -84,32 +84,41 @@ class UpdateCategoryFragment :
     private fun currentUpdateData() {
         val data = args.dataCategory
         val idCategory = data.id_kategori
-        val codeCategoryUpdate = binding.etCodeCategory.text.toString()
-        val nameCategoryUpdate = binding.etNameCategory.text.toString()
-        viewModel.updateCategory(
-            RequestEditCategory(
-                idCategory.toString(),
-                codeCategoryUpdate,
-                nameCategoryUpdate,
-                savedUser!!.id_user
+        val codeCategory = binding.etCodeCategory.text.toString()
+        val nameCategory = binding.etNameCategory.text.toString()
+
+        if (codeCategory.isEmpty()) {
+            showErrorMessage("Harap isi kode kategori dulu!!")
+        } else if (nameCategory.isEmpty()) {
+            showErrorMessage("Harap isi nama kategori dulu!!")
+        } else if (codeCategory.isEmpty() && nameCategory.isEmpty()) {
+            showErrorMessage("Harap isi kode kategori dan nama kategori dulu!!")
+        } else {
+            viewModel.updateCategory(
+                RequestEditCategory(
+                    idCategory.toString(),
+                    codeCategory,
+                    nameCategory,
+                    savedUser!!.id_user
+                )
             )
-        )
-        viewModel.updateCategoryResponse.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Loading -> {
-                    showLoading()
+            viewModel.updateCategoryResponse.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        showLoading()
 
-                }
+                    }
 
-                is NetworkResult.Success -> {
-                    hideLoading()
-                    val response = it.data!!
-                    showSuccessMessage(response.message)
-                }
+                    is NetworkResult.Success -> {
+                        hideLoading()
+                        val response = it.data!!
+                        showSuccessMessage(response.message)
+                    }
 
-                is NetworkResult.Error -> {
-                    hideLoading()
-                    showErrorMessage(it.message!!)
+                    is NetworkResult.Error -> {
+                        hideLoading()
+                        showErrorMessage(it.message!!)
+                    }
                 }
             }
         }
@@ -135,7 +144,7 @@ class UpdateCategoryFragment :
                     toolbar.myToolbar,
                     it,
                     requireActivity(),
-                    "Kategori"
+                    "Edit Kategori"
                 )
             }
         }

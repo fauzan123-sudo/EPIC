@@ -3,7 +3,6 @@ package com.example.epic.ui.fragment.sales
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -40,11 +39,6 @@ class ListSalesFragment :
     }
 
     private fun setUpData() {
-        Toast.makeText(
-            requireContext(),
-            "${getUserId()?.toInt() ?: savedUser?.id_user}",
-            Toast.LENGTH_SHORT
-        ).show()
         viewModel.listSalesRequest(getUserId()?.toInt() ?: savedUser!!.id_user)
         viewModel.listSalesResponse.observe(viewLifecycleOwner) {
             when (it) {

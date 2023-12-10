@@ -231,14 +231,27 @@ class UpdateStoreFragment :
             val getNameStore = edtStoreName.text.toString()
             val getUserName = edtUsername.text.toString()
             val getPassword = edtPassword.text.toString()
-            if (getNameStore.isEmpty()) {
-                edtStoreName.error = "Harap isi Nama"
-            } else if (getUserName.isEmpty()) {
-                edtUsername.error = "Harap isi Username"
-            } else if (getPassword.isEmpty()) {
-                edtPassword.error = "Harap isi Password"
-            } else {
-                handleButtonClick(getNameStore, getUserName, getPassword)
+
+            when {
+                getNameStore.isEmpty() && getUserName.isEmpty() && getPassword.isEmpty() -> {
+                    showErrorMessage("Harap isi dulu!!")
+                }
+
+                getNameStore.isEmpty() -> {
+                    showErrorMessage("Harap isi nama toko dulu!!")
+                }
+
+                getUserName.isEmpty() -> {
+                    showErrorMessage("Harap isi username dulu!!")
+                }
+
+                getPassword.isEmpty() -> {
+                    showErrorMessage("Harap isi password dulu!!")
+                }
+
+                else -> {
+                    handleButtonClick(getNameStore, getUserName, getPassword)
+                }
             }
         }
     }
