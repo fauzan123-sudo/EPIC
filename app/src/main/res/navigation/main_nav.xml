@@ -188,7 +188,11 @@
         android:id="@+id/statisticSellerFragment"
         android:name="com.example.epic.ui.fragment.statistic.StatisticSellerFragment"
         android:label="fragment_statistic_seller"
-        tools:layout="@layout/fragment_statistic_seller" />
+        tools:layout="@layout/fragment_statistic_seller" >
+        <action
+            android:id="@+id/action_statisticSellerFragment_to_newStatisticFragment"
+            app:destination="@id/newStatisticFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reportFragment"
         android:name="com.example.epic.ui.fragment.report.ReportFragment"
@@ -258,6 +262,9 @@
         <action
             android:id="@+id/action_detailProfileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_detailProfileFragment_to_updateSpinnerFragment"
+            app:destination="@id/updateSpinnerFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -281,4 +288,21 @@
         android:name="com.example.epic.ui.fragment.profile.StoreAddressFragment"
         android:label="fragment_store_address"
         tools:layout="@layout/fragment_store_address" />
+    <fragment
+        android:id="@+id/updateSpinnerFragment"
+        android:name="com.example.epic.ui.fragment.profile.UpdateSpinnerFragment"
+        android:label="fragment_update_spinner"
+        tools:layout="@layout/fragment_update_spinner" >
+        <argument
+            android:name="dataTitle"
+            app:argType="string" />
+        <argument
+            android:name="dataValue"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/newStatisticFragment"
+        android:name="com.example.epic.ui.fragment.statistic.NewStatisticFragment"
+        android:label="fragment_new_statistic"
+        tools:layout="@layout/fragment_new_statistic" />
 </navigation>

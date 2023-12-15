@@ -60,7 +60,6 @@ class DetailProfileFragment :
             }
 
 
-
         }
     }
 
@@ -76,7 +75,7 @@ class DetailProfileFragment :
                 gotoUpdateProfile(edtDate.text.toString().trim(), "Tanggal Lahir", "ttl")
             }
             mcGender.setOnClickListener {
-                gotoUpdateProfile(edtGender.text.toString().trim(), "Jenis Kelamin", "jk")
+                goToUpdateGender(edtGender.text.toString().trim())
             }
             mcNoTlp.setOnClickListener {
                 gotoUpdateProfile(edtNoTlp.text.toString().trim(), "No Telepon", "no_tlp")
@@ -86,6 +85,15 @@ class DetailProfileFragment :
             }
 
         }
+    }
+
+    private fun goToUpdateGender(value: String) {
+        val action =
+            DetailProfileFragmentDirections.actionDetailProfileFragmentToUpdateSpinnerFragment(
+                value,
+                "jk"
+            )
+        findNavController().navigate(action)
     }
 
     private fun gotoUpdateProfile(value: String, s: String, name: String) {

@@ -4,34 +4,32 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.epic.R
 import com.example.epic.data.adapter.MonthAdapter
 import com.example.epic.data.model.month.Month
-import com.example.epic.databinding.FragmentStatisticSellerBinding
+import com.example.epic.databinding.FragmentNewStatisticBinding
 import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProductViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getMonth
 import com.example.epic.util.getYear
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StatisticSellerFragment :
-    BaseFragment<FragmentStatisticSellerBinding>(FragmentStatisticSellerBinding::inflate),
+class NewStatisticFragment :
+    BaseFragment<FragmentNewStatisticBinding>(FragmentNewStatisticBinding::inflate),
     MonthAdapter.ItemListener {
 
     @Inject
@@ -45,13 +43,6 @@ class StatisticSellerFragment :
         setUpData(currentMonth)
         setUpToolbar()
         setUpMonth()
-        gotoNewStatistic()
-    }
-
-    private fun gotoNewStatistic() {
-        binding.newStatistic.setOnClickListener {
-            findNavController().navigate(R.id.action_statisticSellerFragment_to_newStatisticFragment)
-        }
     }
 
     private fun setUpMonth() {
@@ -78,7 +69,7 @@ class StatisticSellerFragment :
                 }
             }
 
-            monthAdapter.listener = this@StatisticSellerFragment
+            monthAdapter.listener = this@NewStatisticFragment
             monthAdapter.differ.submitList(months)
             rvMonth.apply {
                 layoutManager =
@@ -102,70 +93,8 @@ class StatisticSellerFragment :
         }
     }
 
-    private fun setUpData2(data: List<Int>) {
-        val lineChart = binding.lineChart
-        Log.d("TAG", "data chart: $data")
-        val entries = ArrayList<Entry>()
-        for (i in data.indices) {
-            entries.add(Entry(i.toFloat() + 1, data[i].toFloat()))
-        }
-
-        // Konfigurasi dataset
-        val dataSet = LineDataSet(entries, "Data Set 1")
-        dataSet.valueTextColor = Color.RED
-        dataSet.color = Color.parseColor("#00A4FF")
-        dataSet.valueTextColor = Color.WHITE
-        dataSet.valueTextSize = 12f
-        dataSet.circleHoleColor = Color.parseColor("#00FF85")
-        dataSet.circleRadius = 8f
-        dataSet.circleHoleRadius = 4f
-        dataSet.setCircleColor(Color.WHITE)
-        dataSet.lineWidth = 3f
-        dataSet.setDrawValues(false)
-
-        // Membuat gradien
-        dataSet.setDrawFilled(true)
-        dataSet.fillDrawable = getGradientDrawable()
-
-        // Konfigurasi LineData
-        val lineData = LineData(dataSet)
-
-        // Menggunakan mode CUBIC_BEZIER untuk membuat garis cekung
-        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-
-        // Konfigurasi LineChart
-        lineChart.data = lineData
-        lineChart.setTouchEnabled(true)
-        lineChart.setPinchZoom(true)
-        lineChart.description.isEnabled = false
-
-        // Konfigurasi sumbu X
-        val xAxis = lineChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = Color.BLACK
-        xAxis.setLabelCount(data.size, true)
-
-        // Konfigurasi sumbu Y
-        val leftYAxis = lineChart.axisLeft
-        leftYAxis.textColor = Color.WHITE
-        leftYAxis.setDrawGridLines(false)
-        val rightYAxis = lineChart.axisRight
-        rightYAxis.setDrawGridLines(false)
-
-        // Konfigurasi legenda
-        val legend = lineChart.legend
-        legend.textColor = Color.WHITE
-
-        // Menambahkan listener untuk menangani klik pada titik data
-        lineChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-
-            }
-
-            override fun onNothingSelected() {
-
-            }
-        })
+    override fun onClickItem(data: Month) {
+        setUpData(data.monthNumber)
     }
 
     private fun setUpData(monthNumber: Int) {
@@ -176,7 +105,9 @@ class StatisticSellerFragment :
                 is NetworkResult.Success -> {
                     hideLoading()
                     val response = it.data!!
-                    setUpData2(response.data)
+                    val data = transformApiDataToEntries(response.data)
+                    setupLineChart(binding.lineChart, data)
+//                    setUpData2(response.data)
                     viewModel.readStatisticSeller.removeObservers(viewLifecycleOwner)
                     binding.lineChart.visibility = View.VISIBLE
 
@@ -196,8 +127,78 @@ class StatisticSellerFragment :
         }
     }
 
-    override fun onClickItem(data: Month) {
-        setUpData(data.monthNumber)
+    private fun transformApiDataToEntries(apiData: List<Int>): List<Entry> {
+        return apiData.mapIndexed { index, chartData ->
+            Entry((index + 1).toFloat(), chartData.toFloat())
+        }
+    }
+
+    private fun setupLineChart(lineChart: LineChart, entries: List<Entry>) {
+        val dataSet = LineDataSet(entries, "Label Data")
+        dataSet.color = Color.BLUE
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.valueTextColor = Color.RED
+        dataSet.color = Color.parseColor("#00A4FF")
+        dataSet.valueTextColor = Color.WHITE
+        dataSet.valueTextSize = 12f
+        dataSet.circleHoleColor = Color.parseColor("#00FF85")
+        dataSet.circleRadius = 8f
+        dataSet.circleHoleRadius = 4f
+        dataSet.setCircleColor(Color.WHITE)
+        dataSet.lineWidth = 3f
+        dataSet.setDrawValues(false)
+
+        // Membuat gradien
+        dataSet.setDrawFilled(true)
+        dataSet.fillDrawable = getGradientDrawable()
+        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        val dataSets = ArrayList<ILineDataSet>()
+        dataSets.add(dataSet)
+
+        val lineData = LineData(dataSets)
+        lineChart.data = lineData
+
+        // Konfigurasi chart lainnya seperti label, sumbu, dsb.
+        lineChart.xAxis.labelRotationAngle = 45f
+        lineChart.xAxis.granularity = 1f
+
+
+        // Konfigurasi LineChart
+        lineChart.data = lineData
+        lineChart.setTouchEnabled(true)
+        lineChart.setPinchZoom(true)
+        lineChart.description.isEnabled = false
+
+        // Konfigurasi sumbu X
+        val xAxis = lineChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.textColor = Color.BLACK
+        xAxis.setLabelCount(entries.size, true)
+
+        // Konfigurasi sumbu Y
+        val leftYAxis = lineChart.axisLeft
+        leftYAxis.textColor = Color.WHITE
+        leftYAxis.setDrawGridLines(false)
+        val rightYAxis = lineChart.axisRight
+        rightYAxis.setDrawGridLines(false)
+        
+//        Setup legend
+        val legend = lineChart.legend
+        legend.textColor = Color.WHITE
+
+
+
+        // Jika nilai sumbu y berupa integer, gunakan formatter ini
+        lineChart.axisLeft.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        }
+
+        lineChart.setTouchEnabled(true)
+        lineChart.setPinchZoom(true)
+
+        lineChart.invalidate()
     }
 
     private fun getGradientDrawable(): Drawable {

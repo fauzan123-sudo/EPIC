@@ -90,14 +90,19 @@ fun deleteUserId(): Boolean {
 }
 
 fun deleteStoreName(): Boolean {
-    val isDataExist: Boolean = Paper.book().contains(STORE_NAME)
+    return try {
+        val isDataExist: Boolean = Paper.book().contains(STORE_NAME)
 
-    return if (isDataExist) {
-        Paper.book().delete(STORE_NAME)
-        println("Data Nama Pengguna berhasil dihapus.")
-        true
-    } else {
-        println("Gagal menghapus data Nama Pengguna atau data Nama Pengguna tidak ditemukan.")
+        if (isDataExist) {
+            Paper.book().delete(STORE_NAME)
+            println("Data Nama Pengguna berhasil dihapus.")
+            true
+        } else {
+            println("Gagal menghapus data Nama Pengguna atau data Nama Pengguna tidak ditemukan.")
+            false
+        }
+    } catch (e: Exception) {
+        println("Terjadi kesalahan saat menghapus data Nama Pengguna: ${e.message}")
         false
     }
 }

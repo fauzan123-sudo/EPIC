@@ -22,9 +22,7 @@ abstract class BaseRepository {
                     val errorCode = response.code()
                     val errorResponse = JSONObject(response.errorBody()!!.charStream().readText())
                     NetworkResult.Error("$errorCode, Pesan: $errorResponse")
-//                    val errorResponse =
-//                        JSONObject(response.errorBody()!!.charStream().readText())
-//                    NetworkResult.Error(errorResponse.toString())
+
                 }
             } catch (e: HttpException) {
                 NetworkResult.Error(e.message ?: "terjadi kesalahan")

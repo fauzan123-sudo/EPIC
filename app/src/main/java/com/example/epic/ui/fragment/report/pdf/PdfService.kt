@@ -1,6 +1,7 @@
 package com.example.epic.ui.fragment.report.pdf
 
 import android.os.Environment
+import android.util.Log
 import com.example.epic.data.model.report.ItemPdf
 import com.itextpdf.text.Document
 import com.itextpdf.text.Element
@@ -13,6 +14,7 @@ import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 class PdfService {
     val TITLE_FONT = Font(Font.FontFamily.HELVETICA, 16f, Font.BOLD)
@@ -24,7 +26,13 @@ class PdfService {
         val title = "Data Barang.pdf"
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(path, fileName)
-        if (!file.exists()) file.createNewFile()
+        if (!file.exists()) {
+            try {
+                file.createNewFile()
+            } catch (e: IOException) {
+                Log.e("PdfService", "Error creating file: $fileName $e nya", e)
+            }
+        }
         return file
     }
 
@@ -171,10 +179,13 @@ class PdfService {
 
         try {
             pdf.close()
+            Log.d("PdfService", "PDF closed successfully")
         } catch (ex: Exception) {
+            Log.e("PdfService", "Error closing PDF", ex)
             onError(ex)
         } finally {
             onFinish(file)
+            Log.d("PdfService", "File creation finished")
         }
     }
 }

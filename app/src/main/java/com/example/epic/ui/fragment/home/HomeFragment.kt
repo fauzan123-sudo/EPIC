@@ -69,14 +69,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         loadApi(getMonth())
         loadCalendar()
         pickStore()
-        getNameStore()
         loadStore()
         backPress()
         checkFcm()
 
 
         binding.apply {
-
             val currentMonth = getMonth()
             val months = listOf(
                 Month(1, "Januari"),
@@ -203,16 +201,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             if (savedUser?.role == "1") {
                 tilStore.visibility = View.VISIBLE
                 tvStoreName.visibility = View.GONE
-
-//                mcv2.setOnClickListener {
-//                    val currentStore = getUserId()
-//                    if (currentStore != null) {
-//                        Toast.makeText(requireContext(), "$currentStore", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        Toast.makeText(requireContext(), "current data is null", Toast.LENGTH_SHORT)
-//                            .show()
-//                    }
-//                }
 
                 hIncomingMenu.setOnClickListener {
                     if (getUserId() == null) {
@@ -486,7 +474,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     override fun onClickItem(data: Month) {
-//        Toast.makeText(requireContext(), data.month, Toast.LENGTH_SHORT).show()
         loadApi(data.monthNumber)
     }
 

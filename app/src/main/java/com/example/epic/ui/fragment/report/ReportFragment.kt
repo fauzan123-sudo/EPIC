@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.net.toUri
@@ -42,12 +41,12 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         setUpData()
         clickDownloadPdf()
         setUpToolbar()
         val store = readStore()
         Toast.makeText(requireContext(), store?.nama_toko ?: "-", Toast.LENGTH_SHORT).show()
-
     }
 
     private fun setUpToolbar() {
@@ -65,7 +64,11 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
 
     private fun clickDownloadPdf() {
         binding.btnDownloadPdf.setOnClickListener {
-            createPdf(myItem)
+            if (AppPermission.permissionGranted(this)) {
+                createPdf(myItem)
+            } else {
+                AppPermission.requestPermission(this)
+            }
         }
     }
 
@@ -122,6 +125,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -131,7 +135,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         if (requestCode == AppPermission.REQUEST_PERMISSION) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 AppPermission.requestPermission(this)
-                toastErrorMessage("Permission should be allowed")
+                showErrorMessage("Permission should be allowed")
             }
         }
     }
@@ -143,7 +147,6 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
     }
 
     private fun createPdf(data: MutableList<ItemPdf>) {
-        Log.d("TAG", "createPdf: $data")
         val onError: (Exception) -> Unit = { toastErrorMessage(it.message.toString()) }
         val onFinish: (File) -> Unit = { openFile(it) }
         val pdfService = PdfService()
@@ -154,7 +157,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
 
         // Mengecek apakah file dengan nama yang sama sudah ada
         while (isFileExists(fileName)) {
-            fileName = "$baseFileName ($fileIndex).pdf"
+            fileName = "$baseFileName.pdf"
             fileIndex++
         }
 

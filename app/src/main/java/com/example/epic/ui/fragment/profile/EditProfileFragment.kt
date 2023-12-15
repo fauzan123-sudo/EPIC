@@ -176,7 +176,6 @@ class EditProfileFragment :
     }
 
     private fun genderSpinner() {
-
         binding.apply {
             edtStoreName.inputType = InputType.TYPE_NULL
             val data = listOf("Perempuan", "Laki-laki")
