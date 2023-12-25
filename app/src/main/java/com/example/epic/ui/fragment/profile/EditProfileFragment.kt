@@ -1,10 +1,8 @@
 package com.example.epic.ui.fragment.profile
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -14,14 +12,12 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.convertDateFormat
+import com.example.epic.util.formatDate
+import com.example.epic.util.isValidDateFormat
 import com.example.epic.util.setupMenu
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class EditProfileFragment :
@@ -49,14 +45,6 @@ class EditProfileFragment :
                     calendarDate()
                 }
 
-                "Jenis Kelamin" -> {
-                    showToast("jenis kelamin kosong")
-                    binding.edtStoreName.isFocusableInTouchMode = true
-                    binding.edtStoreName.isFocusable = true
-
-                    genderSpinner()
-                }
-
                 else -> {
                     enableEditText()
                     binding.edtStoreName.hint = "Harap isi $title"
@@ -66,13 +54,7 @@ class EditProfileFragment :
             when (title) {
                 "Tanggal Lahir" -> {
                     calendarDate()
-                }
-
-                "Jenis Kelamin" -> {
-                    showToast("jenis kelamin tidak kosong")
-                    binding.edtStoreName.isFocusableInTouchMode = true
-                    binding.edtStoreName.isFocusable = true
-                    genderSpinner()
+                    binding.edtStoreName.setText(dataValue)
                 }
 
                 else -> {
@@ -101,16 +83,18 @@ class EditProfileFragment :
             setupMenu(com.example.epic.R.menu.menu_action_text, { menuItem ->
                 when (menuItem.itemId) {
                     com.example.epic.R.id.add_text_action -> {
-                        if (edtStoreName.text.toString().trim().isEmpty()) {
+                        val value = edtStoreName.text.toString().trim()
+                        if (value.isEmpty()) {
                             val title = args.dataTitle
                             showErrorMessage("harap isi $title dulu")
                         } else {
                             val storeName = binding.edtStoreName.text.toString().trim()
                             if (isValidDateFormat(storeName)) {
-                                showToast("Tanggal: ${convertDateFormat(storeName)}")
+                                val date = convertDateFormat(storeName)
+                                handleEdit(date)
+//                                showToast("Tanggal: $date")
                             } else {
-                                showToast("bukan Tanggal: ${convertDateFormat(storeName)}")
-//                                handleEdit()
+                                handleEdit(storeName)
                             }
                         }
 
@@ -131,8 +115,7 @@ class EditProfileFragment :
         }
     }
 
-    private fun handleEdit() {
-        val value = binding.edtStoreName.text.toString().trim()
+    private fun handleEdit(value:String) {
         viewModel.updateProfileRequest(args.userId, RequestUpdateProfile(args.dataName, value))
         viewModel.updateProfileResponse.observe(viewLifecycleOwner) {
             when (it) {
@@ -175,51 +158,5 @@ class EditProfileFragment :
         }
     }
 
-    private fun genderSpinner() {
-        binding.apply {
-            edtStoreName.inputType = InputType.TYPE_NULL
-            val data = listOf("Perempuan", "Laki-laki")
-            val adapter =
-                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, data)
-            edtStoreName.setAdapter(adapter)
 
-            edtStoreName.setOnItemClickListener { _, _, position, _ ->
-                val selectedGender = when (position) {
-                    0 -> "1"
-                    1 -> "2"
-                    else -> ""
-                }
-            }
-        }
-    }
-
-    private fun formatDate(dateInMillis: Long): String {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = dateInMillis
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        return dateFormat.format(Date(calendar.timeInMillis))
-    }
-
-    private fun isValidDateFormat(dateString: String): Boolean {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        dateFormat.isLenient = false
-        return try {
-            dateFormat.parse(dateString)
-            true
-        } catch (e: ParseException) {
-            false
-        }
-    }
-
-    private fun convertDateFormat(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-        return try {
-            val date = inputFormat.parse(inputDate)
-            outputFormat.format(date)
-        } catch (e: ParseException) {
-            "Format tanggal tidak valid"
-        }
-    }
 }

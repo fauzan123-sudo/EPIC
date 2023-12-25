@@ -20,7 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ListStoreFragment :
-    BaseFragment<FragmentListStoreBinding>(FragmentListStoreBinding::inflate), UserAdapter.ItemListener {
+    BaseFragment<FragmentListStoreBinding>(FragmentListStoreBinding::inflate),
+    UserAdapter.ItemListener {
 
     private val viewModel: UserManagementViewModel by viewModels()
 
@@ -64,14 +65,23 @@ class ListStoreFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    binding.rvUser.apply {
-                        val userAdapter = UserAdapter()
-                        layoutManager =
-                            GridLayoutManager(requireContext(), 3)
-                        adapter = userAdapter
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        } else {
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            rvUser.apply {
+                                val userAdapter = UserAdapter()
+                                layoutManager =
+                                    GridLayoutManager(requireContext(), 3)
+                                adapter = userAdapter
 
-                        userAdapter.differ.submitList(data)
-                        userAdapter.listener = this@ListStoreFragment
+                                userAdapter.differ.submitList(data)
+                                userAdapter.listener = this@ListStoreFragment
+                            }
+                        }
                     }
                 }
 

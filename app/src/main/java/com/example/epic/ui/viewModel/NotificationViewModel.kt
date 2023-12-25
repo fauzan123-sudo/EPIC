@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epic.data.model.notification.check.CheckFcmResponse
+import com.example.epic.data.model.notification.check.RequestCheckFcm
 import com.example.epic.data.model.notification.refill.WarningRefillResponse
 import com.example.epic.data.model.notification.update.RequestUpdateToken
 import com.example.epic.data.model.notification.update.UpdateFcmResponse
@@ -31,12 +32,12 @@ class NotificationViewModel @Inject constructor(private val repository: Notifica
     val warningRefillResponse: LiveData<NetworkResult<WarningRefillResponse>>
         get() = _warningRefillResponse
 
-    fun requestCheckFcm() {
+    fun requestCheckFcm(request: String) {
         viewModelScope.launch {
             val connected = CheckInternet().check()
             if (connected){
                 _checkFcm.postValue(NetworkResult.Loading())
-                _checkFcm.postValue(repository.checkNotification())
+                _checkFcm.postValue(repository.checkNotification(request))
             }else{
                 _checkFcm.postValue(NetworkResult.Error("No Internet Coonection"))
             }

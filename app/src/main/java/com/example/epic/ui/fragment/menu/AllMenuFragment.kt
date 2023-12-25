@@ -52,7 +52,7 @@ class AllMenuFragment : BaseFragment<FragmentAllMenuBinding>(FragmentAllMenuBind
                 findNavController().navigate(R.id.action_allMenuFragment_to_productReturnFragment)
             }
             mcChart.setOnClickListener {
-                findNavController().navigate(R.id.action_allMenuFragment_to_statisticSellerFragment)
+                findNavController().navigate(R.id.action_allMenuFragment_to_newStatisticFragment)
             }
             mcReport.setOnClickListener {
                 findNavController().navigate(R.id.action_allMenuFragment_to_reportFragment)

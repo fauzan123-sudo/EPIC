@@ -13,7 +13,9 @@ import retrofit2.http.Query
 interface NotificationApi {
 
     @GET("check-token-firebase")
-    suspend fun checkTokenFcm(): Response<CheckFcmResponse>
+    suspend fun checkTokenFcm(
+        @Query("token_fcm") token_fcm:String
+    ): Response<CheckFcmResponse>
 
     @POST("update-token-firebase")
     suspend fun updateFcmToken(
@@ -23,5 +25,5 @@ interface NotificationApi {
     @GET("barang/warning-refill")
     suspend fun listRefill(
         @Query("id_user") userId: Int
-    ) : Response<WarningRefillResponse>
+    ): Response<WarningRefillResponse>
 }

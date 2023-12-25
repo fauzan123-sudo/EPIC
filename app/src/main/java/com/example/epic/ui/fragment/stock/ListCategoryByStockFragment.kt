@@ -53,13 +53,22 @@ class ListCategoryByStockFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    stockCategoryAdapter.differ.submitList(data)
-                    with(binding.rvProduct) {
-                        layoutManager =
-                            LinearLayoutManager(
-                                requireContext()
-                            )
-                        adapter = stockCategoryAdapter
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoCategory.visibility = View.VISIBLE
+                        } else {
+                            imgNoImage.visibility = View.GONE
+                            tvNoCategory.visibility = View.GONE
+                            stockCategoryAdapter.differ.submitList(data)
+                            with(binding.rvProduct) {
+                                layoutManager =
+                                    LinearLayoutManager(
+                                        requireContext()
+                                    )
+                                adapter = stockCategoryAdapter
+                            }
+                        }
                     }
                 }
 

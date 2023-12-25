@@ -41,11 +41,7 @@ class UpdateSpinnerFragment :
         if (dataValue.isEmpty() || dataValue == "0") {
             binding.edtStoreName.hint = "pilih jenis kelamin"
         } else {
-            if (dataValue == "1") {
-                binding.edtStoreName.hint = "Perempuan"
-            } else {
-                binding.edtStoreName.hint = "Laki-laki"
-            }
+            binding.edtStoreName.hint = args.dataTitle
         }
     }
 

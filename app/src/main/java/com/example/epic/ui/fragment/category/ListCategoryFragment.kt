@@ -116,6 +116,10 @@ class ListCategoryFragment :
 
                     is NetworkResult.Success -> {
                         sweetAlertDialog.dismiss()
+
+                        imgNoImage.visibility = View.GONE
+                        tvNoCategory.visibility = View.GONE
+
                         val response = it.data!!
                         if (response.data.isNotEmpty()) {
                             Log.d("loadDataCategory", "$response")
@@ -133,6 +137,7 @@ class ListCategoryFragment :
                             tvNoCategory.visibility = View.GONE
 
                         } else {
+                            imgNoImage.visibility = View.VISIBLE
                             tvNoCategory.visibility = View.VISIBLE
                             Log.d("data is null", "loadDataCategory: ")
                         }

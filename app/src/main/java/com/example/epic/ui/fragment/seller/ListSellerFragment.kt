@@ -72,16 +72,24 @@ class ListSellerFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    sellerAdapter.listener = this
-                    sellerAdapter.differ.submitList(data)
-                    with(binding.rvSeller) {
-                        layoutManager =
-                            LinearLayoutManager(
-                                requireContext()
-                            )
-                        adapter = sellerAdapter
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        } else {
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            sellerAdapter.listener = this@ListSellerFragment
+                            sellerAdapter.differ.submitList(data)
+                            with(binding.rvSeller) {
+                                layoutManager =
+                                    LinearLayoutManager(
+                                        requireContext()
+                                    )
+                                adapter = sellerAdapter
+                            }
+                        }
                     }
-
                 }
 
                 is NetworkResult.Loading -> {

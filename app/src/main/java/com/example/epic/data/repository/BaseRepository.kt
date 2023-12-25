@@ -21,7 +21,11 @@ abstract class BaseRepository {
                 } else {
                     val errorCode = response.code()
                     val errorResponse = JSONObject(response.errorBody()!!.charStream().readText())
-                    NetworkResult.Error("$errorCode, Pesan: $errorResponse")
+                    if (errorCode == 500) {
+                        NetworkResult.Error("$errorResponse")
+                    } else {
+                        NetworkResult.Error("$errorCode, Pesan: $errorResponse")
+                    }
 
                 }
             } catch (e: HttpException) {

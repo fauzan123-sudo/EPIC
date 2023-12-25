@@ -23,6 +23,7 @@ import com.example.epic.ui.viewModel.HomeViewModel
 import com.example.epic.ui.viewModel.NotificationViewModel
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.ui.viewModel.UserManagementViewModel
+import com.example.epic.util.Constants.FirebaseToken
 import com.example.epic.util.DataStatus
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.getCurrentDate
@@ -40,9 +41,11 @@ import com.example.epic.util.saveUserId
 import com.example.epic.util.updateStore
 import com.example.epic.util.updateStoreName
 import com.example.epic.util.updateUserId
+import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
+import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -72,6 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         loadStore()
         backPress()
         checkFcm()
+
 
 
         binding.apply {
@@ -136,28 +140,53 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    private fun checkFcm() {
-        notificationViewModel.requestCheckFcm()
-        notificationViewModel.checkFcm.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    hideLoading()
-                    val response = it.data!!
-                    if (!response.status) {
-                        updateToken()
-                    }
-                }
+    private fun tokenFirebase(): CompletableFuture<String> {
+        val completableFuture = CompletableFuture<String>()
 
-                is NetworkResult.Loading -> {
-                    showLoading()
-                }
-
-                is NetworkResult.Error -> {
-                    hideLoading()
-                    Log.e("TAG", "error fcm: ${it.message}")
-                    showErrorMessage(it.message!!)
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task: Task<String> ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    Log.d(FirebaseToken, "$FirebaseToken $token")
+                    Log.d("fcm founded", "")
+                    completableFuture.complete(token)
+                } else {
+                    Log.d("no fcm founded", "")
+                    completableFuture.completeExceptionally(task.exception!!)
                 }
             }
+
+        return completableFuture
+    }
+
+
+    private fun checkFcm() {
+        tokenFirebase().thenApply { token ->
+            notificationViewModel.requestCheckFcm(token)
+            notificationViewModel.checkFcm.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        hideLoading()
+                        val response = it.data!!
+                        if (!response.status) {
+                            updateToken()
+                        }
+                    }
+
+                    is NetworkResult.Loading -> {
+                        showLoading()
+                    }
+
+                    is NetworkResult.Error -> {
+                        hideLoading()
+                        Log.e("TAG", "error fcm: ${it.message}")
+                        showErrorMessage(it.message!!)
+                    }
+                }
+            }
+        }.exceptionally { exception ->
+            exception.message?.let { Log.e("Token Retrieval Error", it) }
+            null
         }
     }
 

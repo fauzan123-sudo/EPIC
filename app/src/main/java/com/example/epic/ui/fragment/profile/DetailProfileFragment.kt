@@ -10,6 +10,7 @@ import com.example.epic.ui.fragment.BaseFragment
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.configureToolbarBackPress
+import com.example.epic.util.formatStringDate
 import com.example.epic.util.readLoginResponse
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,12 +39,24 @@ class DetailProfileFragment :
                         val response = it.data!!
                         val data = response.data
 
-                        edtFullName.text = data.nama
-                        edtAddress.text = data.alamat
-                        edtBirth.text = data.tempat_lahir
-                        edtDate.text = data.ttl
-                        edtGender.text = data.jk
-                        edtNoTlp.text = data.no_tlp
+                        edtFullName.text = data.nama ?: "-"
+                        edtAddress.text = data.alamat ?: "-"
+                        edtBirth.text = data.tempat_lahir ?: "-"
+                        val birthday = data.ttl
+                        if (birthday != null) {
+                            edtDate.text = formatStringDate(data.ttl)
+                        } else {
+                            edtDate.text = "-"
+                        }
+                        val gender = data.jk
+                        if (gender == null) {
+                            edtGender.text = "-"
+                        }else if (data.jk == "1") {
+                            edtGender.text = "Perempuan"
+                        } else if (data.jk == "2") {
+                            edtGender.text = "Laki-laki"
+                        }
+                        edtNoTlp.text = data.no_tlp ?: "-"
                     }
 
                     is NetworkResult.Loading -> {

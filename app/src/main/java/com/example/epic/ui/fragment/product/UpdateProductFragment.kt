@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -188,10 +187,10 @@ class UpdateProductFragment :
         if (selectedText.isNotEmpty()) {
             val selectedData: Data? = categories?.find { it.nama_kategori == selectedText }
             val selectedId = selectedData?.id_kategori ?: -1
-            Toast.makeText(requireContext(), "Selected ID: $selectedId", Toast.LENGTH_SHORT)
-                .show()
+//            Toast.makeText(requireContext(), "Selected ID: $selectedId", Toast.LENGTH_SHORT)
+//                .show()
         } else {
-            Toast.makeText(requireContext(), selectedCategoryId, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), selectedCategoryId, Toast.LENGTH_SHORT).show()
         }
     }
 

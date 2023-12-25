@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 val token = task.result
                 Log.d(FirebaseToken, "$FirebaseToken $token")
                 Log.d("fcm founded", "")
-
             } else {
                 Log.d("no fcm founded", "")
             }

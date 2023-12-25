@@ -149,8 +149,10 @@ class StatisticSellerFragment :
         val leftYAxis = lineChart.axisLeft
         leftYAxis.textColor = Color.WHITE
         leftYAxis.setDrawGridLines(false)
+        leftYAxis.axisMinimum = 0f
         val rightYAxis = lineChart.axisRight
         rightYAxis.setDrawGridLines(false)
+        rightYAxis.axisMinimum = 0f
 
         // Konfigurasi legenda
         val legend = lineChart.legend

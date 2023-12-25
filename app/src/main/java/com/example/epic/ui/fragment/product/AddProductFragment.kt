@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.epic.R
@@ -69,8 +68,8 @@ class AddProductFragment :
                                 selectedCategoryId = selectedData.id_kategori.toString()
                                 val categoryId = selectedData.id_kategori
 //                                showProduct(categoryId)
-                                Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
-                                    .show()
+//                                Toast.makeText(requireContext(), "$categoryId", Toast.LENGTH_SHORT)
+//                                    .show()
                             }
                         }
                     }

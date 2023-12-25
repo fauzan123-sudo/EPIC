@@ -47,14 +47,23 @@ class ListSalesFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    salesAdapter.listener = this
-                    salesAdapter.differ.submitList(data)
-                    with(binding.rvSales) {
-                        layoutManager =
-                            LinearLayoutManager(
-                                requireContext()
-                            )
-                        adapter = salesAdapter
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        } else {
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            salesAdapter.listener = this@ListSalesFragment
+                            salesAdapter.differ.submitList(data)
+                            with(binding.rvSales) {
+                                layoutManager =
+                                    LinearLayoutManager(
+                                        requireContext()
+                                    )
+                                adapter = salesAdapter
+                            }
+                        }
                     }
                 }
 
@@ -75,17 +84,18 @@ class ListSalesFragment :
     private fun setUpToolbar() {
         binding.apply {
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar.myToolbar)
-            setupMenu(R.menu.menu_action, { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_add -> {
-                        findNavController().navigate(R.id.action_listSalesFragment_to_addSalesFragment)
-                        true
+            if (savedUser?.role == "2") {
+                setupMenu(R.menu.menu_action, { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.action_add -> {
+                            findNavController().navigate(R.id.action_listSalesFragment_to_addSalesFragment)
+                            true
+                        }
+
+                        else -> false
                     }
-
-                    else -> false
-                }
-            }, MenuItem.SHOW_AS_ACTION_ALWAYS)
-
+                }, MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }
 
             view?.let {
                 configureToolbarBackPress(

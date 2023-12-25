@@ -7,8 +7,8 @@ import javax.inject.Inject
 class NotificationsRepository @Inject constructor(private val api: NotificationApi) :
     BaseRepository() {
 
-    suspend fun checkNotification() = safeApiCall {
-        api.checkTokenFcm()
+    suspend fun checkNotification(request: String) = safeApiCall {
+        api.checkTokenFcm(request)
     }
 
     suspend fun updateFcmToken(request: RequestUpdateToken) = safeApiCall {

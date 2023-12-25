@@ -59,7 +59,16 @@ class ListProductFragment :
                             is NetworkResult.Success -> {
                                 hideLoading()
                                 val response = it.data!!.data
-                                loadRecyclerview(response)
+                                binding.apply {
+                                    if (response.isEmpty()) {
+                                        imgNoImage.visibility = View.VISIBLE
+                                        tvNoData.visibility = View.VISIBLE
+                                    } else {
+                                        imgNoImage.visibility = View.GONE
+                                        tvNoData.visibility = View.GONE
+                                        loadRecyclerview(response)
+                                    }
+                                }
                             }
 
                             is NetworkResult.Loading -> {

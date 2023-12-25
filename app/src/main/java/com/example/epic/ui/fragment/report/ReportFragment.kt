@@ -46,7 +46,7 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
         clickDownloadPdf()
         setUpToolbar()
         val store = readStore()
-        Toast.makeText(requireContext(), store?.nama_toko ?: "-", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), store?.nama_toko ?: "-", Toast.LENGTH_SHORT).show()
     }
 
     private fun setUpToolbar() {
@@ -80,22 +80,31 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    for (i in data.indices) {
-                        val noItem = data[i]
-                        val dataItem = ItemPdf(
-                            no = (i + 1).toString(),
-                            code = noItem.kode_barang,
-                            productName = noItem.nama_barang,
-                            sales = noItem.sales.toString(),
-                            seller = noItem.penjualan.toString(),
-                            productReturn = noItem.pengembalian.toString(),
-                            stock = noItem.persediaan.toString()
-                        )
-                        myItem.add(dataItem)
-                    }
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            rvReport.visibility = View.GONE
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        } else {
+                            rvReport.visibility = View.VISIBLE
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            for (i in data.indices) {
+                                val noItem = data[i]
+                                val dataItem = ItemPdf(
+                                    no = (i + 1).toString(),
+                                    code = noItem.kode_barang,
+                                    productName = noItem.nama_barang,
+                                    sales = noItem.sales.toString(),
+                                    seller = noItem.penjualan.toString(),
+                                    productReturn = noItem.pengembalian.toString(),
+                                    stock = noItem.persediaan.toString()
+                                )
+                                myItem.add(dataItem)
+                            }
 
-                    adapter.also { newAdapter ->
-                        newAdapter.differ.submitList(myItem)
+                            adapter.also { newAdapter ->
+                                newAdapter.differ.submitList(myItem)
 //                        val newItem = ItemPdf(
 //                            "No",
 //                            "Kode",
@@ -106,11 +115,15 @@ class ReportFragment : BaseFragment<FragmentReportBinding>(FragmentReportBinding
 //                            "Persediaan"
 //                        )
 //                        it.addHeaderItem(newItem)
-                        binding.rvReport.apply {
-                            layoutManager = LinearLayoutManager(requireContext())
-                            adapter = newAdapter
+                                binding.rvReport.apply {
+                                    layoutManager = LinearLayoutManager(requireContext())
+                                    adapter = newAdapter
+                                }
+                            }
                         }
                     }
+
+
                 }
 
                 is NetworkResult.Loading -> {

@@ -19,6 +19,8 @@ import com.example.epic.util.getCurrentDateTime
 import com.example.epic.util.getUserId
 import com.example.epic.util.setupMenu
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class AddSellerFragment :
@@ -231,7 +233,17 @@ class AddSellerFragment :
                 is NetworkResult.Error -> {
                     hideLoading()
                     sellerViewModel.createSellerResponse.removeObservers(viewLifecycleOwner)
-                    showErrorMessage(it.message!!)
+                    try {
+                        val errorResponse = JSONObject(it.message ?: "")
+                        val errorMessage = errorResponse.getJSONObject("data")
+                            .getJSONObject("error")
+                            .getString("message")
+
+                        showErrorMessage(errorMessage)
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        showErrorMessage(it.message!!)
+                    }
                 }
             }
         }

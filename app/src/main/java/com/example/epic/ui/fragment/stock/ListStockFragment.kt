@@ -117,14 +117,23 @@ class ListStockFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    stockAdapter.differ.submitList(data)
-                    stockAdapter.listener = this@ListStockFragment
-                    binding.rvStock.apply {
-                        layoutManager =
-                            GridLayoutManager(
-                                requireContext(), 2
-                            )
-                        adapter = stockAdapter
+                    binding.apply {
+                        if (data.isEmpty()) {
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        } else {
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            stockAdapter.differ.submitList(data)
+                            stockAdapter.listener = this@ListStockFragment
+                            binding.rvStock.apply {
+                                layoutManager =
+                                    GridLayoutManager(
+                                        requireContext(), 2
+                                    )
+                                adapter = stockAdapter
+                            }
+                        }
                     }
                 }
 

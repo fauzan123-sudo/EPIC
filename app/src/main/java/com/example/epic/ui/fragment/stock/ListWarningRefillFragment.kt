@@ -55,13 +55,24 @@ class ListWarningRefillFragment :
                     hideLoading()
                     val response = it.data!!
                     val data = response.data
-                    refillAdapter.differ.submitList(data)
-                    with(binding.rvWarningRefill) {
-                        layoutManager =
-                            LinearLayoutManager(
-                                requireContext()
-                            )
-                        adapter = refillAdapter
+                    binding.apply {
+                        if (data.isEmpty()){
+                            rvWarningRefill.visibility = View.GONE
+                            imgNoImage.visibility = View.VISIBLE
+                            tvNoData.visibility = View.VISIBLE
+                        }else{
+                            rvWarningRefill.visibility = View.VISIBLE
+                            imgNoImage.visibility = View.GONE
+                            tvNoData.visibility = View.GONE
+                            refillAdapter.differ.submitList(data)
+                            with(rvWarningRefill) {
+                                layoutManager =
+                                    LinearLayoutManager(
+                                        requireContext()
+                                    )
+                                adapter = refillAdapter
+                            }
+                        }
                     }
                 }
 

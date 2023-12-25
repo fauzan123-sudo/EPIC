@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_allMenuFragment_to_listStoreFragment"
             app:destination="@id/listStoreFragment" />
+        <action
+            android:id="@+id/action_allMenuFragment_to_newStatisticFragment"
+            app:destination="@id/newStatisticFragment" />
     </fragment>
     <fragment
         android:id="@+id/listSalesFragment"

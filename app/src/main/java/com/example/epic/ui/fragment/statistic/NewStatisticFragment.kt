@@ -1,6 +1,7 @@
 package com.example.epic.ui.fragment.statistic
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.example.epic.util.configureToolbarBackPress
 import com.example.epic.util.getMonth
 import com.example.epic.util.getYear
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -122,7 +124,6 @@ class NewStatisticFragment :
                     showErrorMessage(it.message!!)
                 }
 
-                else -> {}
             }
         }
     }
@@ -135,11 +136,10 @@ class NewStatisticFragment :
 
     private fun setupLineChart(lineChart: LineChart, entries: List<Entry>) {
         val dataSet = LineDataSet(entries, "Label Data")
+        dataSet.label = "Grafik Penjualan"
         dataSet.color = Color.BLUE
         dataSet.valueTextColor = Color.BLACK
-        dataSet.valueTextColor = Color.RED
         dataSet.color = Color.parseColor("#00A4FF")
-        dataSet.valueTextColor = Color.WHITE
         dataSet.valueTextSize = 12f
         dataSet.circleHoleColor = Color.parseColor("#00FF85")
         dataSet.circleRadius = 8f
@@ -159,7 +159,7 @@ class NewStatisticFragment :
         lineChart.data = lineData
 
         // Konfigurasi chart lainnya seperti label, sumbu, dsb.
-        lineChart.xAxis.labelRotationAngle = 45f
+//        lineChart.xAxis.labelRotationAngle = 45f
         lineChart.xAxis.granularity = 1f
 
 
@@ -168,6 +168,7 @@ class NewStatisticFragment :
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
         lineChart.description.isEnabled = false
+
 
         // Konfigurasi sumbu X
         val xAxis = lineChart.xAxis
@@ -178,26 +179,48 @@ class NewStatisticFragment :
         // Konfigurasi sumbu Y
         val leftYAxis = lineChart.axisLeft
         leftYAxis.textColor = Color.WHITE
+        leftYAxis.axisMinimum = 0f
+        leftYAxis.labelCount = 4
+        leftYAxis.yOffset = 10f
+
         leftYAxis.setDrawGridLines(false)
-        val rightYAxis = lineChart.axisRight
-        rightYAxis.setDrawGridLines(false)
-        
-//        Setup legend
-        val legend = lineChart.legend
-        legend.textColor = Color.WHITE
-
-
-
-        // Jika nilai sumbu y berupa integer, gunakan formatter ini
-        lineChart.axisLeft.valueFormatter = object : ValueFormatter() {
+        leftYAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
             }
         }
 
+        val rightYAxis = lineChart.axisRight
+        rightYAxis.setDrawGridLines(false)
+        rightYAxis.axisMinimum = 0f
+        rightYAxis.labelCount = 4
+        rightYAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        }
+        
+//        Setup legend
+        val legend = lineChart.legend
+        legend.isEnabled = true
+        legend.setDrawInside(true)
+        legend.textColor = Color.BLACK
+        legend.textSize = 16f
+        legend.typeface = Typeface.create("Poppins", Typeface.NORMAL)
+        legend.typeface = Typeface.DEFAULT_BOLD
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+
+
+
+        // Jika nilai sumbu y berupa integer, gunakan formatter ini
+//        lineChart.axisLeft.valueFormatter = object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                return value.toInt().toString()
+//            }
+//        }
+
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
-
         lineChart.invalidate()
     }
 

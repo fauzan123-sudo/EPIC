@@ -27,6 +27,7 @@ import com.example.epic.R
 import com.example.epic.ui.activity.MainActivity
 import com.google.android.material.appbar.MaterialToolbar
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -92,6 +93,19 @@ fun getCurrentDateTime(): String {
     val currentTime = Date()
     return dateFormat.format(currentTime)
 }
+
+// convert from yyyy-MM-dd to dd-MM-yyyy from year-month-date to date-month-year
+fun formatStringDate(inputDateString: String): String {
+    val inputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return try {
+        val date = inputDateFormat.parse(inputDateString)
+        val outputDateFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+        outputDateFormat.format(date)
+    } catch (e: Exception) {
+        inputDateString
+    }
+}
+
 
 fun Date.toFormattedString(): String {
     val locale = Locale("id", "ID")
@@ -177,6 +191,35 @@ fun Fragment.setupMenu(
 
     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+fun formatDate(dateInMillis: Long): String {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = dateInMillis
+    val dateFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+    return dateFormat.format(Date(calendar.timeInMillis))
+}
+
+fun isValidDateFormat(dateString: String): Boolean {
+    val dateFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+    dateFormat.isLenient = false
+    return try {
+        dateFormat.parse(dateString)
+        true
+    } catch (e: ParseException) {
+        false
+    }
+}
+
+fun convertDateFormat(inputDate: String): String {
+    val inputFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    return try {
+        val date = inputFormat.parse(inputDate)
+        outputFormat.format(date)
+    } catch (e: ParseException) {
+        "Format tanggal tidak valid"
+    }
+}
 
 //fun Fragment.setupMenu(@MenuRes menuId: Int, onMenuSelected: (MenuItem) -> Boolean) =
 //    (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
