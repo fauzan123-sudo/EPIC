@@ -1,5 +1,7 @@
 package com.example.epic.data.network
 
+import com.example.epic.data.model.resetLogin.RequestResetLogin
+import com.example.epic.data.model.resetLogin.ResetLoginResponse
 import com.example.epic.data.model.user.login.LoginResponse
 import com.example.epic.data.model.user.login.RequestLogin
 import retrofit2.Response
@@ -13,5 +15,9 @@ interface AuthApi {
         @Body request: RequestLogin
     ): Response<LoginResponse>
 
+    @POST("reset-is-login")
+    suspend fun resetLogin(
+        @Body request : RequestResetLogin
+    ) : Response<ResetLoginResponse>
 
 }

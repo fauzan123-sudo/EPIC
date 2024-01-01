@@ -75,6 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         loadStore()
         backPress()
         checkFcm()
+        getNameStore()
 
 
 
@@ -123,7 +124,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 DataStatus.Status.SUCCESS -> {
                     hideLoading()
                     val response = it.data
-                    defaultSpinner = response
+//                    defaultSpinner = response
                     Log.d("TAG", "getNameStore is : $response and $defaultSpinner")
                 }
 
@@ -158,7 +159,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         return completableFuture
     }
-
 
     private fun checkFcm() {
         tokenFirebase().thenApply { token ->
@@ -344,18 +344,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                         if (readStore()?.nama_toko == null) {
                             binding.spPickStore.hint = "pilih toko"
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "data is null and please fill",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
                         } else {
                             binding.spPickStore.hint = "${readStore()?.nama_toko}"
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "data is not null and filled ${readStore()}",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
                         }
 
 
@@ -372,6 +362,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                                     saveUserId(selectedStore.id_user.toString())
                                     saveStoreName(selectedStore.nama_toko ?: "-")
                                     saveStore(selectedStore)
+                                    homeViewModel.saveStoreName(selectedStore)
                                 } else {
                                     updateStore(selectedStore)
                                     updateUserId(selectedStore.id_user.toString())

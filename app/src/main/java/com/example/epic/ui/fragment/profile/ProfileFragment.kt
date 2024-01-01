@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
 import com.example.epic.R
+import com.example.epic.data.model.resetLogin.RequestResetLogin
 import com.example.epic.databinding.FragmentProfileBinding
 import com.example.epic.ui.activity.LoginActivity
 import com.example.epic.ui.fragment.BaseFragment
+import com.example.epic.ui.viewModel.AuthViewModel
 import com.example.epic.ui.viewModel.ProfileViewModel
 import com.example.epic.util.NetworkResult
 import com.example.epic.util.TokenManager
@@ -30,6 +32,7 @@ import javax.inject.Inject
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
     private val viewModel: ProfileViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private lateinit var uriImage: Uri
 
     @Inject
@@ -99,7 +102,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                                     )
                                     deleteUserData()
                                     tokenManager.deleteToken()
-
                                     val isDeleted: Boolean = deleteUserId()
                                     val isNameStoreDelete: Boolean = deleteStoreName()
 
@@ -108,6 +110,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                                     } else {
                                         println("Penghapusan tidak berhasil atau data ID dan Nama Pengguna tidak ditemukan.")
                                     }
+                                    resetLogin()
 
                                     requireActivity().finish()
                                 }
@@ -131,6 +134,30 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                 .show()
 
 
+        }
+    }
+
+    private fun resetLogin() {
+        authViewModel.requestResetLogin(RequestResetLogin(savedUser!!.id_user))
+        authViewModel.resetLoginResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    hideLoading()
+                    val response = it.data!!
+                    if (response.status) {
+                        showSuccessMessage(response.message)
+                    }
+                }
+
+                is NetworkResult.Loading -> {
+                    showLoading()
+                }
+
+                is NetworkResult.Error -> {
+                    hideLoading()
+                    showErrorMessage(it.message!!)
+                }
+            }
         }
     }
 

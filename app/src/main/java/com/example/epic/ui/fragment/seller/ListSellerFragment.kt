@@ -41,16 +41,18 @@ class ListSellerFragment :
     private fun setUpToolbar() {
         binding.apply {
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar.myToolbar)
-            setupMenu(R.menu.menu_action, { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_add -> {
-                        findNavController().navigate(R.id.action_listSellerFragment_to_addSellerFragment)
-                        true
-                    }
+            if (savedUser?.role == "2") {
+                setupMenu(R.menu.menu_action, { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.action_add -> {
+                            findNavController().navigate(R.id.action_listSellerFragment_to_addSellerFragment)
+                            true
+                        }
 
-                    else -> false
-                }
-            }, MenuItem.SHOW_AS_ACTION_ALWAYS)
+                        else -> false
+                    }
+                }, MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }
 
 
             view?.let {

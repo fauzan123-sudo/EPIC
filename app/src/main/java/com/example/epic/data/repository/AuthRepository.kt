@@ -1,5 +1,6 @@
 package com.example.epic.data.repository
 
+import com.example.epic.data.model.resetLogin.RequestResetLogin
 import com.example.epic.data.model.user.login.RequestLogin
 import com.example.epic.data.network.AuthApi
 import javax.inject.Inject
@@ -8,6 +9,10 @@ class AuthRepository @Inject constructor(private val api: AuthApi) : BaseReposit
 
     suspend fun userLogin(requestLogin: RequestLogin) = safeApiCall {
         api.loginUser(requestLogin)
+    }
+
+    suspend fun restLogin(request: RequestResetLogin) = safeApiCall {
+        api.resetLogin(request)
     }
 
 }

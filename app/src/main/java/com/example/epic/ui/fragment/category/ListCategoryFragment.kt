@@ -98,10 +98,14 @@ class ListCategoryFragment :
     }
 
     private fun movePage() {
-        binding.apply {
-            mcAddCategory.setOnClickListener {
-                findNavController().navigate(R.id.action_listCategoryFragment_to_addCategoryFragment)
+        if (savedUser?.role == "2") {
+            binding.apply {
+                mcAddCategory.setOnClickListener {
+                    findNavController().navigate(R.id.action_listCategoryFragment_to_addCategoryFragment)
+                }
             }
+        } else {
+            binding.mcAddCategory.visibility = View.GONE
         }
     }
 

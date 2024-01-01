@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.epic.R
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         checkLogin()
         backPress()
         tokenFirebase()
+
+        if (intent.action == "OPEN_HOME_FRAGMENT") {
+            findNavController(R.id.fragmentContainerView2).navigate(R.id.listWarningRefillFragment)
+        }
 
         setContentView(binding.root)
 

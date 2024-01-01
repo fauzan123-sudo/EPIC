@@ -24,8 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-//    private lateinit var adapter: NotificationAdapter
-    private lateinit var repository: DatabaseRepository
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -34,7 +32,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-//        adapter = NotificationAdapter()
         val data = remoteMessage.data
 
         val title = data["title"]
@@ -63,8 +60,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("data", "$notifications")
         notifications!!.add(notificationData)
         Paper.book().write(Constants.notify, notifications)
-//        adapter.setNotifications(notifications)
-//        adapter.notifyDataSetChanged()
     }
 
     private fun showNotification(title: String?, message: String?) {
@@ -78,6 +73,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.createNotificationChannel(channel)
 
         val intent = Intent(this, MainActivity::class.java)
+        intent.action = "OPEN_HOME_FRAGMENT"
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
@@ -87,7 +83,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
             .setContentTitle(title)
             .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.ic_new_logo)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
